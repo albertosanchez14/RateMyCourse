@@ -1,35 +1,43 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+
+import "./App.css";
+
+import Course from "./components/course";
+import Footer from "./components/navigation";
+import {
+  LANDING_PAGE_ROUTE,
+  PROFILE_PAGE_ROUTE,
+  COURSE_PAGE_ROUTE,
+  SHORT_PROF_PAGE_ROUTE,
+  PROF_PAGE_ROUTE,
+  EXPLORE_PAGE_ROUTE,
+  ABOUT_PAGE_ROUTE,
+  PRIVACY_PAGE_ROUTE,
+  WELCOME_PAGE_ROUTE,
+} from "./Routes";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState(0);
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <Router>
+        <Routes>
+          <Route path={LANDING_PAGE_ROUTE} element={<div>Landing Page</div>} />
+          <Route path={PROFILE_PAGE_ROUTE} element={<div>Profile Page</div>} />
+          <Route path={COURSE_PAGE_ROUTE} element={<Course />} />
+          <Route path={PROF_PAGE_ROUTE} element={<div>Prof Page</div>} />
+          <Route path={SHORT_PROF_PAGE_ROUTE} element={<div>Prof Page</div>} />
+          <Route path={EXPLORE_PAGE_ROUTE} element={<div>Explore Page</div>} />
+          <Route path={ABOUT_PAGE_ROUTE} element={<div>About Page</div>} />
+          <Route path={PRIVACY_PAGE_ROUTE} element={<div>Privacy Page</div>} />
+          <Route path={WELCOME_PAGE_ROUTE} element={<div>Welcome Page</div>} />
+        </Routes>
+      </Router>
+      <Footer/>
     </>
-  )
+  );
 }
 
-export default App
+export default App;

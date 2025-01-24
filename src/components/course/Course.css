@@ -1,0 +1,71 @@
+.course-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+
+/* Title Container */
+.course-title-container {
+  display: flex;
+  flex-direction: column;
+  align-self: start;
+}
+
+
+/* Description with Rating Container */
+.course-description-rating-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.course-description-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.course-rating-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.course-rating-easy-container .course-rating-useful-container {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}
+
+
+/* Schedule Container */
+.course-schedule-container {
+  display: flex;
+  flex-direction: column;
+}
+
+
+/* Comments Container */
+.course-comments-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.course-comments-type-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.course-comments-query-container {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}
+
+.course-comments-list-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
