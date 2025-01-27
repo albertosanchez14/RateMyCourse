@@ -33,7 +33,6 @@ export default function Calendar({ events }: CalendarProps) {
       if (class_event === undefined) {
         rowElements.push(
           <div key={j} className="calendar_hour">
-            Row {hour}
           </div>
         );
       } else {

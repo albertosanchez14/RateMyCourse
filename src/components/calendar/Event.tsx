@@ -18,10 +18,10 @@ export default function Event({ title, type, groups, classroom, date }: EventPro
   return (
     <div className="calendar-event">
       <h4>{title}</h4>
-      <span>{type}</span>
-      <span>{groups.join(", ")}</span>
-      <span>{classroom}</span>
-      <span>{printableDate}</span>
+      <span id="calendar-event-type">{type}</span>
+      <span id="calendar-event-groups">{groups.join(", ")}</span>
+      <span id="calendar-event-classroom">{classroom}</span>
+      {/* <span>{printableDate}</span> */}
     </div>
   );
 }

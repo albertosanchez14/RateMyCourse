@@ -12,5 +12,16 @@
 
 .calendar-event > h4 {
   margin-top: 0;
-  margin-bottom: 0.5em;
+  margin-bottom: 0em;
+}
+#calendar-event-type {
+  font-size: 0.8em;
+  margin-top: 0;
+  margin-bottom: 1em;
+}
+#calendar-event-groups,
+#calendar-event-classroom {
+  font-size: 0.8em;
+  margin-top: 0;
+  margin-bottom: 0;
 }
