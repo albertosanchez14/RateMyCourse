@@ -8,6 +8,14 @@
 .calendar_header {
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  padding: 0.5em;
+}
+.calendar_header button {
+  /* border: none;
+  background-color: transparent;
+  cursor: pointer; */
+  height: fit-content;
 }
 
 .calendar_body {

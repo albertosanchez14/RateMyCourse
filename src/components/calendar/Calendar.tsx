@@ -53,43 +53,54 @@ export default function Calendar({ events }: CalendarProps) {
     }
     return rowElements;
   };
+  const handlePrevWeek = () => {
+    if (currentWeekNum === 1) {
+      return;
+    }
+    setCurrentWeekNum(currentWeekNum - 1);
+  };
+  const handleNextWeek = () => {
+    if (currentWeekNum === 24) {
+      return;
+    }
+    setCurrentWeekNum(currentWeekNum + 1);
+  };
+
   return (
     <div className="weekly-calendar">
       <div className="calendar_header">
-        <button onClick={() => setCurrentWeekNum(currentWeekNum - 1)}>Previous</button>
-        <h2>Week {currentWeekNum}</h2>
-        <button onClick={() => setCurrentWeekNum(currentWeekNum + 1)}>
-          Next
-        </button>
+        <button onClick={handlePrevWeek}>Previous</button>
+        <h3>Week {currentWeekNum}</h3>
+        <button onClick={handleNextWeek}>Next</button>
       </div>
       <div className="calendar_body">
         <div className="calendar_day">
           <div className="calendar_hour">
-            <h2 className="calendar_day_header">Monday</h2>
+            <h3 className="calendar_day_header">Monday</h3>
           </div>
           {renderRows("Mon")}
         </div>
         <div className="calendar_day">
           <div className="calendar_hour">
-            <h2 className="calendar_day_header">Tuesday</h2>
+            <h3 className="calendar_day_header">Tuesday</h3>
           </div>
           {renderRows("Tue")}
         </div>
         <div className="calendar_day">
           <div className="calendar_hour">
-            <h2 className="calendar_day_header">Wednesday</h2>
+            <h3 className="calendar_day_header">Wednesday</h3>
           </div>
           {renderRows("Wed")}
         </div>
         <div className="calendar_day">
           <div className="calendar_hour">
-            <h2 className="calendar_day_header">Thurday</h2>
+            <h3 className="calendar_day_header">Thurday</h3>
           </div>
           {renderRows("Thu")}
         </div>
         <div className="calendar_day">
           <div className="calendar_hour">
-            <h2 className="calendar_day_header">Friday</h2>
+            <h3 className="calendar_day_header">Friday</h3>
           </div>
           {renderRows("Fri")}
         </div>

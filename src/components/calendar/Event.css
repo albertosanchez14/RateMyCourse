@@ -10,8 +10,7 @@
   margin-bottom: 5px;
 }
 
-.calendar-event > h3 {
-  font-size: 1.2em;
+.calendar-event > h4 {
   margin-top: 0;
   margin-bottom: 0.5em;
 }
