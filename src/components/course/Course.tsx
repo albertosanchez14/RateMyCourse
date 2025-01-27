@@ -1,15 +1,28 @@
+import { useState } from "react";
+
 import "./Course.css";
 
-import { Header } from "../navigation/Header";
+import Header from "../navigation/Header";
+import Calendar from "../calendar/Calendar";
+
+import { useCourse } from "../../hooks/useCourse";
 
 export default function Course() {
+  const [course, setCourse] = useState();
+  // Load course data now from folder data
+  const { data, isLoading, error } = useCourse();
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error.message}</div>;
+  if (!data) return <div>No data</div>;
+  console.log(data);
+
   return (
     <>
       <Header />
       <div className="course-content">
         <div className="course-title-container">
-          <h2>Course Title</h2>
-          <p>Bachelor in Computer Science and Engineering</p>
+          <h2>{data?.title}</h2>
+          <p>{data?.degree.title}</p>
         </div>
 
         <div className="course-description-rating-container">
@@ -39,9 +52,7 @@ export default function Course() {
         </div>
 
         <div className="course-schedule-container">
-          <h3>Course Schedule</h3>
-          <p>Monday, Wednesday, Friday</p>
-          <p>10:00 AM - 11:00 AM</p>
+          <Calendar events={data?.schedule}/>
         </div>
 
         <div className="course-comments-container">
@@ -54,15 +65,15 @@ export default function Course() {
             </div>
           </div>
           <div className="course-comments-query-container">
-            <select name="sortOption" className="sort-option">
-              <option value="" disabled selected>
+            <select name="sortOption" className="sort-option" defaultValue="">
+              <option value="" disabled>
                 Sort by
               </option>
               <option value="date">Date</option>
               <option value="rating">Rating</option>
             </select>
-            <select name="professor" className="professor-select">
-              <option value="" disabled selected>
+            <select name="professor" className="professor-select" defaultValue="">
+              <option value="" disabled>
                 Select Professor
               </option>
               <option value="prof1">Professor 1</option>

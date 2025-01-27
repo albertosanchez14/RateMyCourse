@@ -1,6 +1,6 @@
 import "./Header.css";
 
-export const Header = () => {
+export default function Header() {
   return (
     <div className="header">
       <div>Logo</div>

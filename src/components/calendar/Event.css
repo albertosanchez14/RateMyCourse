@@ -1,0 +1,10 @@
+.calendar-event {
+  display: flex;
+  flex-direction: column;
+
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 5px;
+  margin-bottom: 5px;
+}

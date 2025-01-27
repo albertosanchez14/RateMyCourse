@@ -1,0 +1,60 @@
+{
+  "title": "Computer Architecture",
+  "code": 13888,
+  "degree": {
+    "title": "Bachelor in Computer Science and Engineering",
+    "plan": 489,
+    "estudio": 218
+  },
+  "course": "2024/2025",
+  "coordinating_teacher": "Garcia Sanchez, Jose Daniel",
+  "department": "Computer Science and Engineering Department",
+  "type": "Compulsory",
+  "credits": 6,
+  "course_year": 3,
+  "semester": 1,
+  "requirements": ["Programming", "Computer Structure", "Operating Systems"],
+  "teacher": [
+    {
+      "group": 81,
+      "lead_teacher": "Garcia Sanchez, Jose Daniel",
+      "aggregated_group_lead_teacher": "Exposito Singh, David"
+    },
+    {
+      "group": 82,
+      "lead_teacher": "Cascajo Garcia, Alberto",
+      "aggregated_group_lead_teacher": "Exposito Singh, David"
+    },
+    {
+      "group": 84,
+      "lead_teacher": "Cascajo Garcia, Alberto",
+      "aggregated_group_lead_teacher": "Gomez Carrasco, Carlos"
+    },
+    {
+      "group": 85,
+      "lead_teacher": "Gomez Carrasco, Carlos",
+      "aggregated_group_lead_teacher": "Gomez Carrasco, Carlos"
+    }
+  ],
+
+  "schedule": [
+    {
+      "title": "Computer Architecture",
+      "type": "Magistral",
+      "groups": [81, 82, 801],
+      "week": 5,
+      "start_time": "2024/09/09/09:00",
+      "end_time": "2024/09/09/11:00",
+      "classroom": "Aula 4.2.E05"
+    },
+    {
+      "title": "Computer Architecture",
+      "type": "Magistral",
+      "groups": [84, 85],
+      "week": 5,
+      "start_time": "2024/09/09/17:00",
+      "end_time": "2024/09/09/19:00",
+      "classroom": "Aula 4.1.E03"
+    }
+  ]
+}

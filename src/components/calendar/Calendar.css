@@ -1,0 +1,29 @@
+.weekly_calendar {
+  display: flex;
+  flex-direction: column;
+}
+
+.calendar_header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.calendar_body {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  border: 1px solid #ccc;
+}
+
+.calendar_day {
+  display: grid;
+  grid-template-rows: repeat(7, 1fr);
+}
+
+.calendar_day {
+  border: 1px solid #ccc;
+}
+
+.calendar_day > div {
+  padding: 10px;
+  border: 1px solid #ccc;
+}
