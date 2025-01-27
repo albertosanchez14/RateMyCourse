@@ -6,5 +6,12 @@
   border: 1px solid #ccc;
   border-radius: 5px;
   padding: 5px;
+  margin-right: 10px;
   margin-bottom: 5px;
+}
+
+.calendar-event > h3 {
+  font-size: 1.2em;
+  margin-top: 0;
+  margin-bottom: 0.5em;
 }

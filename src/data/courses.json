@@ -50,9 +50,65 @@
     {
       "title": "Computer Architecture",
       "type": "Magistral",
+      "groups": [81, 82, 801],
+      "week": 14,
+      "start_time": "2024/11/12/13:00",
+      "end_time": "2024/11/12/15:00",
+      "classroom": "Aula 4.2.E05"
+    },
+
+    {
+      "title": "Computer Architecture",
+      "type": "Magistral",
       "groups": [84, 85],
       "week": 5,
       "start_time": "2024/09/09/17:00",
+      "end_time": "2024/09/09/19:00",
+      "classroom": "Aula 4.1.E03"
+    },
+    {
+      "title": "Computer Architecture",
+      "type": "Magistral",
+      "groups": [84, 85],
+      "week": 18,
+      "start_time": "2024/12/12/19:00",
+      "end_time": "2024/12/12/21:00",
+      "classroom": "Aula 2.3.B05"
+    },
+    
+    {
+      "title": "Computer Architecture",
+      "type": "Practice",
+      "groups": [81],
+      "week": 5,
+      "start_time": "2024/09/13/11:00",
+      "end_time": "2024/09/13/13:00",
+      "classroom": "Aula 4.1.E06"
+    },
+    {
+      "title": "Computer Architecture",
+      "type": "Practice",
+      "groups": [82],
+      "week": 5,
+      "start_time": "2024/09/13/09:00",
+      "end_time": "2024/09/13/11:00",
+      "classroom": "Aula 4.1.E06"
+    },
+    {
+      "title": "Computer Architecture",
+      "type": "Practice",
+      "groups": [84],
+      "week": 5,
+      "start_time": "2024/09/13/15:00",
+      "end_time": "2024/09/13/17:00",
+      "classroom": "Aula 4.1.E06"
+    },
+    {
+      "title": "Computer Architecture",
+      "type": "Practice",
+      "groups": [85],
+      "week": 5,
+      "start_time": "2024/09/11/17:00",
       "end_time": "2024/09/09/19:00",
       "classroom": "Aula 4.1.E03"
     }

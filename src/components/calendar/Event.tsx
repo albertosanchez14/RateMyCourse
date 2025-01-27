@@ -2,12 +2,13 @@ import "./Event.css";
 
 type EventProps = {
   title: string;
+  type: "Magistral" | "Practice" | "Laboratory";
   groups: Array<number>;
   classroom: string;
   date: Date;
 };
 
-export default function Event({ title, groups, classroom, date }: EventProps) {
+export default function Event({ title, type, groups, classroom, date }: EventProps) {
   const printableDate = new Date(date).toLocaleDateString("en-US", {
     weekday: "short",
     month: "short",
@@ -17,6 +18,7 @@ export default function Event({ title, groups, classroom, date }: EventProps) {
   return (
     <div className="calendar-event">
       <h3>{title}</h3>
+      <span>{type}</span>
       <span>{groups.join(", ")}</span>
       <span>{classroom}</span>
       <span>{printableDate}</span>

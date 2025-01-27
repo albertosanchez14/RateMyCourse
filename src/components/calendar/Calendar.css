@@ -1,6 +1,8 @@
-.weekly_calendar {
+.weekly-calendar {
   display: flex;
   flex-direction: column;
+
+  border: 1px solid #ccc;
 }
 
 .calendar_header {
@@ -11,19 +13,26 @@
 .calendar_body {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  border: 1px solid #ccc;
+  border-top: 1px solid #ccc;
 }
 
 .calendar_day {
   display: grid;
-  grid-template-rows: repeat(7, 1fr);
+  grid-template-rows: auto repeat(6, 1fr);
+  
+  border-right: 1px solid #ccc;
+}
+.calendar_day:last-child {
+  border-right: none;
 }
 
-.calendar_day {
-  border: 1px solid #ccc;
+.calendar_hour {
+  border-top: 1px solid #ccc;
+}
+.calendar_hour:first-child {
+  border-top: 0px solid #ccc;
 }
 
-.calendar_day > div {
-  padding: 10px;
-  border: 1px solid #ccc;
+.calendar_day_header {
+  margin-left: 5px;
 }

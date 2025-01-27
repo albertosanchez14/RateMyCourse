@@ -10,8 +10,8 @@ type CalendarProps = { events: Array<EventType> };
 type WeekType = "Mon" | "Tue" | "Wed" | "Thu" | "Fri";
 
 export default function Calendar({ events }: CalendarProps) {
-  const [rows, setRows] = useState(6);
-  const [currentWeekNum, setCurrentWeekNum] = useState(5);
+  const [rows] = useState(6);
+  const [currentWeekNum, setCurrentWeekNum] = useState(1);
 
   const renderRows = (week: WeekType) => {
     const rowElements = [];
@@ -38,45 +38,59 @@ export default function Calendar({ events }: CalendarProps) {
         );
       } else {
         rowElements.push(
-          <Event
-            key={j}
-            title={class_event.title}
-            groups={class_event.groups}
-            classroom={class_event.classroom}
-            date={class_event.start_time}
-          />
+          <div key={j} className="calendar_hour">
+            <Event
+              key={j}
+              title={class_event.title}
+              type={class_event.type}
+              groups={class_event.groups}
+              classroom={class_event.classroom}
+              date={class_event.start_time}
+            />
+          </div>
         );
       }
     }
     return rowElements;
   };
-
   return (
     <div className="weekly-calendar">
       <div className="calendar_header">
-        <button>Previous</button>
+        <button onClick={() => setCurrentWeekNum(currentWeekNum - 1)}>Previous</button>
         <h2>Week {currentWeekNum}</h2>
-        <button>Next</button>
+        <button onClick={() => setCurrentWeekNum(currentWeekNum + 1)}>
+          Next
+        </button>
       </div>
       <div className="calendar_body">
         <div className="calendar_day">
-          <h2 className="calendar_day_header">Monday</h2>
+          <div className="calendar_hour">
+            <h2 className="calendar_day_header">Monday</h2>
+          </div>
           {renderRows("Mon")}
         </div>
         <div className="calendar_day">
-          <h2 className="calendar_day_header">Tuesday</h2>
+          <div className="calendar_hour">
+            <h2 className="calendar_day_header">Tuesday</h2>
+          </div>
           {renderRows("Tue")}
         </div>
         <div className="calendar_day">
-          <h2 className="calendar_day_header">Wednesday</h2>
+          <div className="calendar_hour">
+            <h2 className="calendar_day_header">Wednesday</h2>
+          </div>
           {renderRows("Wed")}
         </div>
         <div className="calendar_day">
-          <h2 className="calendar_day_header">Thursday</h2>
+          <div className="calendar_hour">
+            <h2 className="calendar_day_header">Thurday</h2>
+          </div>
           {renderRows("Thu")}
         </div>
         <div className="calendar_day">
-          <h2 className="calendar_day_header">Friday</h2>
+          <div className="calendar_hour">
+            <h2 className="calendar_day_header">Friday</h2>
+          </div>
           {renderRows("Fri")}
         </div>
       </div>

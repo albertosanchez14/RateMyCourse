@@ -1,4 +1,4 @@
-import { useState } from "react";
+// import { useState } from "react";
 
 import "./Course.css";
 
@@ -8,7 +8,6 @@ import Calendar from "../calendar/Calendar";
 import { useCourse } from "../../hooks/useCourse";
 
 export default function Course() {
-  const [course, setCourse] = useState();
   // Load course data now from folder data
   const { data, isLoading, error } = useCourse();
   if (isLoading) return <div>Loading...</div>;
