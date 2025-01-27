@@ -74,8 +74,30 @@ export default function Calendar({ events }: CalendarProps) {
         <button onClick={handleNextWeek}>Next</button>
       </div>
       <div className="calendar_body">
+        <div className="calendar_day" id="hours_label_column">
+          <div className="calendar_day_header_placeholder"></div>
+          <div className="calendar_hours_label_container">
+            <span className="label_hour_top">9:00</span>
+          </div>
+          <div className="calendar_hours_label_container">
+            <span className="label_hour_top">11:00</span>
+          </div>
+          <div className="calendar_hours_label_container">
+            <span className="label_hour_top">13:00</span>
+          </div>
+          <div className="calendar_hours_label_container">
+            <span className="label_hour_top">15:00</span>
+          </div>
+          <div className="calendar_hours_label_container">
+            <span className="label_hour_top">17:00</span>
+          </div>
+          <div className="calendar_hours_label_container">
+            <span className="label_hour_top">19:00</span>
+            <span>21:00</span>
+          </div>
+        </div>
         <div className="calendar_day">
-          <div className="calendar_day_header">
+          <div className="calendar_day_header" id="monday_container">
             <h3 className="calendar_day_header_title">Monday</h3>
           </div>
           {renderRows("Mon")}
@@ -99,7 +121,7 @@ export default function Calendar({ events }: CalendarProps) {
           {renderRows("Thu")}
         </div>
         <div className="calendar_day">
-          <div className="calendar_day_header">
+          <div className="calendar_day_header" id="friday_container">
             <h3 className="calendar_day_header_title">Friday</h3>
           </div>
           {renderRows("Fri")}

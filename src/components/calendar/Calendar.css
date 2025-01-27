@@ -4,6 +4,7 @@
 
   /* border-radius: 8px;
   border: 1px solid #ccc; */
+  --header-height: 3.5em;
 }
 
 .calendar_header {
@@ -22,20 +23,55 @@
 
 .calendar_body {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: auto repeat(5, 1fr);
 
-  border-radius: 8px;
-  border: 1px solid #ccc;
+}
+
+.calendar_hours_label {
+  display: grid;
+  grid-template-rows: var(--header-height) repeat(6, 1fr);
+  border-right: 1px solid #ccc;
 }
 
 .calendar_day {
   display: grid;
-  grid-template-rows: auto repeat(6, 1fr);
+  grid-template-rows: var(--header-height) repeat(6, 1fr);
   
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
   border-right: 1px solid #ccc;
 }
+.calendar_day:first-child {
+  border: none;
+  border-top: 1px solid transparent;
+}
+.calendar_day:nth-child(2) {
+  border-radius: 8px 0px 0px 0px;
+  border-left: 1px solid #ccc;
+}
 .calendar_day:last-child {
-  border-right: none;
+  border-radius: 0px 8px 0px 0px;
+}
+.calendar_day#hours_label_column{
+  text-align: end;
+
+  div {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  span{
+    padding-right: 5px;
+  }
+  span.label_hour_top {
+    align-self: flex-end;
+    width: fit-content;
+
+    border-top: 1px solid #ccc;
+  }
+}
+.calendar_day#hours_label_column .calendar_day_header_placeholder {
+  height: 3.5em; /* Ensure the height is consistent */
 }
 
 .calendar_hour {
@@ -47,9 +83,18 @@
 
 .calendar_day_header {
   background-color: #f0f0f0;
+  display: flex;
+  align-items: center;
+}
+.calendar_day_header#monday_container {
   border-top-left-radius: 8px;
+}
+.calendar_day_header#friday_container {
   border-top-right-radius: 8px;
 }
+
 .calendar_day_header_title {
+  margin-top: 0px;
+  margin-bottom: 0px;
   margin-left: 5px;
 }
