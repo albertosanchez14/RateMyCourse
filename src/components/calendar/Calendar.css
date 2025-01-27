@@ -2,13 +2,15 @@
   display: flex;
   flex-direction: column;
 
-  border: 1px solid #ccc;
+  /* border-radius: 8px;
+  border: 1px solid #ccc; */
 }
 
 .calendar_header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+
   padding: 0.5em;
 }
 .calendar_header button {
@@ -21,7 +23,9 @@
 .calendar_body {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  border-top: 1px solid #ccc;
+
+  border-radius: 8px;
+  border: 1px solid #ccc;
 }
 
 .calendar_day {
@@ -42,5 +46,10 @@
 }
 
 .calendar_day_header {
+  background-color: #f0f0f0;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+.calendar_day_header_title {
   margin-left: 5px;
 }

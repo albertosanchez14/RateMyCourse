@@ -75,32 +75,32 @@ export default function Calendar({ events }: CalendarProps) {
       </div>
       <div className="calendar_body">
         <div className="calendar_day">
-          <div className="calendar_hour">
-            <h3 className="calendar_day_header">Monday</h3>
+          <div className="calendar_day_header">
+            <h3 className="calendar_day_header_title">Monday</h3>
           </div>
           {renderRows("Mon")}
         </div>
         <div className="calendar_day">
-          <div className="calendar_hour">
-            <h3 className="calendar_day_header">Tuesday</h3>
+          <div className="calendar_day_header">
+            <h3 className="calendar_day_header_title">Tuesday</h3>
           </div>
           {renderRows("Tue")}
         </div>
         <div className="calendar_day">
-          <div className="calendar_hour">
-            <h3 className="calendar_day_header">Wednesday</h3>
+          <div className="calendar_day_header">
+            <h3 className="calendar_day_header_title">Wednesday</h3>
           </div>
           {renderRows("Wed")}
         </div>
         <div className="calendar_day">
-          <div className="calendar_hour">
-            <h3 className="calendar_day_header">Thurday</h3>
+          <div className="calendar_day_header">
+            <h3 className="calendar_day_header_title">Thurday</h3>
           </div>
           {renderRows("Thu")}
         </div>
         <div className="calendar_day">
-          <div className="calendar_hour">
-            <h3 className="calendar_day_header">Friday</h3>
+          <div className="calendar_day_header">
+            <h3 className="calendar_day_header_title">Friday</h3>
           </div>
           {renderRows("Fri")}
         </div>
