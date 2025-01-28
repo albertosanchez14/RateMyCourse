@@ -1,3 +1,9 @@
+.rectangle-chart{
+  display: flex;
+  align-items: center;
+  gap: 1em;
+}
+
 .rectangle-chart-container {
   display: flex;
   width: 100%;
