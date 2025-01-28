@@ -43,17 +43,23 @@
   border-top: 1px solid #ccc;
   border-bottom: 1px solid #ccc;
   border-right: 1px solid #ccc;
+  box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.1);
 }
 .calendar_day:first-child {
+  box-shadow:none;
   border: none;
   border-top: 1px solid transparent;
 }
 .calendar_day:nth-child(2) {
   border-radius: 8px 0px 0px 0px;
   border-left: 1px solid #ccc;
+
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px
 }
 .calendar_day:last-child {
-  border-radius: 0px 8px 0px 0px;
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
 }
 .calendar_day#hours_label_column{
   text-align: end;
@@ -65,12 +71,13 @@
   }
   span{
     padding-right: 5px;
+    font-size: 0.8em;
   }
   span.label_hour_top {
     align-self: flex-end;
     width: fit-content;
 
-    border-top: 1px solid #ccc;
+    /* border-top: 1px solid #ccc; */
   }
 }
 .calendar_day#hours_label_column .calendar_day_header_placeholder {
