@@ -8,7 +8,6 @@ export default function SemiCircleChart() {
 
   // Calculate the rotation angle based on the rating (assuming rating is out of 5)
   const angle = (rating / 5) * 180;
-  console.log(angle);
 
   useEffect(() => {
     const canvas = canvasRef.current;

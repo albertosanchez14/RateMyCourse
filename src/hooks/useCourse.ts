@@ -12,7 +12,7 @@ const fetchCourse = async (): Promise<CourseType> => {
     start_time: new Date(event.start_time),
     end_time: new Date(event.end_time),
   }));
-  console.log(a);
+  // console.log(a);
 
 
   // Simulate network delay

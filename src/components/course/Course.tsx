@@ -4,8 +4,10 @@ import "./Course.css";
 
 import Header from "../navigation/Header";
 import Calendar from "../calendar/Calendar";
+
 import SemiCircleChart from "./SemiCircleChart";
 import RectangleChart from "./RectangleChart";
+import GroupSelector from "./GroupSelector";
 
 import { useCourse } from "../../hooks/useCourse";
 
@@ -15,6 +17,7 @@ export default function Course() {
   const [description, setDescription] = useState("");
   const descriptionRef = useRef<HTMLParagraphElement>(null);
   const [isOverflowing, setIsOverflowing] = useState(false);
+  const [selectedGroups, setSelectedGroups] = useState<number[]>([]);
 
   // Set the description to the first one
   useEffect(() => {
@@ -91,6 +94,20 @@ export default function Course() {
     }
   };
 
+  const handleGroupChange = (group: number, isChecked: boolean) => {
+    setSelectedGroups((prevSelectedGroups) =>
+      isChecked
+        ? [...prevSelectedGroups, group]
+        : prevSelectedGroups.filter((g) => g !== group)
+    );
+  };
+  const filteredEvents = data?.schedule.filter((event) =>
+    selectedGroups.length === 0
+      ? true
+      : event.groups.some((group: number) => selectedGroups.includes(group))
+  );
+  console.log(filteredEvents);
+
   return (
     <>
       <Header />
@@ -163,7 +180,11 @@ export default function Course() {
         </div>
 
         <div className="course-schedule-container">
-          <Calendar events={data?.schedule} />
+          <Calendar events={filteredEvents} />
+          <GroupSelector
+            groups={data.teacher.map((teacher) => teacher.group)}
+            onGroupChange={handleGroupChange}
+          />
         </div>
 
         <div className="course-comments-container">
