@@ -42,19 +42,6 @@ export default function Calendar({ events }: CalendarProps) {
           class_events.push(event);
         }
       });
-
-      // const class_event = events.find(
-      //   (event) =>
-      //     // Same week number
-      //     event.week === currentWeekNum &&
-      //     // Same start hour
-      //     new Date(event.start_time).getHours() === hour &&
-      //     // Same day of the week
-      //     week ===
-      //       new Date(event.start_time).toLocaleDateString("en-US", {
-      //         weekday: "short",
-      //       })
-      // );
       if (class_events.length === 0) {
         rowElements.push(<div key={j} className="calendar_hour"></div>);
       } else {
