@@ -14,6 +14,12 @@
   margin-top: 0;
   margin-bottom: 0em;
 }
+.calendar-event > div {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: end;
+}
 #calendar-event-type {
   font-size: 0.8em;
   margin-top: 0;

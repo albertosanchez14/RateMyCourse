@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import "./Calendar.css";
 
@@ -12,14 +12,23 @@ type WeekType = "Mon" | "Tue" | "Wed" | "Thu" | "Fri";
 export default function Calendar({ events }: CalendarProps) {
   const [rows] = useState(6);
   const [currentWeekNum, setCurrentWeekNum] = useState(5);
+  const [currentDate, setCurrentDate] = useState(new Date().getTime());
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentDate(new Date().getTime());
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
 
   const renderRows = (week: WeekType) => {
     const rowElements = [];
     for (let j = 0; j < rows; j++) {
       const hour = j * 2 + 9;
-      // Find the class event that matches the current row
-      const class_event = events.find(
-        (event) =>
+      // Find the class events that matches the current row
+      const class_events: Array<EventType> = [];
+      events.forEach((event) => {
+        if (
           // Same week number
           event.week === currentWeekNum &&
           // Same start hour
@@ -29,23 +38,38 @@ export default function Calendar({ events }: CalendarProps) {
             new Date(event.start_time).toLocaleDateString("en-US", {
               weekday: "short",
             })
-      );
-      if (class_event === undefined) {
-        rowElements.push(
-          <div key={j} className="calendar_hour">
-          </div>
-        );
+        ) {
+          class_events.push(event);
+        }
+      });
+
+      // const class_event = events.find(
+      //   (event) =>
+      //     // Same week number
+      //     event.week === currentWeekNum &&
+      //     // Same start hour
+      //     new Date(event.start_time).getHours() === hour &&
+      //     // Same day of the week
+      //     week ===
+      //       new Date(event.start_time).toLocaleDateString("en-US", {
+      //         weekday: "short",
+      //       })
+      // );
+      if (class_events.length === 0) {
+        rowElements.push(<div key={j} className="calendar_hour"></div>);
       } else {
         rowElements.push(
           <div key={j} className="calendar_hour">
-            <Event
-              key={j}
-              title={class_event.title}
-              type={class_event.type}
-              groups={class_event.groups}
-              classroom={class_event.classroom}
-              date={class_event.start_time}
-            />
+            {class_events.map((event, index) => (
+              <Event
+                key={index}
+                title={event.title}
+                type={event.type}
+                groups={event.groups}
+                classroom={event.classroom}
+                date={event.start_time}
+              />
+            ))}
           </div>
         );
       }

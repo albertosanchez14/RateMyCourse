@@ -34,7 +34,7 @@
 .course-description-title-container {
   display: flex;
   flex-direction: row;
-  gap: 1rem;
+  gap: 1.5rem;
 
   #unselected {
     opacity: 0.3;

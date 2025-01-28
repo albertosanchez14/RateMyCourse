@@ -75,6 +75,9 @@
 }
 
 .calendar_hour {
+  display: flex;
+  flex-direction: row;
+
   border-top: 1px solid #ccc;
 }
 .calendar_hour:first-child {
