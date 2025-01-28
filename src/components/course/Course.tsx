@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 import "./Course.css";
 
@@ -12,18 +12,33 @@ import { useCourse } from "../../hooks/useCourse";
 export default function Course() {
   // Load course data now from folder data
   const { data, isLoading, error } = useCourse();
-  const [description, setDescription] = useState('');
+  const [description, setDescription] = useState("");
+  const descriptionRef = useRef<HTMLParagraphElement>(null);
+  const [isOverflowing, setIsOverflowing] = useState(false);
 
+  // Set the description to the first one
   useEffect(() => {
     if (data) {
       setDescription(data.objectives);
     }
   }, [data]);
+  // Check if the description is overflowing
+  useEffect(() => {
+    if (descriptionRef.current) {
+      if (
+        descriptionRef.current.scrollHeight >
+        descriptionRef.current.clientHeight
+      ) {
+        setIsOverflowing(true);
+      } else {
+        setIsOverflowing(false);
+      }
+    }
+  }, [descriptionRef, description]);
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;
   if (!data) return <div>No data</div>;
-
 
   const handleDescriptionChange = (e: React.MouseEvent<HTMLHeadingElement>) => {
     // Change the selected title
@@ -34,29 +49,46 @@ export default function Course() {
     e.currentTarget.id = "selected";
     // Change the description
     const selectedDescription = e.currentTarget.textContent;
-    let newDescription = '';
+    let newDescription = "";
     switch (selectedDescription) {
-      case 'Objectives':
+      case "Objectives":
         newDescription = data?.objectives;
         break;
-      case 'Skills and learning outcomes':
+      case "Skills and learning outcomes":
         newDescription = data?.skills_and_learning_outcomes;
         break;
-      case 'Description of contents':
+      case "Description of contents":
         newDescription = data?.description_of_contents;
         break;
       default:
         newDescription = data?.objectives;
     }
+    if (!descriptionRef.current) return;
+    descriptionRef.current.className = "course-description";
+    const loadMoreButton = document.getElementsByClassName(
+      "course-description-load"
+    )[0] as HTMLButtonElement | undefined;
+    if (loadMoreButton) loadMoreButton.textContent = "Load More";
     setDescription(newDescription);
   };
   const generateDescription = (description: string) => {
     return description.split("\n").map((line, index) => (
-        <span key={index}>
-          {line}
-          <br />
-        </span>
-      ))
+      <span key={index}>
+        {line}
+        <br />
+      </span>
+    ));
+  };
+
+  const handleLoadMoreDesc = (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (!descriptionRef.current) return;
+    if (descriptionRef.current.className === "course-description") {
+      descriptionRef.current.className = "course-description-expanded";
+      e.currentTarget.textContent = "Show Less";
+    } else {
+      descriptionRef.current.className = "course-description";
+      e.currentTarget.textContent = "Load More";
+    }
   };
 
   return (
@@ -93,9 +125,17 @@ export default function Course() {
                 Description of contents
               </h3>
             </div>
-            <p className="course-description">
+            <p className="course-description" ref={descriptionRef}>
               {generateDescription(description)}
             </p>
+            {isOverflowing && (
+              <button
+                className="course-description-load"
+                onClick={handleLoadMoreDesc}
+              >
+                Load More
+              </button>
+            )}
           </div>
           <div className="course-rating-container">
             <div

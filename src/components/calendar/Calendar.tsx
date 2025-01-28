@@ -11,7 +11,7 @@ type WeekType = "Mon" | "Tue" | "Wed" | "Thu" | "Fri";
 
 export default function Calendar({ events }: CalendarProps) {
   const [rows] = useState(6);
-  const [currentWeekNum, setCurrentWeekNum] = useState(1);
+  const [currentWeekNum, setCurrentWeekNum] = useState(5);
 
   const renderRows = (week: WeekType) => {
     const rowElements = [];

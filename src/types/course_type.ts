@@ -37,6 +37,3 @@ export type EventType = {
   end_time: Date;
   classroom: string;
 };
-
-// Date has year, month, day, hour, minute
-const dateRegex = /\d{4}  \d{2} \d{2} \d{2}:\d{2}$/;
