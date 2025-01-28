@@ -15,6 +15,9 @@ export type CourseType = {
     lead_teacher: string;
     aggregated_group_lead_teacher: string;
   }>;
+  objectives: string;
+  skills_and_learning_outcomes: string;
+  description_of_contents: string; 
 
   schedule: Array<EventType>;
 };

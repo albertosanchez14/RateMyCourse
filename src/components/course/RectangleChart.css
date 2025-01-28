@@ -1,0 +1,26 @@
+.rectangle-chart-container {
+  display: flex;
+  width: 100%;
+  height: 30px;
+
+  background-color: #f0f0f0;
+  border: 1px solid #f0f0f0;
+  border-radius: 8px;
+}
+
+.rectangle-chart-bar {
+  background-color: lightblue;
+  border-radius: 8px;
+
+  width: var(--target-width);
+  animation: growWidth 1s forwards;
+}
+
+@keyframes growWidth {
+  from {
+    width: 0;
+  }
+  to {
+    width: var(--target-width);
+  }
+}

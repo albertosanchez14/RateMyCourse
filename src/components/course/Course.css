@@ -11,7 +11,12 @@
   flex-direction: column;
   align-self: start;
 }
-
+.course-title {
+  font-size: 2rem;
+  margin-bottom: 0px;
+}
+.course_degree {
+}
 
 /* Description with Rating Container */
 .course-description-rating-container {
@@ -19,33 +24,55 @@
   flex-direction: row;
   justify-content: space-between;
   gap: 1rem;
+
+  border-top: 1px solid #f0f0f0;
 }
 
 .course-description-container {
-  flex: 3;
   display: flex;
   flex-direction: column;
+}
+.course-description-title-container {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+
+  #unselected {
+    opacity: 0.3;
+    cursor: pointer;
+  }
+  #selected {
+    opacity: 1;
+    cursor: pointer;
+  }
+}
+.course-description-title {
+  margin-bottom: 0px;
+}
+.course-description {
+  margin-bottom: 0px;
 }
 
 .course-rating-container {
-  flex: 2;
   display: flex;
   flex-direction: column;
 }
-
-.course-rating-easy-container,
-.course-rating-useful-container,
-.course-rating-overall-container {
+.course-rating-title {
+  margin-bottom: 0px;
+}
+.course-rating-type-container {
   display: flex;
   flex-direction: column;
 }
-
+/****************************************/
 
 /* Schedule Container */
 .course-schedule-container {
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  border-top: 1px solid #f0f0f0;
 }
 
 
@@ -54,6 +81,8 @@
   display: flex;
   flex-direction: column;
   gap: 1rem;
+
+  border-top: 1px solid #f0f0f0;
 }
 
 .course-comments-type-container {

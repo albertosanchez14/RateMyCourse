@@ -37,6 +37,10 @@
     }
   ],
 
+  "objectives": "The main goal of this course is that the student knows the basic concepts around the computer architecture and the impact that they have in the performance of applications and computer systems. \n\nTo achieve this goal: \n+ Advanced aspects of computer architecture are covered in detail such as optimizations in memory hierarchy, instruction level parallelism, or multiprocessors design. \n+ Basic concept in concurrent programming and its relationship with the computer architecture are enforced. \n+ Parallel programming concepts are introduced. \n+ A constant concern about application performance and energy consumption is encouraged.",
+  "skills_and_learning_outcomes": "\u00BF Distinguish the different elements of a computer's memory organization and hierarchy and understand how they affect the performance of a processor and can use this knowledge to optimize algorithms written in high-level languages. \n\u00BF Know the concept of multiprocessor and multi-core architectures and be able to develop and optimize software for these architectures. \n\u00BF Know and apply the fundamental principles and basic techniques of parallel and concurrent programming.",
+  "description_of_contents": "1. Fundamentals of computer design.\n1.1. Introduction. \n1.2. Historical perspective.\n1.3. Classification of Computers.\n1.4. Parallelism.\n1.5. Computer Architecture.\n\n2. Performance Evaluation of computer systems.\n2.1. Classification of architectures and evaluation.\n2.2. Computer Systems Reliability.\n\n3. Memory hierarchy.\n3.1. Cache memory optimizations.\n3.2. Advanced cache optimizations.\n\n4. Instruction Level Parallelism.\n4.1. Introduction to Instruction Level Parallelism.\n4.2. Exploitation of Instruction Level Parallelism.\n\n5. Multiprocessors.\n5.1. Symmetric shared memory architectures.\n5.2. Distributed shared memory.\n5.3. Synchronization in shared memory.\n5.4. Memory consistency models.\n\n6. Models of parallel and concurrent programming.\n6.1. Introduction to parallel programming: OpenMP.\n6.2. Concurrent programming model: ISO C ++ Threads .\n6.3. Memory consistency models in C ++.",
+
   "schedule": [
     {
       "title": "Computer Architecture",
@@ -75,7 +79,7 @@
       "end_time": "2024/12/12/21:00",
       "classroom": "Aula 2.3.B05"
     },
-    
+
     {
       "title": "Computer Architecture",
       "type": "Practice",
