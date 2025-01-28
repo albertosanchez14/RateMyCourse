@@ -173,7 +173,7 @@ export default function Course() {
               className="course-rating-type-container"
               id="course-rating-overall-container"
             >
-              <h4>Rating (Semi-Chart)</h4>
+              <h4>Rating</h4>
               <SemiCircleChart />
             </div>
           </div>

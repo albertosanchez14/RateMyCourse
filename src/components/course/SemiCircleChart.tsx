@@ -91,18 +91,7 @@ export default function SemiCircleChart() {
 
   return (
     <div className="multi-graph margin">
-      {/* <svg width="300" height="200" viewBox="-40 -40 380 240" id="needle">
-        <line
-          x1="0"
-          y1="0"
-          x2="150"
-          y2="50"
-          stroke="red"
-          strokeWidth="5"
-          transform={`rotate(${angle}, 150, 200)`}
-        />
-      </svg> */}
-      {rating * 20}%
+      <span>{rating * 20}%</span>
       <div
         className="graph"
         style={
@@ -128,11 +117,5 @@ export default function SemiCircleChart() {
         }
       ></div>
     </div>
-    // <canvas
-    //   id="speedometer_graph"
-    //   height="350"
-    //   width="666"
-    //   ref={canvasRef}
-    // ></canvas>
   );
 }
