@@ -114,7 +114,7 @@ export default function Course() {
       <Header />
       <div className="course-content">
         <div className="course-title-container">
-          <h2 className="course-title">{data?.title}</h2>
+          <h1 className="course-title">{data?.title}</h1>
           <span className="course_degree">{data?.degree.title}</span>
         </div>
 
