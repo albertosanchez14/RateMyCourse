@@ -23,6 +23,7 @@ export default function Course() {
   useEffect(() => {
     if (data) {
       setDescription(data.objectives);
+      setSelectedGroups(data.teacher.map((teacher) => teacher.group)); // Initialize selectedGroups with all group numbers
     }
   }, [data]);
   // Check if the description is overflowing
@@ -101,11 +102,11 @@ export default function Course() {
         : prevSelectedGroups.filter((g) => g !== group)
     );
   };
-  const filteredEvents = data?.schedule.filter((event) =>
-    selectedGroups.length === 0
-      ? true
-      : event.groups.some((group: number) => selectedGroups.includes(group))
-  );
+  const filteredEvents = selectedGroups.length === 0
+    ? []
+    : data?.schedule.filter((event) =>
+        event.groups.some((group: number) => selectedGroups.includes(group))
+      );
   console.log(filteredEvents);
 
   return (
