@@ -9,13 +9,14 @@
   width: 100%;
   height: 30px;
 
-  background-color: #f0f0f0;
-  border: 1px solid #f0f0f0;
+  background-color: #caf0f8;
+  border: 1px solid #caf0f8;
   border-radius: 8px;
 }
 
 .rectangle-chart-bar {
-  background-color: lightblue;
+  background-color: #0077b6;
+  /* background-color: #03045e; */
   border-radius: 8px;
 
   width: var(--target-width);

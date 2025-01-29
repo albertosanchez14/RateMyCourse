@@ -7,7 +7,7 @@
 
   /* border-radius: 8px;
   border: 1px solid #ccc; */
-  --header-height: 3.5em;
+  --header-height: 3em;
 }
 
 .calendar_header {
@@ -81,7 +81,7 @@
   }
 }
 .calendar_day#hours_label_column .calendar_day_header_placeholder {
-  height: 3.5em; /* Ensure the height is consistent */
+  height: var(--header-height); /* Ensure the height is consistent */
 }
 
 .calendar_hour {

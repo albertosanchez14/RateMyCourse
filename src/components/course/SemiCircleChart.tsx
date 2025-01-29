@@ -95,25 +95,25 @@ export default function SemiCircleChart() {
       <div
         className="graph"
         style={
-          { "--percentage": 100, "--fill": "purple" } as React.CSSProperties
+          { "--percentage": 100, "--fill": "#0077b6" } as React.CSSProperties
         }
       ></div>
       <div
         className="graph"
         style={
-          { "--percentage": 75, "--fill": "#0669AD" } as React.CSSProperties
+          { "--percentage": 75, "--fill": "#00b4d8" } as React.CSSProperties
         }
       ></div>
       <div
         className="graph"
         style={
-          { "--percentage": 50, "--fill": "#E62A39" } as React.CSSProperties
+          { "--percentage": 50, "--fill": "#90e0ef" } as React.CSSProperties
         }
       ></div>
       <div
         className="graph"
         style={
-          { "--percentage": 25, "--fill": "#FEDA3E" } as React.CSSProperties
+          { "--percentage": 25, "--fill": "#caf0f8" } as React.CSSProperties
         }
       ></div>
     </div>
