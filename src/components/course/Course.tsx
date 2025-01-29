@@ -8,6 +8,7 @@ import Calendar from "../calendar/Calendar";
 import SemiCircleChart from "./SemiCircleChart";
 import RectangleChart from "./RectangleChart";
 import GroupSelector from "./GroupSelector";
+import CommentSection from "../comments/CommentSection";
 
 import { useCourse } from "../../hooks/useCourse";
 
@@ -107,7 +108,6 @@ export default function Course() {
     : data?.schedule.filter((event) =>
         event.groups.some((group: number) => selectedGroups.includes(group))
       );
-  console.log(filteredEvents);
 
   return (
     <>
@@ -188,56 +188,7 @@ export default function Course() {
           />
         </div>
 
-        <div className="course-comments-container">
-          <div className="course-comments-type-container">
-            <div>
-              <h3>Comments</h3>
-            </div>
-            <div>
-              <h3>Profesor</h3>
-            </div>
-          </div>
-          <div className="course-comments-query-container">
-            <select name="sortOption" className="sort-option" defaultValue="">
-              <option value="" disabled>
-                Sort by
-              </option>
-              <option value="date">Date</option>
-              <option value="rating">Rating</option>
-            </select>
-            <select
-              name="professor"
-              className="professor-select"
-              defaultValue=""
-            >
-              <option value="" disabled>
-                Select Professor
-              </option>
-              <option value="prof1">Professor 1</option>
-              <option value="prof2">Professor 2</option>
-            </select>
-          </div>
-          <div className="course-comments-list-container">
-            <div className="course-comment-container">
-              <p>Comment 1</p>
-              <p>Rating: 4.5/5</p>
-              <p>By: Student 1</p>
-            </div>
-            <div className="course-comment-container">
-              <p>Comment 2</p>
-              <p>Rating: 4.5/5</p>
-              <p>By: Student 2</p>
-            </div>
-            <div className="course-comment-container">
-              <p>Comment 3</p>
-              <p>Rating: 5/5</p>
-              <p>By: Student 3</p>
-            </div>
-          </div>
-          <div>
-            <button>Load More</button>
-          </div>
-        </div>
+        <CommentSection course_id={data.code}/>
       </div>
     </>
   );
