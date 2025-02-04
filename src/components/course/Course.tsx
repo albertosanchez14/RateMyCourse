@@ -112,14 +112,14 @@ export default function Course() {
   };
 
   const handleLoadMoreDesc = (e: React.MouseEvent<HTMLButtonElement>) => {
-    if (!descriptionRef.current) return;
+    if (!descriptionRef.current || !loadMoreButtonRef.current) return;
     if (descriptionRef.current.className === "course-description") {
       descriptionRef.current.className = "course-description-expanded";
       descriptionRef.current.style.maxHeight = "none";
       e.currentTarget.textContent = "Show Less";
     } else {
       descriptionRef.current.className = "course-description";
-      descriptionRef.current.style.maxHeight = `${maxDescriptionHeight}px`;
+      descriptionRef.current.style.maxHeight = `${maxDescriptionHeight - loadMoreButtonRef.current.clientHeight}px`;
       e.currentTarget.textContent = "Load More";
     }
   };
