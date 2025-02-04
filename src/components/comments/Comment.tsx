@@ -22,7 +22,6 @@ export default function Comment({ comment }: CommentProps) {
       let maxWidth = 0;
       Array.from(titles).forEach((title) => {
         const width = title.getBoundingClientRect().width;
-        console.log(comment.id, width);
         if (width > maxWidth) {
           maxWidth = width;
         }
@@ -31,7 +30,6 @@ export default function Comment({ comment }: CommentProps) {
       Array.from(titles).forEach((title) => {
         (title as HTMLElement).style.width = `${maxWidth}px`;
       });
-      console.log(maxWidth);
     }
   }, [comment.rating]);
 

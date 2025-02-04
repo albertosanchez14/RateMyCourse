@@ -2,8 +2,11 @@ import { useEffect, useState, useRef } from "react";
 
 import "./SemiCircleChart.css";
 
-export default function SemiCircleChart() {
-  const [rating, setRating] = useState(2.5);
+interface SemiCircleChartProps {
+  rating: number;
+}
+
+export default function SemiCircleChart( { rating }: SemiCircleChartProps ) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   // Calculate the rotation angle based on the rating (assuming rating is out of 5)
