@@ -1,0 +1,64 @@
+/* Comments Container */
+.course-comments-container {
+  display: flex;
+  flex-direction: column;
+
+  /* padding-left: 1rem;
+  padding-right: 1rem; */
+  border-top: 1px solid #f0f0f0;
+}
+
+/* Section to choose the types of the reviews */
+.course-comments-type-container {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}
+
+.course-comments-type {
+  padding: 1rem;
+  /* margin-left: 2em; */
+
+  /* border: 5px solid #f0f0f0;
+  border-bottom: none;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px; */
+}
+
+.course-comments-type-title{
+  margin: 1px;
+}
+.course-comments-type-title#selected {
+  opacity: 1;
+}
+.course-comments-type-title#unselected {
+  opacity: 0.3;
+}
+.course-comments-type-title:hover {
+  opacity: 1;
+  cursor: pointer;
+}
+/*********************************************/
+
+.course-comments-content-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  padding: 1rem;
+  /* border: 5px solid #f0f0f0; */
+  border-radius: 8px;
+  /* clip-path: ellipse(75% 50% at 50% 50%); */
+}
+
+.course-comments-query-container {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}
+
+.course-comments-list-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}

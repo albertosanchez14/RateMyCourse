@@ -2,20 +2,25 @@ import { useEffect, useState, useRef } from "react";
 
 import "./RectangleChart.css";
 
-export default function RectangleChart() {
-  const [rating, setRating] = useState(2);
-  // Calculate the width based on the rating (assuming rating is out of 5)
-  const width = (rating / 5) * 300;
+interface RectangleChartProps {
+  rating: number;
+}
 
-  const [targetWidth, setTargetWidth] = useState(width);
+export default function RectangleChart( { rating }: RectangleChartProps) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  // Calculate the width based on the rating (assuming rating is out of 5)
+  const width_ratio = (rating / 5);
+  const [targetWidth, setTargetWidth] = useState(0);
 
   useEffect(() => {
-    setTargetWidth(width);
-  }, [width]);
+    if (!containerRef.current) return;
+    const container_width = containerRef.current.clientWidth;
+    setTargetWidth(container_width * width_ratio);
+  }, []);
 
   return (
     <div className="rectangle-chart">
-      <div className="rectangle-chart-container">
+      <div className="rectangle-chart-container" ref={containerRef}>
         <div
           className="rectangle-chart-bar"
           style={

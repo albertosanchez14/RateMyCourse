@@ -2,11 +2,44 @@
   {
     "id": 1,
     "course_id": 13888,
-    "comment": "Comment 1",
+    "comment": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec purus nec nunc tincidunt ultricies. Nullam nec purus nec nunc tincidunt ultricies. Nullam nec pur us nec nunc tincidunt ultricies. Nullam nec purus nec nunctincidunt ultricies.",
+    "rating": {
+      "easy": 1,
+      "useful": 4.5,
+      "overall": 4.5
+    },
+    "by": "Student 1"
+  },
+  {
+    "id": 2,
+    "course_id": 13888,
+    "comment": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec purus nec nunc tincidunt ultricies. Nullam nec purus nec nunc tincidunt ultricies. Nullam nec pur us nec nunc tincidunt ultricies. Nullam nec purus nec nunctincidunt ultricies.",
     "rating": {
       "easy": 4.5,
       "useful": 4.5,
-      "rating": 4.5
+      "overall": 4.5
+    },
+    "by": "Student 1"
+  },
+  {
+    "id": 3,
+    "course_id": 13888,
+    "comment": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec purus nec nunc tincidunt ultricies. Nullam nec purus nec nunc tincidunt ultricies. Nullam nec pur us nec nunc tincidunt ultricies. Nullam nec purus nec nunctincidunt ultricies.",
+    "rating": {
+      "easy": 4.5,
+      "useful": 4.5,
+      "overall": 4.5
+    },
+    "by": "Student 1"
+  },
+  {
+    "id": 4,
+    "course_id": 13888,
+    "comment": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec purus nec nunc tincidunt ultricies. Nullam nec purus nec nunc tincidunt ultricies. Nullam nec pur us nec nunc tincidunt ultricies. Nullam nec purus nec nunctincidunt ultricies.",
+    "rating": {
+      "easy": 4.5,
+      "useful": 4.5,
+      "overall": 4.5
     },
     "by": "Student 1"
   }

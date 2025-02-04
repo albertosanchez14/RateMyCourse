@@ -161,14 +161,14 @@ export default function Course() {
               id="course-rating-easy-container"
             >
               <h4 className="course-rating-title">Easy</h4>
-              <RectangleChart />
+              <RectangleChart rating={2} />
             </div>
             <div
               className="course-rating-type-container"
               id="course-rating-useful-container"
             >
               <h4 className="course-rating-title">Useful</h4>
-              <RectangleChart />
+              <RectangleChart rating={4.5}/>
             </div>
             <div
               className="course-rating-type-container"

@@ -6,8 +6,8 @@ export type CommentCourseType = {
   by: string;
 };
 
-type RatingType = {
+export type RatingType = {
   easy: number;
   useful: number;
-  rating: number; // Overall rating
+  overall: number; // Overall rating
 };
