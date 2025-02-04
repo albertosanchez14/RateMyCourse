@@ -11,6 +11,7 @@ import GroupSelector from "./GroupSelector";
 import CommentSection from "../comments/CommentSection";
 
 import { useCourse } from "../../hooks/useCourse";
+import { RatingType } from "../../types/comments_type";
 
 export default function Course() {
   // Load course data now from folder data
@@ -156,20 +157,20 @@ export default function Course() {
             )}
           </div>
           <div className="course-rating-container">
-            <div
-              className="course-rating-type-container"
-              id="course-rating-easy-container"
-            >
-              <h4 className="course-rating-title">Easy</h4>
-              <RectangleChart rating={2} />
-            </div>
-            <div
-              className="course-rating-type-container"
-              id="course-rating-useful-container"
-            >
-              <h4 className="course-rating-title">Useful</h4>
-              <RectangleChart rating={4.5}/>
-            </div>
+            {/* Ratings */}
+            {Object.keys(data.rating).map((key) => {
+              if (key === "overall") return null;
+              return (
+                <div
+                  className="course-rating-type-container"
+                  id={`course-rating-${key}-container`}
+                  key={key}
+                >
+                  <h4 className="course-rating-title">{key.charAt(0).toUpperCase() + key.slice(1)}</h4>
+                  <RectangleChart rating={data.rating[key as keyof RatingType]} />
+                </div>
+              );
+            })}
             <div
               className="course-rating-type-container"
               id="course-rating-overall-container"

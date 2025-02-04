@@ -27,7 +27,7 @@ export default function Comment({ comment }: CommentProps) {
           maxWidth = width;
         }
       });
-      maxWidth += 10; // TODO: Ver como hacerlo mejor
+      maxWidth += 20; // TODO: Ver como hacerlo mejor
       Array.from(titles).forEach((title) => {
         (title as HTMLElement).style.width = `${maxWidth}px`;
       });
@@ -45,13 +45,13 @@ export default function Comment({ comment }: CommentProps) {
         />
         <div>
         <span className="course-comment-profile-user">{comment.by}</span>
-        <span className="course-comment-profile-date">date</span>
+        <span className="course-comment-profile-date">{comment.date}</span>
         </div>
       </div>
       <div className="course-comment-description-rating">
         <div className="course-comment-description-container">
-          <h3 className="title">Title</h3>
-          <p>{comment.comment}</p>
+          <h3 className="title">{comment.title}</h3>
+          <p>{comment.description}</p>
         </div>
         <div
           className="course-comment-rating-container"

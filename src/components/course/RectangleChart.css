@@ -8,7 +8,7 @@
 .rectangle-chart-container {
   display: flex;
   width: 100%;
-  height: 30px;
+  height: 20px;
 
   background-color: #caf0f8;
   border: 1px solid #caf0f8;

@@ -1,3 +1,5 @@
+import { RatingType } from "./comments_type";
+
 export type CourseType = {
   title: string;
   code: number;
@@ -19,6 +21,7 @@ export type CourseType = {
   skills_and_learning_outcomes: string;
   description_of_contents: string; 
 
+  rating: RatingType;
   schedule: Array<EventType>;
 };
 

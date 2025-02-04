@@ -2,10 +2,13 @@
   {
     "id": 1,
     "course_id": 13888,
-    "comment": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec purus nec nunc tincidunt ultricies. Nullam nec purus nec nunc tincidunt ultricies. Nullam nec pur us nec nunc tincidunt ultricies. Nullam nec purus nec nunctincidunt ultricies.",
+    "title": "Great course!",
+    "date": "2019-01-01",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec purus nec nunc tincidunt ultricies. Nullam nec purus nec nunc tincidunt ultricies. Nullam nec pur us nec nunc tincidunt ultricies. Nullam nec purus nec nunctincidunt ultricies.",
     "rating": {
       "easy": 1,
-      "useful": 4.5,
+      "useful": 4,
+      "workload": 4,
       "overall": 4.5
     },
     "by": "Student 1"
@@ -13,34 +16,43 @@
   {
     "id": 2,
     "course_id": 13888,
-    "comment": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec purus nec nunc tincidunt ultricies. Nullam nec purus nec nunc tincidunt ultricies. Nullam nec pur us nec nunc tincidunt ultricies. Nullam nec purus nec nunctincidunt ultricies.",
+    "title": "Bad course!",
+    "date": "2019-01-02",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec purus nec nunc tincidunt ultricies. Nullam nec purus nec nunc tincidunt ultricies. Nullam nec pur us nec nunc tincidunt ultricies. Nullam nec purus nec nunctincidunt ultricies.",
     "rating": {
-      "easy": 4.5,
-      "useful": 4.5,
-      "overall": 4.5
+      "easy": 2,
+      "useful": 2.5,
+      "workload": 3,
+      "overall": 3
     },
-    "by": "Student 1"
+    "by": "Student 2"
   },
   {
     "id": 3,
     "course_id": 13888,
-    "comment": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec purus nec nunc tincidunt ultricies. Nullam nec purus nec nunc tincidunt ultricies. Nullam nec pur us nec nunc tincidunt ultricies. Nullam nec purus nec nunctincidunt ultricies.",
+    "title": "R u kidding me?",
+    "date": "2019-01-03",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec purus nec nunc tincidunt ultricies. Nullam nec purus nec nunc tincidunt ultricies. Nullam nec pur us nec nunc tincidunt ultricies. Nullam nec purus nec nunctincidunt ultricies.",
     "rating": {
-      "easy": 4.5,
-      "useful": 4.5,
-      "overall": 4.5
+      "easy": 1,
+      "useful": 4.3,
+      "workload": 2,
+      "overall": 2
     },
-    "by": "Student 1"
+    "by": "Student 2"
   },
   {
     "id": 4,
     "course_id": 13888,
-    "comment": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec purus nec nunc tincidunt ultricies. Nullam nec purus nec nunc tincidunt ultricies. Nullam nec pur us nec nunc tincidunt ultricies. Nullam nec purus nec nunctincidunt ultricies.",
+    "title": "I'm not sure",
+    "date": "2019-01-04",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec purus nec nunc tincidunt ultricies. Nullam nec purus nec nunc tincidunt ultricies. Nullam nec pur us nec nunc tincidunt ultricies. Nullam nec purus nec nunctincidunt ultricies.",
     "rating": {
       "easy": 4.5,
       "useful": 4.5,
+      "workload": 4,
       "overall": 4.5
     },
-    "by": "Student 1"
+    "by": "Student 2"
   }
 ]
