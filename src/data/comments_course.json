@@ -11,7 +11,8 @@
       "workload": 4,
       "overall": 4.5
     },
-    "by": "Student 1"
+    "by": "Student 1",
+    "professor": "Professor 1"
   },
   {
     "id": 2,
@@ -25,7 +26,8 @@
       "workload": 3,
       "overall": 3
     },
-    "by": "Student 2"
+    "by": "Student 2",
+    "professor": "Professor 1"
   },
   {
     "id": 3,
@@ -39,7 +41,8 @@
       "workload": 2,
       "overall": 2
     },
-    "by": "Student 2"
+    "by": "Student 2",
+    "professor": "Professor 1"
   },
   {
     "id": 4,
@@ -53,6 +56,7 @@
       "workload": 4,
       "overall": 4.5
     },
-    "by": "Student 2"
+    "by": "Student 2",
+    "professor": "Professor 1"
   }
 ]

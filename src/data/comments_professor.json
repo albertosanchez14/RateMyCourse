@@ -1,0 +1,70 @@
+[
+  {
+    "id": 1,
+    "professor": {
+      "id": "prof123",
+      "name": "John Doe"
+    },
+    "title": "Great Professor",
+    "date": "2023-10-01",
+    "description": "Explains concepts clearly and is very helpful.",
+    "rating": {
+      "clarity": 5,
+      "helpfulness": 5,
+      "engaging": 4,
+      "overall": 5
+    },
+    "by": "student456"
+  },
+  {
+    "id": 2,
+    "professor": {
+      "id": "prof123",
+      "name": "John Doe"
+    },
+    "title": "Average Experience",
+    "date": "2023-09-15",
+    "description": "The professor is knowledgeable but sometimes hard to follow.",
+    "rating": {
+      "clarity": 3,
+      "helpfulness": 4,
+      "engaging": 3,
+      "overall": 3
+    },
+    "by": "student789"
+  },
+  {
+    "id": 1,
+    "professor": {
+      "id": "prof124",
+      "name": "Doe John"
+    },
+    "title": "Great Professor",
+    "date": "2023-10-01",
+    "description": "Explains concepts clearly and is very helpful.",
+    "rating": {
+      "clarity": 5,
+      "helpfulness": 5,
+      "engaging": 4,
+      "overall": 5
+    },
+    "by": "student456"
+  },
+  {
+    "id": 2,
+    "professor": {
+      "id": "prof124",
+      "name": "Doe John"
+    },
+    "title": "Average Experience",
+    "date": "2023-09-15",
+    "description": "The professor is knowledgeable but sometimes hard to follow.",
+    "rating": {
+      "clarity": 3,
+      "helpfulness": 4,
+      "engaging": 3,
+      "overall": 3
+    },
+    "by": "student789"
+  }
+]

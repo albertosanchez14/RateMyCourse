@@ -17,23 +17,38 @@
   "teacher": [
     {
       "group": 81,
-      "lead_teacher": "Garcia Sanchez, Jose Daniel",
-      "aggregated_group_lead_teacher": "Exposito Singh, David"
+      "lead_teacher": {
+        "name": "Garcia Sanchez, Jose Daniel",
+        "id": "prof123"
+      },
+      "aggregated_group_lead_teacher": {
+        "name": "Exposito Singh, David",
+        "id": "prof124"
+      }
     },
     {
       "group": 82,
-      "lead_teacher": "Cascajo Garcia, Alberto",
-      "aggregated_group_lead_teacher": "Exposito Singh, David"
+      "lead_teacher": { "name": "Cascajo Garcia, Alberto", "id": "prof125" },
+      "aggregated_group_lead_teacher": {
+        "name": "Exposito Singh, David",
+        "id": "prof124"
+      }
     },
     {
       "group": 84,
-      "lead_teacher": "Cascajo Garcia, Alberto",
-      "aggregated_group_lead_teacher": "Gomez Carrasco, Carlos"
+      "lead_teacher": { "name": "Cascajo Garcia, Alberto", "id": "prof125" },
+      "aggregated_group_lead_teacher": {
+        "name": "Gomez Carrasco, Carlos",
+        "id": "prof126"
+      }
     },
     {
       "group": 85,
-      "lead_teacher": "Gomez Carrasco, Carlos",
-      "aggregated_group_lead_teacher": "Gomez Carrasco, Carlos"
+      "lead_teacher": { "name": "Gomez Carrasco, Carlos", "id": "prof126" },
+      "aggregated_group_lead_teacher": {
+        "name": "Gomez Carrasco, Carlos",
+        "id": "prof126"
+      }
     }
   ],
 

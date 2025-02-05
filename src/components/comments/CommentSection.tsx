@@ -1,26 +1,46 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import "./CommentSection.css";
 
-import { useComments } from "../../hooks/useComents";
-import { CommentCourseType } from "../../types/comments_type";
+import {
+  useCourseComments,
+  useProfessorsComments,
+} from "../../hooks/useComents";
+import {
+  CommentCourseType,
+  CommentProfessorType,
+  Professor,
+} from "../../types/comments_type";
 
 import Comment from "./Comment";
+import ProfessorCommentCard from "./ProfessorCommentCard";
 
 interface CommentSectionProps {
   course_id: number;
+  professors: Set<Professor>;
 }
 
-export default function CommentSection({ course_id }: CommentSectionProps) {
+export default function CommentSection({ course_id, professors }: CommentSectionProps) {
   // Load comments data now from folder data
-  const { data, isLoading, error } = useComments(course_id);
   const [commentsType, setCommentsType] = useState<"course" | "professor">(
     "course"
   );
+  const courseComments = useCourseComments(course_id);
+  console.log(professors);
+  // const professorComments = useProfessorsComments(professors);
 
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error.message}</div>;
-  if (!data) return <div>No data</div>;
+  useEffect(() => {
+  }, [commentsType]);
+
+  if (courseComments.isLoading) return <div>Loading...</div>;
+  if (courseComments.error)
+    return <div>Error: {courseComments.error.message}</div>;
+  if (!courseComments.data) return <div>No data</div>;
+
+  // if (professorComments.isLoading) return <div>Loading...</div>;
+  // if (professorComments.error)
+  //   return <div>Error: {professorComments.error.message}</div>;
+  // if (!professorComments.data) return <div>No data</div>;
 
   const handleCommentsType = (e: React.MouseEvent<HTMLDivElement>) => {
     const types = document.getElementsByClassName("course-comments-type-title");
@@ -72,14 +92,22 @@ export default function CommentSection({ course_id }: CommentSectionProps) {
             <option value="prof2">Professor 2</option>
           </select>
         </div>
-        <div className="course-comments-list-container">
-          {data.map((comment: CommentCourseType) => (
-            <Comment key={comment.id} comment={comment} />
-          ))}
-        </div>
-        <div>
-          <button>Load More</button>
-        </div>
+        {/* Course Reviews */}
+        {commentsType === "course" && (
+          <div className="course-comments-list-container">
+            {courseComments.data.map((comment: CommentCourseType) => (
+              <Comment key={comment.id} comment={comment} />
+            ))}
+          </div>
+        )}
+        {/* Professor Reviews */}
+        {/* {commentsType === "professor" && (
+          <div className="course-professor-comments-list-container">
+            {professorComments.data.map((comment: CommentProfessorType) => (
+              <ProfessorCommentCard key={comment.id} comment={comment} />
+            ))}
+          </div>
+        )} */}
       </div>
     </div>
   );

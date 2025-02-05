@@ -3,6 +3,7 @@ import { useState, useEffect, useRef, useLayoutEffect } from "react";
 import "./Course.css";
 
 import Header from "../navigation/Header";
+import CourseTitleSection from "./CourseTitleSection";
 import Calendar from "../calendar/Calendar";
 
 import SemiCircleChart from "./SemiCircleChart";
@@ -50,7 +51,9 @@ export default function Course() {
     ) {
       console.log("overflowing");
       setIsOverflowing(true);
-      const loadMoreButtonHeight = loadMoreButtonRef.current ? loadMoreButtonRef.current.offsetHeight : 0;
+      const loadMoreButtonHeight = loadMoreButtonRef.current
+        ? loadMoreButtonRef.current.offsetHeight
+        : 0;
       maxHeight -= loadMoreButtonHeight;
     } else {
       setIsOverflowing(false);
@@ -62,8 +65,12 @@ export default function Course() {
   useLayoutEffect(() => {
     if (isOverflowing && loadMoreButtonRef.current && descriptionRef.current) {
       const loadMoreButtonHeight = loadMoreButtonRef.current.offsetHeight;
-      const currentMaxHeight = parseFloat(descriptionRef.current.style.maxHeight);
-      descriptionRef.current.style.maxHeight = `${currentMaxHeight - loadMoreButtonHeight}px`;
+      const currentMaxHeight = parseFloat(
+        descriptionRef.current.style.maxHeight
+      );
+      descriptionRef.current.style.maxHeight = `${
+        currentMaxHeight - loadMoreButtonHeight
+      }px`;
     }
   }, [isOverflowing]);
 
@@ -119,7 +126,9 @@ export default function Course() {
       e.currentTarget.textContent = "Show Less";
     } else {
       descriptionRef.current.className = "course-description";
-      descriptionRef.current.style.maxHeight = `${maxDescriptionHeight - loadMoreButtonRef.current.clientHeight}px`;
+      descriptionRef.current.style.maxHeight = `${
+        maxDescriptionHeight - loadMoreButtonRef.current.clientHeight
+      }px`;
       e.currentTarget.textContent = "Load More";
     }
   };
@@ -138,14 +147,22 @@ export default function Course() {
           event.groups.some((group: number) => selectedGroups.includes(group))
         );
 
+  const uniqueTeachers = new Map();
+  data.teacher.forEach((teacher) => {
+    uniqueTeachers.set(teacher.lead_teacher.id, teacher.lead_teacher);
+    uniqueTeachers.set(
+      teacher.aggregated_group_lead_teacher.id,
+      teacher.aggregated_group_lead_teacher
+    );
+  });
+  const uniqueTeacherSet = new Set(uniqueTeachers.values());
+
   return (
     <>
       <Header />
       <div className="course-content">
-        <div className="course-title-container">
-          <h1 className="course-title">{data?.title}</h1>
-          <span className="course_degree">{data?.degree.title}</span>
-        </div>
+        <CourseTitleSection title={data.title} degree={data.degree} />
+        <CourseDescRateSection /> 
 
         <div className="course-description-rating-container">
           <div className="course-description-container">
@@ -201,9 +218,9 @@ export default function Course() {
                     : key.charAt(0).toUpperCase() + key.slice(1)}
                 </h4>
                 {key === "overall" ? (
-                  <SemiCircleChart rating={value}/>
+                  <SemiCircleChart rating={value as number} />
                 ) : (
-                  <RectangleChart rating={value} />
+                  <RectangleChart rating={value as number} />
                 )}
               </div>
             ))}
@@ -218,7 +235,7 @@ export default function Course() {
           />
         </div>
 
-        <CommentSection course_id={data.code} />
+        <CommentSection course_id={data.code} professors={uniqueTeacherSet} />
       </div>
     </>
   );

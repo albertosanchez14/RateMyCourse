@@ -1,4 +1,4 @@
-import { RatingType } from "./comments_type";
+import { RatingCourseType, Professor } from "./comments_type";
 
 export type CourseType = {
   title: string;
@@ -14,18 +14,18 @@ export type CourseType = {
   requirements: Array<string>;
   teacher: Array<{
     group: number;
-    lead_teacher: string;
-    aggregated_group_lead_teacher: string;
+    lead_teacher: Professor;
+    aggregated_group_lead_teacher: Professor;
   }>;
   objectives: string;
   skills_and_learning_outcomes: string;
   description_of_contents: string; 
 
-  rating: RatingType;
+  rating: RatingCourseType;
   schedule: Array<EventType>;
 };
 
-type DegreeType = {
+export type DegreeType = {
   title: string;
   plan: number;
   estudio: number;

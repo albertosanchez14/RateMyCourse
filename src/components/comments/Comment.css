@@ -42,10 +42,25 @@
 .course-comment-description-container {
   display: flex;
   flex-direction: column;
+  height: 100%;
   flex: 2;
 }
 .course-comment-description-container .title {
   margin: 0px;
+}
+.course-comment-description-container .professor {
+  display: flex;
+  align-items: end;
+  height: 100%;
+  gap: 0.3em;
+
+  span {
+    color: #a0a0a0;
+    font-size: 0.8em;
+  }
+  a {
+    font-size: 0.85em;
+  }
 }
 
 .course-comment-rating-container {

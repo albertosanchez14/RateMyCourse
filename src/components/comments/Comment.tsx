@@ -3,7 +3,7 @@ import { useLayoutEffect, useRef } from "react";
 import "./Comment.css";
 
 import { CommentCourseType } from "../../types/comments_type";
-import { RatingType } from "../../types/comments_type";
+import { RatingCourseType } from "../../types/comments_type";
 
 import RectangleChart from "../course/RectangleChart";
 
@@ -14,6 +14,7 @@ interface CommentProps {
 export default function Comment({ comment }: CommentProps) {
   const ratingContainerRef = useRef<HTMLDivElement>(null);
 
+  // Set the width of the rating titles to be the same
   useLayoutEffect(() => {
     if (ratingContainerRef.current) {
       const titles = ratingContainerRef.current.getElementsByClassName(
@@ -42,14 +43,20 @@ export default function Comment({ comment }: CommentProps) {
           className="course-comment-profile"
         />
         <div>
-        <span className="course-comment-profile-user">{comment.by}</span>
-        <span className="course-comment-profile-date">{comment.date}</span>
+          <span className="course-comment-profile-user">{comment.by}</span>
+          <span className="course-comment-profile-date">{comment.date}</span>
         </div>
       </div>
       <div className="course-comment-description-rating">
         <div className="course-comment-description-container">
           <h3 className="title">{comment.title}</h3>
-          <p>{comment.description}</p>
+          <span>{comment.description}</span>
+          <div className="professor">
+            <span className="professor">
+              Taught by
+            </span>
+            <a href="">{comment.professor}</a>
+          </div>
         </div>
         <div
           className="course-comment-rating-container"
@@ -58,12 +65,10 @@ export default function Comment({ comment }: CommentProps) {
           {Object.keys(comment.rating).map((key) => (
             <div key={key}>
               <div className="course-comment-rating-title">
-                <h4>
-                  {key.charAt(0).toUpperCase() + key.slice(1)}
-                </h4>
+                <h4>{key.charAt(0).toUpperCase() + key.slice(1)}</h4>
               </div>
               <RectangleChart
-                rating={comment.rating[key as keyof RatingType] as number}
+                rating={comment.rating[key as keyof RatingCourseType] as number}
               />
             </div>
           ))}
