@@ -1,8 +1,8 @@
-import { useState } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 import "./App.css";
 
+import Header from "./components/navigation";
 import Course from "./components/course";
 import Footer from "./components/navigation";
 import {
@@ -18,10 +18,9 @@ import {
 } from "./Routes";
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
     <>
+      <Header />
       <Router>
         <Routes>
           <Route path={LANDING_PAGE_ROUTE} element={<div>Landing Page</div>} />
@@ -35,7 +34,7 @@ function App() {
           <Route path={WELCOME_PAGE_ROUTE} element={<div>Welcome Page</div>} />
         </Routes>
       </Router>
-      <Footer/>
+      <Footer />
     </>
   );
 }

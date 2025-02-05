@@ -12,7 +12,7 @@ interface ScheduleSectionProps {
   schedule: Array<EventType>;
 }
 
-export default function ScheduleSection({
+export default function CourseScheduleSection({
   teacher,
   schedule,
 }: ScheduleSectionProps) {

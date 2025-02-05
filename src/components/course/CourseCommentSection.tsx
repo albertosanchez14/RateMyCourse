@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import "./CommentSection.css";
+import "./CourseCommentSection.css";
 
 import {
   useCourseComments,
@@ -12,22 +12,21 @@ import {
   Professor,
 } from "../../types/comments_type";
 
-import Comment from "./Comment";
-import ProfessorCommentCard from "./ProfessorCommentCard";
+import Comment from "../comments/Comment";
+import ProfessorCommentCard from "../comments/ProfessorCommentCard";
 
-interface CommentSectionProps {
+interface CourseCommentSectionProps {
   course_id: number;
   professors: Set<Professor>;
 }
 
-export default function CommentSection({ course_id, professors }: CommentSectionProps) {
+export default function CommentSection({ course_id, professors }: CourseCommentSectionProps) {
   // Load comments data now from folder data
   const [commentsType, setCommentsType] = useState<"course" | "professor">(
     "course"
   );
   const courseComments = useCourseComments(course_id);
-  console.log(professors);
-  // const professorComments = useProfessorsComments(professors);
+  const professorComments = useProfessorsComments(Array.from(professors).map((professor) => professor.id));
 
   useEffect(() => {
   }, [commentsType]);

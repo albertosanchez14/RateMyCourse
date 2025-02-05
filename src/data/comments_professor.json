@@ -3,7 +3,7 @@
     "id": 1,
     "professor": {
       "id": "prof123",
-      "name": "John Doe"
+      "name": "Garcia Sanchez, Jose Daniel"
     },
     "title": "Great Professor",
     "date": "2023-10-01",
@@ -20,7 +20,7 @@
     "id": 2,
     "professor": {
       "id": "prof123",
-      "name": "John Doe"
+      "name": "Garcia Sanchez, Jose Daniel"
     },
     "title": "Average Experience",
     "date": "2023-09-15",
@@ -34,10 +34,10 @@
     "by": "student789"
   },
   {
-    "id": 1,
+    "id": 3,
     "professor": {
       "id": "prof124",
-      "name": "Doe John"
+      "name": "Exposito Singh, David"
     },
     "title": "Great Professor",
     "date": "2023-10-01",
@@ -51,10 +51,61 @@
     "by": "student456"
   },
   {
-    "id": 2,
+    "id": 4,
     "professor": {
       "id": "prof124",
-      "name": "Doe John"
+      "name": "Exposito Singh, David"
+    },
+    "title": "Average Experience",
+    "date": "2023-09-15",
+    "description": "The professor is knowledgeable but sometimes hard to follow.",
+    "rating": {
+      "clarity": 3,
+      "helpfulness": 4,
+      "engaging": 3,
+      "overall": 3
+    },
+    "by": "student789"
+  },
+  {
+    "id": 5,
+    "professor": {
+      "id": "prof125",
+      "name": "Cascajo Garcia, Alberto"
+    },
+    "title": "Great Professor",
+    "date": "2023-10-01",
+    "description": "Explains concepts clearly and is very helpful.",
+    "rating": {
+      "clarity": 5,
+      "helpfulness": 5,
+      "engaging": 4,
+      "overall": 5
+    },
+    "by": "student456"
+  },
+  {
+    "id": 6,
+    "professor": {
+      "id": "prof125",
+      "name": "Cascajo Garcia, Alberto"
+    },
+    "title": "Average Experience",
+    "date": "2023-09-15",
+    "description": "The professor is knowledgeable but sometimes hard to follow.",
+    "rating": {
+      "clarity": 3,
+      "helpfulness": 4,
+      "engaging": 3,
+      "overall": 3
+    },
+    "by": "student789"
+  },
+  {
+    "id": 7,
+    "professor": {
+      "id": "prof125",
+      "name": "Gomez Carrasco, Carlos"
     },
     "title": "Average Experience",
     "date": "2023-09-15",

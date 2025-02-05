@@ -1,10 +1,9 @@
 import "./Course.css";
 
-import Header from "../navigation/Header";
 import CourseTitleSection from "./CourseTitleSection";
 import CourseDescRateSection from "./CourseDescRateSection";
-import ScheduleSection from "./ScheduleSection";
-import CommentSection from "../comments/CommentSection";
+import CourseScheduleSection from "./CourseScheduleSection";
+import CourseCommentSection from "./CourseCommentSection";
 
 import { useCourse } from "../../hooks/useCourse";
 
@@ -28,7 +27,6 @@ export default function Course() {
 
   return (
     <>
-      <Header />
       <div className="course-content">
         <CourseTitleSection title={data.title} degree={data.degree} />
         <CourseDescRateSection
@@ -37,8 +35,14 @@ export default function Course() {
           description_of_contents={data.description_of_contents}
           rating={data.rating}
         />
-        <ScheduleSection teacher={data.teacher} schedule={data.schedule} />
-        <CommentSection course_id={data.code} professors={uniqueTeacherSet} />
+        <CourseScheduleSection
+          teacher={data.teacher}
+          schedule={data.schedule}
+        />
+        <CourseCommentSection
+          course_id={data.code}
+          professors={uniqueTeacherSet}
+        />
       </div>
     </>
   );

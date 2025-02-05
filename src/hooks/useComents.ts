@@ -1,14 +1,20 @@
 import { useQuery } from "@tanstack/react-query";
-import { CommentCourseType, CommentProfessorType } from "../types/comments_type";
+import {
+  CommentCourseType,
+  CommentProfessorType,
+} from "../types/comments_type";
 
 import commentsCourseData from "../data/comments_course.json"; // Adjust the path as necessary
 import commentsProfessorData from "../data/comments_professor.json"; // Adjust the path as necessary
 
-
-const fetchCourseComents = async (course_id: number): Promise<Array<CommentCourseType>> => {
+const fetchCourseComents = async (
+  course_id: number
+): Promise<Array<CommentCourseType>> => {
   // Mock data
   const response = commentsCourseData as Array<CommentCourseType>;
-  const filteredResponse = response.filter((comment) => comment.course_id === course_id);
+  const filteredResponse = response.filter(
+    (comment) => comment.course_id === course_id
+  );
 
   // Simulate network delay
   // await new Promise((resolve) => setTimeout(resolve, 1));
@@ -22,10 +28,16 @@ export const useCourseComments = (course_id: number) => {
   });
 };
 
-const fetchProffesorComents = async (professor_id: string): Promise<Array<CommentProfessorType>> => {
+// ****************************************************************************
+
+const fetchProffesorComents = async (
+  professor_id: string
+): Promise<Array<CommentProfessorType>> => {
   // Mock data
   const response = commentsProfessorData as Array<CommentProfessorType>;
-  const filteredResponse = response.filter((comment) => comment.professor.id === professor_id);
+  const filteredResponse = response.filter(
+    (comment) => comment.professor.id === professor_id
+  );
 
   // Simulate network delay
   // await new Promise((resolve) => setTimeout(resolve, 1));
@@ -39,10 +51,16 @@ export const useProfessorComments = (professor_id: string) => {
   });
 };
 
-const fetchProffesorsComents = async (professors_id: Array<string>): Promise<Array<CommentProfessorType>> => {
+// ****************************************************************************
+
+const fetchProffesorsComents = async (
+  professors_id: Array<string>
+): Promise<Array<CommentProfessorType>> => {
   // Mock data
   const response = commentsProfessorData as Array<CommentProfessorType>;
-  const filteredResponse = response.filter((comment) => comment.professor.id in professors_id);
+  const filteredResponse = response.filter((comment) =>
+    professors_id.includes(comment.professor.id)
+  );
 
   // Simulate network delay
   // await new Promise((resolve) => setTimeout(resolve, 1));
