@@ -1,0 +1,46 @@
+[
+  {
+    "id": "prof123",
+    "name": "Garcia Sanchez, Jose Daniel",
+    "department": "Computer Science",
+    "rating": {
+      "clarity": 4.5,
+      "helpfulness": 4.5,
+      "engaging": 4.5,
+      "overall": 4.5
+    }
+  },
+  {
+    "id": "prof124",
+    "name": "Exposito Singh, David",
+    "department": "Computer Science",
+    "rating": {
+      "clarity": 4.5,
+      "helpfulness": 4.5,
+      "engaging": 4.5,
+      "overall": 4.5
+    }
+  },
+  {
+    "id": "prof125",
+    "name": "Cascajo Garcia, Alberto",
+    "department": "Computer Science",
+    "rating": {
+      "clarity": 4.5,
+      "helpfulness": 4.5,
+      "engaging": 4.5,
+      "overall": 4.5
+    }
+  },
+  {
+    "id": "prof126",
+    "name": "Gomez Carrasco, Carlos",
+    "department": "Computer Science",
+    "rating": {
+      "clarity": 4.5,
+      "helpfulness": 4.5,
+      "engaging": 4.5,
+      "overall": 4.5
+    }
+  }
+]

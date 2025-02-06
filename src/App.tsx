@@ -2,9 +2,9 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 import "./App.css";
 
-import Header from "./components/navigation";
+import Header from "./components/navigation/Header";
 import Course from "./components/course";
-import Footer from "./components/navigation";
+import Footer from "./components/navigation/Footer";
 import {
   LANDING_PAGE_ROUTE,
   PROFILE_PAGE_ROUTE,
