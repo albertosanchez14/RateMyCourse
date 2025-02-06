@@ -8,8 +8,11 @@ import CourseCommentSection from "./CourseCommentSection";
 import { useCourse } from "../../hooks/useCourse";
 
 export default function Course() {
+  // Get course_code from URL
+  const url = window.location.href;
+  const course_code = url.substring(url.lastIndexOf("/") + 1);
   // Load course data now from folder data
-  const { data, isLoading, error } = useCourse();
+  const { data, isLoading, error } = useCourse(Number(course_code));
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;

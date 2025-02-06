@@ -25,7 +25,7 @@ function App() {
         <Routes>
           <Route path={LANDING_PAGE_ROUTE} element={<div>Landing Page</div>} />
           <Route path={PROFILE_PAGE_ROUTE} element={<div>Profile Page</div>} />
-          <Route path={COURSE_PAGE_ROUTE} element={<Course />} />
+          <Route path={COURSE_PAGE_ROUTE} element={<Course/>} />
           <Route path={PROF_PAGE_ROUTE} element={<div>Prof Page</div>} />
           <Route path={SHORT_PROF_PAGE_ROUTE} element={<div>Prof Page</div>} />
           <Route path={EXPLORE_PAGE_ROUTE} element={<div>Explore Page</div>} />
