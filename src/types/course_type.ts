@@ -1,4 +1,4 @@
-import { RatingCourseType, Professor } from "./comments_type";
+import { RatingType, Professor } from "./comments_type";
 
 export type CourseType = {
   title: string;
@@ -21,7 +21,7 @@ export type CourseType = {
   skills_and_learning_outcomes: string;
   description_of_contents: string; 
 
-  rating: RatingCourseType;
+  rating: RatingType;
   schedule: Array<EventType>;
 };
 

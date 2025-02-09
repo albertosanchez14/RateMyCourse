@@ -2,24 +2,81 @@ import { useEffect, useState } from "react";
 
 import "./Calendar.css";
 
+import { useWeekSchedule } from "../../hooks/useWeek";
 import { EventType } from "../../types/course_type";
 
 import Event from "./Event";
 
-type CalendarProps = { events: Array<EventType> };
+type CalendarProps = { events: Array<EventType>; semester: number };
 type WeekType = "Mon" | "Tue" | "Wed" | "Thu" | "Fri";
 
-export default function Calendar({ events }: CalendarProps) {
+export default function Calendar({ events, semester }: CalendarProps) {
+  const weekDays: WeekType[] = ["Mon", "Tue", "Wed", "Thu", "Fri"];
+
   const [rows] = useState(6);
   const [currentWeekNum, setCurrentWeekNum] = useState(5);
+  const [currentMonth, setCurrentMonth] = useState("");
   const [currentDate, setCurrentDate] = useState(new Date().getTime());
+
+  const [daysinWeek, setDaysinWeek] = useState({
+    Mon: 0,
+    Tue: 0,
+    Wed: 0,
+    Thu: 0,
+    Fri: 0,
+  });
+
+  const semesterString = semester === 1 ? "first_semester" : "second_semester";
+  const { data: weekSchedule, isLoading, error } = useWeekSchedule();
 
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentDate(new Date().getTime());
     }, 1000);
+    console.log("Timer started");
+    console.log("Current date: ", new Date(currentDate));
     return () => clearInterval(timer);
   }, []);
+  // Set the days and month in the weekly calendar
+  useEffect(() => {
+    if (!weekSchedule) return;
+    const week: { [key: string]: any } = weekSchedule[semesterString];
+    const key = "w" + currentWeekNum;
+
+    // Create a map to store dates for each weekday
+    const weekDates: { [key in WeekType]: Date } = {
+      Mon: new Date(),
+      Tue: new Date(),
+      Wed: new Date(),
+      Thu: new Date(),
+      Fri: new Date(),
+    };
+
+    // Parse the Monday date (week[key] format is "day/month")
+    const [day, month] = week[key].split("/").map(Number);
+    const mondayDate = new Date(2024, month - 1, day); // month is 0-based in Date constructor
+
+    // Set dates for each weekday
+    weekDays.forEach((weekday, index) => {
+      const date = new Date(mondayDate);
+      date.setDate(mondayDate.getDate() + index);
+      weekDates[weekday] = date;
+    });
+
+    // Update the daysinWeek state
+    setDaysinWeek({
+      Mon: weekDates.Mon.getDate(),
+      Tue: weekDates.Tue.getDate(),
+      Wed: weekDates.Wed.getDate(),
+      Thu: weekDates.Thu.getDate(),
+      Fri: weekDates.Fri.getDate(),
+    });
+    setCurrentMonth(weekDates.Mon.toLocaleString("en-US", { month: "long" }));
+  }, [weekSchedule, semesterString, currentWeekNum]);
+
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error.message}</div>;
+  if (!weekSchedule) return <div>No data</div>;
 
   const renderRows = (week: WeekType) => {
     const rowElements = [];
@@ -80,7 +137,7 @@ export default function Calendar({ events }: CalendarProps) {
     <div className="weekly-calendar">
       <div className="calendar_header">
         <button onClick={handlePrevWeek}>Previous</button>
-        <h3>Week {currentWeekNum}</h3>
+        <h3>{currentMonth} - Week {currentWeekNum}</h3>
         <button onClick={handleNextWeek}>Next</button>
       </div>
       <div className="calendar_body">
@@ -108,31 +165,41 @@ export default function Calendar({ events }: CalendarProps) {
         </div>
         <div className="calendar_day">
           <div className="calendar_day_header" id="monday_container">
-            <h4 className="calendar_day_header_title">Monday</h4>
+            <h4 className="calendar_day_header_title">
+              {daysinWeek[weekDays[0]]} - {weekDays[0]}
+            </h4>
           </div>
           {renderRows("Mon")}
         </div>
         <div className="calendar_day">
           <div className="calendar_day_header">
-            <h4 className="calendar_day_header_title">Tuesday</h4>
+            <h4 className="calendar_day_header_title">
+              {daysinWeek[weekDays[1]]} - {weekDays[1]}
+            </h4>
           </div>
           {renderRows("Tue")}
         </div>
         <div className="calendar_day">
           <div className="calendar_day_header">
-            <h4 className="calendar_day_header_title">Wednesday</h4>
+            <h4 className="calendar_day_header_title">
+              {daysinWeek[weekDays[2]]} - {weekDays[2]}
+            </h4>
           </div>
           {renderRows("Wed")}
         </div>
         <div className="calendar_day">
           <div className="calendar_day_header">
-            <h4 className="calendar_day_header_title">Thurday</h4>
+            <h4 className="calendar_day_header_title">
+              {daysinWeek[weekDays[3]]} - {weekDays[3]}
+            </h4>
           </div>
           {renderRows("Thu")}
         </div>
         <div className="calendar_day">
           <div className="calendar_day_header" id="friday_container">
-            <h4 className="calendar_day_header_title">Friday</h4>
+            <h4 className="calendar_day_header_title">
+              {daysinWeek[weekDays[4]]} - {weekDays[4]}
+            </h4>
           </div>
           {renderRows("Fri")}
         </div>

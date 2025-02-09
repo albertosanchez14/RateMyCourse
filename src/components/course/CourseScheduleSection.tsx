@@ -9,12 +9,14 @@ interface ScheduleSectionProps {
   teacher: {
     group: number;
   }[];
-  schedule: Array<EventType>;
+  schedule: Array<EventType>
+  semester: number;
 }
 
 export default function CourseScheduleSection({
   teacher,
   schedule,
+  semester,
 }: ScheduleSectionProps) {
   const [selectedGroups, setSelectedGroups] = useState<number[]>([]);
 
@@ -41,7 +43,7 @@ export default function CourseScheduleSection({
 
   return (
     <div className="course-schedule-container">
-      <Calendar events={filteredEvents} />
+      <Calendar events={filteredEvents} semester={semester} />
       <GroupSelector
         groups={teacher.map((teacher) => teacher.group)}
         onGroupChange={handleGroupChange}
