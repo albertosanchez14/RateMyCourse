@@ -12,12 +12,11 @@ type WeekType = "Mon" | "Tue" | "Wed" | "Thu" | "Fri";
 
 export default function Calendar({ events, semester }: CalendarProps) {
   const weekDays: WeekType[] = ["Mon", "Tue", "Wed", "Thu", "Fri"];
-
   const [rows] = useState(6);
-  const [currentWeekNum, setCurrentWeekNum] = useState(5);
+  const [initialWeekNum, setInitialWeekNum] = useState(1);
+  const [finalWeekNum, setFinalWeekNum] = useState(24);
+  const [currentWeekNum, setCurrentWeekNum] = useState(initialWeekNum);
   const [currentMonth, setCurrentMonth] = useState("");
-  const [currentDate, setCurrentDate] = useState(new Date().getTime());
-
   const [daysinWeek, setDaysinWeek] = useState({
     Mon: 0,
     Tue: 0,
@@ -25,18 +24,9 @@ export default function Calendar({ events, semester }: CalendarProps) {
     Thu: 0,
     Fri: 0,
   });
-
   const semesterString = semester === 1 ? "first_semester" : "second_semester";
   const { data: weekSchedule, isLoading, error } = useWeekSchedule();
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentDate(new Date().getTime());
-    }, 1000);
-    console.log("Timer started");
-    console.log("Current date: ", new Date(currentDate));
-    return () => clearInterval(timer);
-  }, []);
   // Set the days and month in the weekly calendar
   useEffect(() => {
     if (!weekSchedule) return;
@@ -73,6 +63,39 @@ export default function Calendar({ events, semester }: CalendarProps) {
     });
     setCurrentMonth(weekDates.Mon.toLocaleString("en-US", { month: "long" }));
   }, [weekSchedule, semesterString, currentWeekNum]);
+  // Set the starting week of the semester which is first day of september
+  useEffect(() => {
+    if (!weekSchedule) return;
+    // Set the initial week number based on the semester
+    let initalMonth;
+    let finalMonth;
+    if (semester === 1) {
+      initalMonth = "09";
+      finalMonth = "01";
+    } else {
+      initalMonth = "02";
+      finalMonth = "07";
+    }
+    const week: { [key: string]: any } = weekSchedule[semesterString];
+    // Find the first week of the semester
+    const key = Object.keys(week).filter(
+      (key) => week[key].split("/")[1] === initalMonth
+    )[0];
+    if (!key) return;
+    const [day] = week[key].split("/").map(Number);
+    // TODO: Fix the week number calculation, change to first class in the week
+    const weekNumInit = day < 3 ? Number(key.slice(1)) + 1 : Number(key.slice(1));
+    setInitialWeekNum(weekNumInit);
+    setCurrentWeekNum(weekNumInit);
+    // Find the last week of the semester
+    const finalWeekKey = Object.keys(week).filter(
+      (key) => week[key].split("/")[1] === finalMonth
+    )[0];
+    if (!finalWeekKey) return;
+    const finalWeekNum = Number(finalWeekKey.slice(1));
+    // TODO: Fix the week number calculation, change to last class in the week
+    setFinalWeekNum(finalWeekNum);
+  }, [weekSchedule, semesterString]);
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;
@@ -121,13 +144,13 @@ export default function Calendar({ events, semester }: CalendarProps) {
     return rowElements;
   };
   const handlePrevWeek = () => {
-    if (currentWeekNum === 1) {
+    if (currentWeekNum === initialWeekNum) {
       return;
     }
     setCurrentWeekNum(currentWeekNum - 1);
   };
   const handleNextWeek = () => {
-    if (currentWeekNum === 24) {
+    if (currentWeekNum === finalWeekNum) {
       return;
     }
     setCurrentWeekNum(currentWeekNum + 1);
@@ -137,7 +160,9 @@ export default function Calendar({ events, semester }: CalendarProps) {
     <div className="weekly-calendar">
       <div className="calendar_header">
         <button onClick={handlePrevWeek}>Previous</button>
-        <h3>{currentMonth} - Week {currentWeekNum}</h3>
+        <h3>
+          {currentMonth} - Week {currentWeekNum}
+        </h3>
         <button onClick={handleNextWeek}>Next</button>
       </div>
       <div className="calendar_body">
