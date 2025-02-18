@@ -3,13 +3,13 @@ import { useState, useRef, useEffect, useLayoutEffect } from "react";
 import RectangleChart from "./RectangleChart";
 import SemiCircleChart from "./SemiCircleChart";
 
-import { RatingCourseType } from "../../types/comments_type";
+import { RatingType } from "../../types/comments_type";
 
 interface CourseDescRateSectionProps {
-  objectives: string;
-  skills_and_learning_outcomes: string;
-  description_of_contents: string;
-  rating: RatingCourseType;
+  objectives: string | undefined;
+  skills_and_learning_outcomes: string | undefined;
+  description_of_contents: string | undefined;
+  rating: RatingType | undefined;
 }
 
 export default function CourseDescRateSection({
@@ -26,6 +26,16 @@ export default function CourseDescRateSection({
   const loadMoreButtonRef = useRef<HTMLButtonElement>(null);
   const ratingContainerRef = useRef<HTMLDivElement>(null);
 
+  // Eliminate the _id field from the rating object
+  const [modifiedRating, setModifiedRating] = useState<RatingType | undefined>(rating);
+  useEffect(() => {
+    if (rating) {
+      const newRating = { ...rating };
+      console.log(newRating);
+      delete newRating._id;
+      setModifiedRating(newRating);
+    }
+  }, [rating]);
   // Set the description to the first one
   useEffect(() => {
     if (objectives) {
@@ -86,16 +96,16 @@ export default function CourseDescRateSection({
     let newDescription = "";
     switch (selectedDescription) {
       case "Objectives":
-        newDescription = objectives;
+        newDescription = objectives || "";
         break;
       case "Skills and learning outcomes":
-        newDescription = skills_and_learning_outcomes;
+        newDescription = skills_and_learning_outcomes || "";
         break;
       case "Description of contents":
-        newDescription = description_of_contents;
+        newDescription = description_of_contents || "";
         break;
       default:
-        newDescription = objectives;
+        newDescription = objectives || "";
     }
     if (!descriptionRef.current) return;
     descriptionRef.current.className = "course-description";
@@ -135,27 +145,33 @@ export default function CourseDescRateSection({
           className="course-description-title-container"
           ref={descriptionTitleContRef}
         >
-          <h3
-            className="course-description-title"
-            id="selected"
-            onClick={handleDescriptionChange}
-          >
-            Objectives
-          </h3>
-          <h3
-            className="course-description-title"
-            id="unselected"
-            onClick={handleDescriptionChange}
-          >
-            Skills and learning outcomes
-          </h3>
-          <h3
-            className="course-description-title"
-            id="unselected"
-            onClick={handleDescriptionChange}
-          >
-            Description of contents
-          </h3>
+          {objectives && (
+            <h3
+              className="course-description-title"
+              id="selected"
+              onClick={handleDescriptionChange}
+            >
+              Objectives
+            </h3>
+          )}
+          {skills_and_learning_outcomes && (
+            <h3
+              className="course-description-title"
+              id="unselected"
+              onClick={handleDescriptionChange}
+            >
+              Skills and learning outcomes
+            </h3>
+          )}
+          {description_of_contents && (
+            <h3
+              className="course-description-title"
+              id="unselected"
+              onClick={handleDescriptionChange}
+            >
+              Description of contents
+            </h3>
+          )}
         </div>
         <p className="course-description" ref={descriptionRef}>
           {generateDescription(description)}
@@ -171,24 +187,25 @@ export default function CourseDescRateSection({
         )}
       </div>
       <div className="course-rating-container" ref={ratingContainerRef}>
-        {Object.entries(rating).map(([key, value]) => (
-          <div
-            className="course-rating-type-container"
-            id={`course-rating-${key}-container`}
-            key={key}
-          >
-            <h4 className="course-rating-title">
-              {key === "overall"
-                ? "Rating"
-                : key.charAt(0).toUpperCase() + key.slice(1)}
-            </h4>
-            {key === "overall" ? (
-              <SemiCircleChart rating={value as number} />
-            ) : (
-              <RectangleChart rating={value as number} />
-            )}
-          </div>
-        ))}
+        {modifiedRating &&
+          Object.entries(modifiedRating).map(([key, value]) => (
+            <div
+              className="course-rating-type-container"
+              id={`course-rating-${key}-container`}
+              key={key}
+            >
+              <h4 className="course-rating-title">
+                {key === "overall"
+                  ? "Rating"
+                  : key.charAt(0).toUpperCase() + key.slice(1)}
+              </h4>
+              {key === "overall" ? (
+                <SemiCircleChart rating={value as number} />
+              ) : (
+                <RectangleChart rating={value as number} />
+              )}
+            </div>
+          ))}
       </div>
     </div>
   );

@@ -3,14 +3,29 @@ import { useEffect, useState } from "react";
 import Calendar from "../calendar/Calendar";
 import GroupSelector from "./GroupSelector";
 
-import { EventType } from "../../types/course_type";
+import { FREventType } from "../../types/course_type";
 
 interface ScheduleSectionProps {
-  teacher: {
-    group: number;
-  }[];
-  schedule: Array<EventType>
-  semester: number;
+  teacher: Array<{
+    faculty: string;
+    teacher: Array<{
+      group: number;
+      lead_teacher: {
+        id: string | undefined;
+        name: string;
+      };
+      aggregated_group_lead_teacher:
+        | { id: string | undefined; name: string }
+        | undefined;
+    }>;
+  }>;
+  schedule:
+    | Array<{
+        faculty: string;
+        schedule: Array<FREventType>;
+      }>
+    | undefined;
+  semester: number | undefined;
 }
 
 export default function CourseScheduleSection({
@@ -19,20 +34,40 @@ export default function CourseScheduleSection({
   semester,
 }: ScheduleSectionProps) {
   const [selectedGroups, setSelectedGroups] = useState<number[]>([]);
+  // TODO: Add functionality to change the selected faculty
+  const [selectedFaculty, setSelectedFaculty] = useState<string>(
+    teacher[0].faculty
+  );
 
+  // Initialize all groups of the faculty selected
   useEffect(() => {
     if (teacher) {
-      setSelectedGroups(teacher.map((teacher) => teacher.group)); // Initialize selectedGroups with all group numbers
+      // Initialize selectedGroups with the groups of the faculty selected
+      setSelectedGroups(
+        teacher
+          .find((t) => t.faculty === selectedFaculty)
+          ?.teacher.map((t) => t.group) || []
+      );
     }
   }, [teacher]);
 
+  // Filter the events by faculty and groups
   const filteredEvents =
-    selectedGroups.length === 0
+    selectedGroups.length === 0 || !schedule
       ? []
-      : schedule.filter((event) =>
-          event.groups.some((group: number) => selectedGroups.includes(group))
-        );
+      : schedule
+          // Filter the events by faculty
+          .filter(
+            (facultySchedules) => facultySchedules.faculty === selectedFaculty
+          )
+          // Filter the events by groups
+          .flatMap((facultySch) =>
+            facultySch.schedule.filter((event) =>
+              event.groups.some((group) => selectedGroups.includes(group))
+            )
+          );
 
+  // Handle the change of the selected groups of the faculty
   const handleGroupChange = (group: number, isChecked: boolean) => {
     setSelectedGroups((prevSelectedGroups) =>
       isChecked
@@ -43,9 +78,18 @@ export default function CourseScheduleSection({
 
   return (
     <div className="course-schedule-container">
-      <Calendar events={filteredEvents} semester={semester} />
+      <Calendar
+        faculty={selectedFaculty}
+        events={filteredEvents}
+        // TODO: Fix the semester default number
+        semester={semester ?? 1}
+      />
       <GroupSelector
-        groups={teacher.map((teacher) => teacher.group)}
+        groups={
+          teacher
+            .find((t) => t.faculty === selectedFaculty)
+            ?.teacher.map((t) => t.group) || []
+        }
         onGroupChange={handleGroupChange}
       />
     </div>

@@ -1,28 +1,48 @@
-import { RatingType, Professor } from "./comments_type";
+import { RatingType } from "./comments_type";
 
-export type CourseType = {
+export type DBCourseType = {
   title: string;
   code: number;
   degree: DegreeType;
   course: string;
   coordinating_teacher: string;
   department: string;
-  type: "Basic Core" | "Compulsory" | "Optional";
+  type: "Basic Core" | "Compulsory" | "Electives" | "Bachelor Thesis";
   credits: number;
-  course_year: number;
-  semester: number;
-  requirements: Array<string>;
+  course_year: number | undefined;
+  semester: number | undefined;
+  requirements: Array<string> | undefined;
   teacher: Array<{
-    group: number;
-    lead_teacher: Professor;
-    aggregated_group_lead_teacher: Professor;
+    faculty: string;
+    teacher: Array<{
+      group: number;
+      lead_teacher: {
+        id: string | undefined;
+        name: string;
+      };
+      aggregated_group_lead_teacher:
+        | { id: string | undefined; name: string }
+        | undefined;
+    }>;
   }>;
-  objectives: string;
-  skills_and_learning_outcomes: string;
-  description_of_contents: string; 
+  objectives: string | undefined;
+  skills_and_learning_outcomes: string | undefined;
+  description_of_contents: string | undefined;
 
-  rating: RatingType;
-  schedule: Array<EventType>;
+  rating: RatingType | undefined;
+  schedule:
+    | Array<{
+        faculty: string;
+        schedule: Array<DBEventType>;
+      }>
+    | undefined;
+};
+
+export type FRCourseType = Omit<DBCourseType, "schedule"> & {
+  schedule: Array<{
+    faculty: string;
+    schedule: Array<FREventType>;
+  }> | undefined;
 };
 
 export type DegreeType = {
@@ -31,12 +51,25 @@ export type DegreeType = {
   estudio: number;
 };
 
-export type EventType = {
-  title: CourseType["title"];
+export type DBEventType = {
   type: "Magistral" | "Practice" | "Laboratory";
   groups: Array<number>;
-  week: number; // 1-16
-  start_time: Date;
-  end_time: Date;
+  start_time: string;
+  end_time: string;
+  sessions: Array<{
+    date: Array<string>;
+    classroom: string;
+    weeks: Array<number>;
+  }>;
+};
+
+// Add type definition for transformed event
+export type FREventType = {
+  type: "Magistral" | "Practice" | "Laboratory";
+  groups: number[];
+  week: number;
+  start_time: string;
+  end_time: string;
+  date: string;
   classroom: string;
 };

@@ -3,14 +3,22 @@ import { useEffect, useState } from "react";
 import "./Calendar.css";
 
 import { useWeekSchedule } from "../../hooks/useWeek";
-import { EventType } from "../../types/course_type";
+import { FREventType } from "../../types/course_type";
 
 import Event from "./Event";
 
-type CalendarProps = { events: Array<EventType>; semester: number };
+type CalendarProps = {
+  faculty: string;
+  events: Array<FREventType>;
+  semester: number;
+};
 type WeekType = "Mon" | "Tue" | "Wed" | "Thu" | "Fri";
 
-export default function Calendar({ events, semester }: CalendarProps) {
+export default function Calendar({
+  faculty,
+  events,
+  semester,
+}: CalendarProps) {
   const weekDays: WeekType[] = ["Mon", "Tue", "Wed", "Thu", "Fri"];
   const [rows] = useState(6);
   const [initialWeekNum, setInitialWeekNum] = useState(1);
@@ -84,7 +92,8 @@ export default function Calendar({ events, semester }: CalendarProps) {
     if (!key) return;
     const [day] = week[key].split("/").map(Number);
     // TODO: Fix the week number calculation, change to first class in the week
-    const weekNumInit = day < 3 ? Number(key.slice(1)) + 1 : Number(key.slice(1));
+    const weekNumInit =
+      day < 3 ? Number(key.slice(1)) + 1 : Number(key.slice(1));
     setInitialWeekNum(weekNumInit);
     setCurrentWeekNum(weekNumInit);
     // Find the last week of the semester
@@ -106,18 +115,17 @@ export default function Calendar({ events, semester }: CalendarProps) {
     for (let j = 0; j < rows; j++) {
       const hour = j * 2 + 9;
       // Find the class events that matches the current row
-      const class_events: Array<EventType> = [];
+      const class_events: Array<FREventType> = [];
       events.forEach((event) => {
+        const startTime = Number(event.start_time.split(":")[0]);
+        const weekCurrent = event.date.split(",")[0];
         if (
           // Same week number
           event.week === currentWeekNum &&
           // Same start hour
-          new Date(event.start_time).getHours() === hour &&
+          startTime === hour &&
           // Same day of the week
-          week ===
-            new Date(event.start_time).toLocaleDateString("en-US", {
-              weekday: "short",
-            })
+          week === weekCurrent
         ) {
           class_events.push(event);
         }
@@ -130,11 +138,9 @@ export default function Calendar({ events, semester }: CalendarProps) {
             {class_events.map((event, index) => (
               <Event
                 key={index}
-                title={event.title}
                 type={event.type}
                 groups={event.groups}
                 classroom={event.classroom}
-                date={event.start_time}
               />
             ))}
           </div>
@@ -161,7 +167,7 @@ export default function Calendar({ events, semester }: CalendarProps) {
       <div className="calendar_header">
         <button onClick={handlePrevWeek}>Previous</button>
         <h3>
-          {currentMonth} - Week {currentWeekNum}
+          {faculty} - {currentMonth} - Week {currentWeekNum}
         </h3>
         <button onClick={handleNextWeek}>Next</button>
       </div>

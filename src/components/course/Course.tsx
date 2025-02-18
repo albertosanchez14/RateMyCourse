@@ -18,15 +18,13 @@ export default function Course() {
   if (error) return <div>Error: {error.message}</div>;
   if (!data) return <div>No data</div>;
 
-  const uniqueTeachers = new Map();
-  data.teacher.forEach((teacher) => {
-    uniqueTeachers.set(teacher.lead_teacher.id, teacher.lead_teacher);
-    uniqueTeachers.set(
-      teacher.aggregated_group_lead_teacher.id,
-      teacher.aggregated_group_lead_teacher
-    );
+  const uniqueTeachers = new Set<{ id?: string; name?: string } | undefined>();
+  data.teacher.forEach((teachersInFaculty) => {
+    teachersInFaculty.teacher.forEach((teacherElem) => {
+      uniqueTeachers.add(teacherElem.lead_teacher);
+      uniqueTeachers.add(teacherElem.aggregated_group_lead_teacher);
+    });
   });
-  const uniqueTeacherSet = new Set(uniqueTeachers.values());
 
   return (
     <>
@@ -45,7 +43,7 @@ export default function Course() {
         />
         <CourseCommentSection
           course_id={data.code}
-          professors={uniqueTeacherSet}
+          professors={uniqueTeachers}
         />
       </div>
     </>

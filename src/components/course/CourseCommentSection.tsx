@@ -17,7 +17,7 @@ import ProfessorCommentCard from "../comments/ProfessorCommentCard";
 
 interface CourseCommentSectionProps {
   course_id: number;
-  professors: Set<Professor>;
+  professors: Set<{ id?: string; name?: string } | undefined>;
 }
 
 export default function CommentSection({
@@ -29,18 +29,20 @@ export default function CommentSection({
     "course"
   );
   const courseComments = useCourseComments(course_id);
-  const professorComments = useProfessorsComments(
-    Array.from(professors).map((professor) => professor.id)
-  );
+  
+  // const professorComments = useProfessorsComments(
+  //   Array.from(professors).map((professor) => professor.id)
+  // );
 
   if (courseComments.isLoading) return <div>Loading...</div>;
   if (courseComments.error)
     return <div>Error: {courseComments.error.message}</div>;
   if (!courseComments.data) return <div>No data</div>;
-  if (professorComments.isLoading) return <div>Loading...</div>;
-  if (professorComments.error)
-    return <div>Error: {professorComments.error.message}</div>;
-  if (!professorComments.data) return <div>No data</div>;
+
+  // if (professorComments.isLoading) return <div>Loading...</div>;
+  // if (professorComments.error)
+  //   return <div>Error: {professorComments.error.message}</div>;
+  // if (!professorComments.data) return <div>No data</div>;
 
   // Handle comments type
   const handleCommentsType = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -111,7 +113,7 @@ export default function CommentSection({
           </div>
         )}
         {/* Professor Reviews */}
-        {commentsType === "professor" && (
+        {/* {commentsType === "professor" && (
           <div className="course-professor-comments-list-container">
             {Array.from(professorComments.data).map(
               ([professor, comments]: [
@@ -126,7 +128,7 @@ export default function CommentSection({
               )
             )}
           </div>
-        )}
+        )} */}
       </div>
     </div>
   );
