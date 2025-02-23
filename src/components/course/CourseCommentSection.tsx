@@ -29,7 +29,8 @@ export default function CommentSection({
     "course"
   );
   const courseComments = useCourseComments(course_id);
-  
+
+  // TODO: Implement useProfessorsComments
   // const professorComments = useProfessorsComments(
   //   Array.from(professors).map((professor) => professor.id)
   // );

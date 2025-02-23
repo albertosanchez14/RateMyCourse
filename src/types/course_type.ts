@@ -30,19 +30,18 @@ export type DBCourseType = {
   description_of_contents: string | undefined;
 
   rating: RatingType | undefined;
-  schedule:
-    | Array<{
-        faculty: string;
-        schedule: Array<DBEventType>;
-      }>
-    | undefined;
+  schedule: Array<{
+    faculty: string;
+    schedule: Array<DBEventType>;
+  }>;
 };
 
 export type FRCourseType = Omit<DBCourseType, "schedule"> & {
-  schedule: Array<{
-    faculty: string;
-    schedule: Array<FREventType>;
-  }> | undefined;
+  schedule:
+    | Array<{
+        faculty: string;
+        schedule: Array<FREventType>;
+      }>;
 };
 
 export type DegreeType = {

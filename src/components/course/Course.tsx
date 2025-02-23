@@ -29,7 +29,11 @@ export default function Course() {
   return (
     <>
       <div className="course-content">
-        <CourseTitleSection title={data.title} degree={data.degree} />
+        <CourseTitleSection
+          title={data.title}
+          course={data.code}
+          degree={data.degree}
+        />
         <CourseDescRateSection
           objectives={data.objectives}
           skills_and_learning_outcomes={data.skills_and_learning_outcomes}

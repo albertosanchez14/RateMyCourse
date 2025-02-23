@@ -19,12 +19,10 @@ interface ScheduleSectionProps {
         | undefined;
     }>;
   }>;
-  schedule:
-    | Array<{
-        faculty: string;
-        schedule: Array<FREventType>;
-      }>
-    | undefined;
+  schedule: Array<{
+    faculty: string;
+    schedule: Array<FREventType>;
+  }>;
   semester: number | undefined;
 }
 
@@ -33,6 +31,9 @@ export default function CourseScheduleSection({
   schedule,
   semester,
 }: ScheduleSectionProps) {
+  if (schedule.length === 0) {
+    return <div className="course-schedule-container"></div>;
+  }
   const [selectedGroups, setSelectedGroups] = useState<number[]>([]);
   // TODO: Add functionality to change the selected faculty
   const [selectedFaculty, setSelectedFaculty] = useState<string>(
