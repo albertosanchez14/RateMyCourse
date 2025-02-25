@@ -14,16 +14,10 @@ type CalendarProps = {
 };
 type WeekType = "Mon" | "Tue" | "Wed" | "Thu" | "Fri";
 
-export default function Calendar({
-  faculty,
-  events,
-  semester,
-}: CalendarProps) {
+export default function Calendar({ faculty, events, semester }: CalendarProps) {
   const weekDays: WeekType[] = ["Mon", "Tue", "Wed", "Thu", "Fri"];
   const [rows] = useState(6);
-  const [initialWeekNum, setInitialWeekNum] = useState(1);
-  const [finalWeekNum, setFinalWeekNum] = useState(24);
-  const [currentWeekNum, setCurrentWeekNum] = useState(initialWeekNum);
+  // const [currentWeekNum, setCurrentWeekNum] = useState(initialWeekNum);
   const [currentMonth, setCurrentMonth] = useState("");
   const [daysinWeek, setDaysinWeek] = useState({
     Mon: 0,
@@ -35,82 +29,57 @@ export default function Calendar({
   const semesterString = semester === 1 ? "first_semester" : "second_semester";
   const { data: weekSchedule, isLoading, error } = useWeekSchedule();
 
+  // Initialize with today's date
+  const [minDate, setMinDate] = useState<Date>(new Date());
+  const [maxDate, setMaxDate] = useState<Date>(new Date());
+  const [startingDate, setStartingDate] = useState<Date>(() => {
+    const today = new Date();
+    const day = today.getDay();
+    const diff = today.getDate() - day + (day === 0 ? -6 : 1);
+    return new Date(today.setDate(diff));
+  });
+
+  // Update startingDate when events are available
+  useEffect(() => {
+    if (events.length === 0) return;
+
+    // Find earliest event date
+    let minDate = new Date(events[0].date);
+    let maxDate = new Date(events[0].date);
+    events.forEach((event) => {
+      const date = new Date(event.date);
+      if (date < minDate) minDate = date;
+      if (date > maxDate) maxDate = date;
+    });
+    setMinDate(minDate);
+    setMaxDate(maxDate);
+
+    // Adjust to Monday of that week
+    const day = minDate.getDay();
+    const diff = minDate.getDate() - day + (day === 0 ? -6 : 1);
+    minDate.setDate(diff);
+
+    setStartingDate(minDate);
+  }, [events]); // Only run when events change
+
   // Set the days and month in the weekly calendar
   useEffect(() => {
-    if (!weekSchedule) return;
-    const week: { [key: string]: any } = weekSchedule[semesterString];
-    const key = "w" + currentWeekNum;
-
-    // Create a map to store dates for each weekday
-    const weekDates: { [key in WeekType]: Date } = {
-      Mon: new Date(),
-      Tue: new Date(),
-      Wed: new Date(),
-      Thu: new Date(),
-      Fri: new Date(),
-    };
-
-    // Parse the Monday date (week[key] format is "day/month")
-    const [day, month] = week[key].split("/").map(Number);
-    const mondayDate = new Date(2024, month - 1, day); // month is 0-based in Date constructor
-
-    // Set dates for each weekday
-    weekDays.forEach((weekday, index) => {
-      const date = new Date(mondayDate);
-      date.setDate(mondayDate.getDate() + index);
-      weekDates[weekday] = date;
-    });
-
     // Update the daysinWeek state
     setDaysinWeek({
-      Mon: weekDates.Mon.getDate(),
-      Tue: weekDates.Tue.getDate(),
-      Wed: weekDates.Wed.getDate(),
-      Thu: weekDates.Thu.getDate(),
-      Fri: weekDates.Fri.getDate(),
+      Mon: startingDate.getDate(),
+      Tue: startingDate.getDate() + 1,
+      Wed: startingDate.getDate() + 2,
+      Thu: startingDate.getDate() + 3,
+      Fri: startingDate.getDate() + 4,
     });
-    setCurrentMonth(weekDates.Mon.toLocaleString("en-US", { month: "long" }));
-  }, [weekSchedule, semesterString, currentWeekNum]);
-  // Set the starting week of the semester which is first day of september
-  useEffect(() => {
-    if (!weekSchedule) return;
-    // Set the initial week number based on the semester
-    let initalMonth;
-    let finalMonth;
-    if (semester === 1) {
-      initalMonth = "09";
-      finalMonth = "01";
-    } else {
-      initalMonth = "01";
-      finalMonth = "07";
-    }
-    const week: { [key: string]: any } = weekSchedule[semesterString];
-    // Find the first week of the semester
-    const key = Object.keys(week).filter(
-      (key) => week[key].split("/")[1] === initalMonth
-    )[0];
-    if (!key) return;
-    const [day] = week[key].split("/").map(Number);
-    // TODO: Fix the week number calculation, change to first class in the week
-    const weekNumInit =
-      day < 3 ? Number(key.slice(1)) + 1 : Number(key.slice(1));
-    setInitialWeekNum(weekNumInit);
-    setCurrentWeekNum(weekNumInit);
-    // Find the last week of the semester
-    const finalWeekKey = Object.keys(week).filter(
-      (key) => week[key].split("/")[1] === finalMonth
-    )[0];
-    if (!finalWeekKey) return;
-    const finalWeekNum = Number(finalWeekKey.slice(1));
-    // TODO: Fix the week number calculation, change to last class in the week
-    setFinalWeekNum(finalWeekNum);
-  }, [weekSchedule, semesterString]);
+    setCurrentMonth(startingDate.toLocaleString("en-US", { month: "long" }));
+  }, [events, startingDate]);
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;
   if (!weekSchedule) return <div>No data</div>;
 
-  const renderRows = (week: WeekType) => {
+  const renderRows = (date: Date) => {
     const rowElements = [];
     for (let j = 0; j < rows; j++) {
       const hour = j * 2 + 9;
@@ -118,14 +87,14 @@ export default function Calendar({
       const class_events: Array<FREventType> = [];
       events.forEach((event) => {
         const startTime = Number(event.start_time.split(":")[0]);
-        const weekCurrent = event.date.split(",")[0];
+        const dateCurrent = new Date(event.date);
         if (
-          // Same week number
-          event.week === currentWeekNum &&
           // Same start hour
           startTime === hour &&
-          // Same day of the week
-          week === weekCurrent
+          // Same date
+          dateCurrent.getDate() === date.getDate() &&
+          dateCurrent.getMonth() === date.getMonth() &&
+          dateCurrent.getFullYear() === date.getFullYear()
         ) {
           class_events.push(event);
         }
@@ -150,16 +119,14 @@ export default function Calendar({
     return rowElements;
   };
   const handlePrevWeek = () => {
-    if (currentWeekNum === initialWeekNum) {
+    if (startingDate.getTime() - 7 * 24 * 60 * 60 * 1000 < minDate.getTime())
       return;
-    }
-    setCurrentWeekNum(currentWeekNum - 1);
+    setStartingDate(new Date(startingDate.getTime() - 7 * 24 * 60 * 60 * 1000));
   };
   const handleNextWeek = () => {
-    if (currentWeekNum === finalWeekNum) {
+    if (startingDate.getTime() + 7 * 24 * 60 * 60 * 1000 > maxDate.getTime())
       return;
-    }
-    setCurrentWeekNum(currentWeekNum + 1);
+    setStartingDate(new Date(startingDate.getTime() + 7 * 24 * 60 * 60 * 1000));
   };
 
   return (
@@ -167,7 +134,7 @@ export default function Calendar({
       <div className="calendar_header">
         <button onClick={handlePrevWeek}>Previous</button>
         <h3>
-          {faculty} - {currentMonth} - Week {currentWeekNum}
+          {faculty} - {currentMonth}
         </h3>
         <button onClick={handleNextWeek}>Next</button>
       </div>
@@ -200,7 +167,7 @@ export default function Calendar({
               {daysinWeek[weekDays[0]]} - {weekDays[0]}
             </h4>
           </div>
-          {renderRows("Mon")}
+          {renderRows(startingDate)}
         </div>
         <div className="calendar_day">
           <div className="calendar_day_header">
@@ -208,7 +175,9 @@ export default function Calendar({
               {daysinWeek[weekDays[1]]} - {weekDays[1]}
             </h4>
           </div>
-          {renderRows("Tue")}
+          {renderRows(
+            new Date(startingDate.getTime() + 1 * 24 * 60 * 60 * 1000)
+          )}
         </div>
         <div className="calendar_day">
           <div className="calendar_day_header">
@@ -216,7 +185,9 @@ export default function Calendar({
               {daysinWeek[weekDays[2]]} - {weekDays[2]}
             </h4>
           </div>
-          {renderRows("Wed")}
+          {renderRows(
+            new Date(startingDate.getTime() + 2 * 24 * 60 * 60 * 1000)
+          )}
         </div>
         <div className="calendar_day">
           <div className="calendar_day_header">
@@ -224,7 +195,9 @@ export default function Calendar({
               {daysinWeek[weekDays[3]]} - {weekDays[3]}
             </h4>
           </div>
-          {renderRows("Thu")}
+          {renderRows(
+            new Date(startingDate.getTime() + 3 * 24 * 60 * 60 * 1000)
+          )}
         </div>
         <div className="calendar_day">
           <div className="calendar_day_header" id="friday_container">
@@ -232,7 +205,9 @@ export default function Calendar({
               {daysinWeek[weekDays[4]]} - {weekDays[4]}
             </h4>
           </div>
-          {renderRows("Fri")}
+          {renderRows(
+            new Date(startingDate.getTime() + 4 * 24 * 60 * 60 * 1000)
+          )}
         </div>
       </div>
     </div>
