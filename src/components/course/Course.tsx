@@ -40,11 +40,13 @@ export default function Course() {
           description_of_contents={data.description_of_contents}
           rating={data.rating}
         />
-        <CourseScheduleSection
-          teacher={data.teacher}
-          schedule={data.schedule}
-          semester={data.semester}
-        />
+        {data.schedule.length > 0 && (
+          <CourseScheduleSection
+            teacher={data.teacher}
+            schedule={data.schedule}
+            semester={data.semester}
+          />
+        )}
         <CourseCommentSection
           course_id={data.code}
           professors={uniqueTeachers}

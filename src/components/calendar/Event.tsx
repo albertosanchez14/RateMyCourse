@@ -19,8 +19,18 @@ export default function Event({
   } else if (type == "Laboratory") {
     backgroundColor = "lightgreen";
   }
+  
+  // Handle classroom display
+  const defaultClassroom = "N/A";
+  let displayAula = defaultClassroom;
 
-  const displayAula = classroom.split("Aula")[1].trim();
+  if (classroom) {
+    if (classroom.includes("Aula")) {
+      displayAula = classroom.split("Aula")[1]?.trim() || defaultClassroom;
+    } else {
+      displayAula = classroom;
+    }
+  }
 
   return (
     <div className="calendar-event" style={{ backgroundColor }}>

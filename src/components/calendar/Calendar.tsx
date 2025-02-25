@@ -81,7 +81,7 @@ export default function Calendar({
       initalMonth = "09";
       finalMonth = "01";
     } else {
-      initalMonth = "02";
+      initalMonth = "01";
       finalMonth = "07";
     }
     const week: { [key: string]: any } = weekSchedule[semesterString];
