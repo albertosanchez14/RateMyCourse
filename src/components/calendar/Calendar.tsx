@@ -8,12 +8,11 @@ import { FREventType } from "../../types/course_type";
 import Event from "./Event";
 
 type CalendarProps = {
-  faculty: string;
   events: Array<FREventType>;
 };
 type WeekType = "Mon" | "Tue" | "Wed" | "Thu" | "Fri";
 
-export default function Calendar({ faculty, events }: CalendarProps) {
+export default function Calendar({ events }: CalendarProps) {
   const weekDays: WeekType[] = ["Mon", "Tue", "Wed", "Thu", "Fri"];
   const [rows] = useState(6);
   const [currentMonth, setCurrentMonth] = useState("");
@@ -130,9 +129,7 @@ export default function Calendar({ faculty, events }: CalendarProps) {
     <div className="weekly-calendar">
       <div className="calendar_header">
         <button onClick={handlePrevWeek}>Previous</button>
-        <h3>
-          {faculty} - {currentMonth}
-        </h3>
+        <h3>{currentMonth}</h3>
         <button onClick={handleNextWeek}>Next</button>
       </div>
       <div className="calendar_body">

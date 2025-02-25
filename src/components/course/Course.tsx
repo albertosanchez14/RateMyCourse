@@ -27,30 +27,25 @@ export default function Course() {
   });
 
   return (
-    <>
-      <div className="course-content">
-        <CourseTitleSection
-          title={data.title}
-          course={data.code}
-          degree={data.degree}
+    <div className="course-content">
+      <CourseTitleSection
+        title={data.title}
+        course={data.code}
+        degree={data.degree}
+      />
+      <CourseDescRateSection
+        objectives={data.objectives}
+        skills_and_learning_outcomes={data.skills_and_learning_outcomes}
+        description_of_contents={data.description_of_contents}
+        rating={data.rating}
+      />
+      {data.schedule.length > 0 && (
+        <CourseScheduleSection
+          teacher={data.teacher}
+          schedule={data.schedule}
         />
-        <CourseDescRateSection
-          objectives={data.objectives}
-          skills_and_learning_outcomes={data.skills_and_learning_outcomes}
-          description_of_contents={data.description_of_contents}
-          rating={data.rating}
-        />
-        {data.schedule.length > 0 && (
-          <CourseScheduleSection
-            teacher={data.teacher}
-            schedule={data.schedule}
-          />
-        )}
-        <CourseCommentSection
-          course_id={data.code}
-          professors={uniqueTeachers}
-        />
-      </div>
-    </>
+      )}
+      <CourseCommentSection course_id={data.code} professors={uniqueTeachers} />
+    </div>
   );
 }

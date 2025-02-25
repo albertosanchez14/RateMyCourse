@@ -1,18 +1,25 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import "./GroupSelector.css";
 
 interface GroupSelectorProps {
   groups: number[];
+  selectedGroups: number[];
   onGroupChange: (group: number, isChecked: boolean) => void;
 }
 
 export default function GroupSelector({
   groups,
+  selectedGroups,
   onGroupChange,
 }: GroupSelectorProps) {
   const [selectAll, setSelectAll] = useState(true);
-  const [checkedGroups, setCheckedGroups] = useState<number[]>(groups);
+
+  // Update selectAll state when groups or selectedGroups change
+  useEffect(() => {
+    const allSelected = groups.length === selectedGroups.length;
+    setSelectAll(allSelected);
+  }, [groups, selectedGroups]);
 
   const handleCheckboxChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -24,21 +31,14 @@ export default function GroupSelector({
     // Update the select all checkbox
     if (!isChecked) {
       setSelectAll(false);
-    } else if (checkedGroups.length + 1 === groups.length) {
+    } else if (selectedGroups.length + 1 === groups.length) {
       setSelectAll(true);
     }
-    // Update the checked groups -> local state
-    setCheckedGroups((prevCheckedGroups) =>
-      isChecked
-        ? [...prevCheckedGroups, group]
-        : prevCheckedGroups.filter((g) => g !== group)
-    );
   };
 
   const handleSelectAllChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const isChecked = e.target.checked;
     setSelectAll(isChecked);
-    setCheckedGroups(isChecked ? groups : []);
     groups.forEach((group) => onGroupChange(group, isChecked));
   };
 
@@ -59,7 +59,7 @@ export default function GroupSelector({
           <input
             type="checkbox"
             id={`group-${index}`}
-            checked={checkedGroups.includes(group)}
+            checked={selectedGroups.includes(group)}
             onChange={(e) => handleCheckboxChange(e, group)}
           />
           <label htmlFor={`group-${index}`}>{group}</label>

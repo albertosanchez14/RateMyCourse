@@ -63,13 +63,13 @@
   opacity: 1;
 }
 .course-description-title {
-  font-size: 1.2rem;
   margin-bottom: 0px;
 }
 .course-description {
   height: 100%;
   overflow-y: hidden;
   margin-bottom: 0px;
+  font-size: 0.95rem;
 }
 .course-description-expand {
   max-height: none;
@@ -93,6 +93,22 @@
   flex-direction: column;
 }
 /****************************************/
+.course-schedule-section{
+  border-top: 1px solid #f0f0f0;
+}
+
+.course-schedule-title {
+  cursor: pointer;
+  opacity: 0.3;
+  transition: background-color 0.2s ease;
+}
+.course-schedule-title:hover {
+  opacity: 1;
+}
+.course-schedule-title.selected {
+  cursor:auto;
+  opacity: 1;
+}
 
 /* Schedule Container */
 .course-schedule-container {
@@ -101,7 +117,6 @@
   align-items: center;
   justify-content: center;
   gap: 1rem;
-
-  border-top: 1px solid #f0f0f0;
 }
+
 /****************************************/

@@ -30,7 +30,6 @@ export default function CourseScheduleSection({
   schedule,
 }: ScheduleSectionProps) {
   const [selectedGroups, setSelectedGroups] = useState<number[]>([]);
-  // TODO: Add functionality to change the selected faculty
   const [selectedFaculty, setSelectedFaculty] = useState<string>(
     teacher[0].faculty
   );
@@ -44,8 +43,9 @@ export default function CourseScheduleSection({
           .find((t) => t.faculty === selectedFaculty)
           ?.teacher.map((t) => t.group) || []
       );
+      console.log(teacher);
     }
-  }, [teacher]);
+  }, [teacher, selectedFaculty]);
 
   // Filter the events by faculty and groups
   const filteredEvents =
@@ -63,6 +63,11 @@ export default function CourseScheduleSection({
             )
           );
 
+  // Handle the change of the selected faculty
+  const handleChangeFaculty = (event: React.MouseEvent<HTMLHeadingElement>) => {
+    setSelectedFaculty(event.currentTarget.innerText);
+  };
+
   // Handle the change of the selected groups of the faculty
   const handleGroupChange = (group: number, isChecked: boolean) => {
     setSelectedGroups((prevSelectedGroups) =>
@@ -73,19 +78,32 @@ export default function CourseScheduleSection({
   };
 
   return (
-    <div className="course-schedule-container">
-      <Calendar
-        faculty={selectedFaculty}
-        events={filteredEvents}
-      />
-      <GroupSelector
-        groups={
-          teacher
-            .find((t) => t.faculty === selectedFaculty)
-            ?.teacher.map((t) => t.group) || []
-        }
-        onGroupChange={handleGroupChange}
-      />
+    <div className="course-schedule-section">
+      <div className="course-description-title-container">
+        {schedule.map((facultySchedule) => (
+          <h3
+          className={`course-schedule-title ${
+            selectedFaculty === facultySchedule.faculty ? "selected" : ""
+          }`}
+            onClick={handleChangeFaculty}
+            key={facultySchedule.faculty}
+          >
+            {facultySchedule.faculty}
+          </h3>
+        ))}
+      </div>
+      <div className="course-schedule-container">
+        <Calendar events={filteredEvents} />
+        <GroupSelector
+          groups={
+            teacher
+              .find((t) => t.faculty === selectedFaculty)
+              ?.teacher.map((t) => t.group) || []
+          }
+          selectedGroups={selectedGroups}
+          onGroupChange={handleGroupChange}
+        />
+      </div>
     </div>
   );
 }
