@@ -23,13 +23,11 @@ interface ScheduleSectionProps {
     faculty: string;
     schedule: Array<FREventType>;
   }>;
-  semester: number | undefined;
 }
 
 export default function CourseScheduleSection({
   teacher,
   schedule,
-  semester,
 }: ScheduleSectionProps) {
   const [selectedGroups, setSelectedGroups] = useState<number[]>([]);
   // TODO: Add functionality to change the selected faculty
@@ -79,8 +77,6 @@ export default function CourseScheduleSection({
       <Calendar
         faculty={selectedFaculty}
         events={filteredEvents}
-        // TODO: Fix the semester default number
-        semester={semester ?? 1}
       />
       <GroupSelector
         groups={

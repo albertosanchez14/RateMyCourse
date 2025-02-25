@@ -44,7 +44,6 @@ export default function Course() {
           <CourseScheduleSection
             teacher={data.teacher}
             schedule={data.schedule}
-            semester={data.semester}
           />
         )}
         <CourseCommentSection

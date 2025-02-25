@@ -10,14 +10,12 @@ import Event from "./Event";
 type CalendarProps = {
   faculty: string;
   events: Array<FREventType>;
-  semester: number;
 };
 type WeekType = "Mon" | "Tue" | "Wed" | "Thu" | "Fri";
 
-export default function Calendar({ faculty, events, semester }: CalendarProps) {
+export default function Calendar({ faculty, events }: CalendarProps) {
   const weekDays: WeekType[] = ["Mon", "Tue", "Wed", "Thu", "Fri"];
   const [rows] = useState(6);
-  // const [currentWeekNum, setCurrentWeekNum] = useState(initialWeekNum);
   const [currentMonth, setCurrentMonth] = useState("");
   const [daysinWeek, setDaysinWeek] = useState({
     Mon: 0,
@@ -26,7 +24,6 @@ export default function Calendar({ faculty, events, semester }: CalendarProps) {
     Thu: 0,
     Fri: 0,
   });
-  const semesterString = semester === 1 ? "first_semester" : "second_semester";
   const { data: weekSchedule, isLoading, error } = useWeekSchedule();
 
   // Initialize with today's date
