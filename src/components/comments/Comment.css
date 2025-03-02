@@ -45,6 +45,9 @@
   height: 100%;
   flex: 2;
 }
+.course-comment-description-container > span{
+  font-size: 0.95em;
+}
 .course-comment-description-container .title {
   margin: 0px;
 }
