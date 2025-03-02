@@ -40,8 +40,12 @@ export default function CourseDescRateSection({
   useEffect(() => {
     if (objectives) {
       setDescription(objectives);
+    } else if (skills_and_learning_outcomes) {
+      setDescription(skills_and_learning_outcomes);
+    } else if (description_of_contents) {
+      setDescription(description_of_contents);
     }
-  }, [objectives]);
+  }, [objectives, skills_and_learning_outcomes, description_of_contents]);
   // Check if the description is overflowing
   useEffect(() => {
     if (!descriptionRef.current) return;

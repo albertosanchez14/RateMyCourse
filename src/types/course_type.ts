@@ -11,20 +11,8 @@ export type DBCourseType = {
   credits: number;
   course_year: number | undefined;
   semester: number | undefined;
-  requirements: Array<string> | undefined;
-  teacher: Array<{
-    faculty: string;
-    teacher: Array<{
-      group: number;
-      lead_teacher: {
-        id: string | undefined;
-        name: string;
-      };
-      aggregated_group_lead_teacher:
-        | { id: string | undefined; name: string }
-        | undefined;
-    }>;
-  }>;
+  requirements: Array<string>;
+  teacher: Array<DBTeacherType>;
   objectives: string | undefined;
   skills_and_learning_outcomes: string | undefined;
   description_of_contents: string | undefined;
@@ -33,6 +21,21 @@ export type DBCourseType = {
   schedule: Array<{
     faculty: string;
     schedule: Array<DBEventType>;
+  }>;
+  website: string;
+};
+
+export type DBTeacherType = {
+  faculty: string;
+  teacher: Array<{
+    group: number;
+    lead_teacher: {
+      id: string | undefined;
+      name: string;
+    };
+    aggregated_group_lead_teacher:
+      | { id: string | undefined; name: string }
+      | undefined;
   }>;
 };
 

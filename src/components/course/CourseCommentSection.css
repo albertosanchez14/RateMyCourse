@@ -13,7 +13,6 @@
   flex-direction: column;
   flex: 3;
   gap: 1rem;
-  padding: 1rem;
 }
 
 .course-comments-form-container {
@@ -49,8 +48,8 @@
   border-top-right-radius: 8px; */
 }
 
-.course-comments-type-title{
-  margin: 0px;
+.course-comments-type-title {
+  /* margin: 0px; */
 }
 .course-comments-type-title#selected {
   opacity: 1;
@@ -74,7 +73,7 @@
   border-radius: 8px;
   /* clip-path: ellipse(75% 50% at 50% 50%); */
 }
-.course-comments-content{
+.course-comments-content {
   display: flex;
   flex-direction: row;
   gap: 1rem;
@@ -89,7 +88,7 @@
 .course-comments-list-container {
   display: flex;
   flex-direction: column;
-  flex: 3.5;  
+  flex: 3.5;
   gap: 1rem;
 }
 

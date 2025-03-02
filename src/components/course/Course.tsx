@@ -3,6 +3,7 @@ import "./Course.css";
 import CourseTitleSection from "./CourseTitleSection";
 import CourseDescRateSection from "./CourseDescRateSection";
 import CourseScheduleSection from "./CourseScheduleSection";
+import CourseDetailSection from "./CourseDetailSection";
 import CourseCommentSection from "./CourseCommentSection";
 
 import { useCourse } from "../../hooks/useCourse";
@@ -45,6 +46,17 @@ export default function Course() {
           schedule={data.schedule}
         />
       )}
+      <CourseDetailSection
+        type={data.type}
+        department={data.department}
+        credits={data.credits}
+        course_year={data.course_year}
+        semester={data.semester}
+        coordinating_teacher={data.coordinating_teacher}
+        website={data.website}
+        requirements={data.requirements}
+        teacher={data.teacher}
+      />
       <CourseCommentSection course_id={data.code} professors={uniqueTeachers} />
     </div>
   );
