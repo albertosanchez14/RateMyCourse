@@ -56,27 +56,35 @@ export default function CourseDetailSection({
         >
           Course Details
         </h3>
-        <h3 className="course-detail-title" onClick={handleDetailChange}>
-          Groups and Teachers
-        </h3>
-        <h3 className="course-detail-title" onClick={handleDetailChange}>
-          Requirements
-        </h3>
+        {teacher.length !== 0 && (
+          <h3 className="course-detail-title" onClick={handleDetailChange}>
+            Groups and Teachers
+          </h3>
+        )}
+        {requirements.length !== 0 && (
+          <h3 className="course-detail-title" onClick={handleDetailChange}>
+            Requirements
+          </h3>
+        )}
       </div>
       <div className="course-detail-container">
         {/* Course Details */}
         {details === "Course Details" && (
           <div className="course-detail">
-            <div className="course-detail-item">
-              <span className="course-detail-item-subtitle">Department:</span>
-              <span>{department}</span>
-            </div>
-            <div className="course-detail-item">
-              <span className="course-detail-item-subtitle">
-                Coordinating Teacher:
-              </span>
-              <span>{printTeacher(coordinating_teacher)}</span>
-            </div>
+            {department && (
+              <div className="course-detail-item">
+                <span className="course-detail-item-subtitle">Department:</span>
+                <span>{department}</span>
+              </div>
+            )}
+            {coordinating_teacher && (
+              <div className="course-detail-item">
+                <span className="course-detail-item-subtitle">
+                  Coordinating Teacher:
+                </span>
+                <span>{printTeacher(coordinating_teacher)}</span>
+              </div>
+            )}
             <div className="course-detail-item">
               <span className="course-detail-item-subtitle">Type:</span>
               <span>{type}</span>

@@ -45,6 +45,7 @@ export default function CourseDescRateSection({
     } else if (description_of_contents) {
       setDescription(description_of_contents);
     }
+    document.getElementsByClassName("course-description-title")[0].id = "selected";
   }, [objectives, skills_and_learning_outcomes, description_of_contents]);
   // Check if the description is overflowing
   useEffect(() => {
@@ -152,7 +153,7 @@ export default function CourseDescRateSection({
           {objectives && (
             <h3
               className="course-description-title"
-              id="selected"
+              id="unselected"
               onClick={handleDescriptionChange}
             >
               Objectives
