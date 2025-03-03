@@ -81,26 +81,28 @@ export default function CommentSection({
           </div>
         </div>
         <div className="course-comments-content-container">
-          <div className="course-comments-query-container">
-            <select name="sortOption" className="sort-option" defaultValue="">
-              <option value="" disabled>
-                Sort by
-              </option>
-              <option value="date">Date</option>
-              <option value="rating">Rating</option>
-            </select>
-            <select
-              name="professor"
-              className="professor-select"
-              defaultValue=""
-            >
-              <option value="" disabled>
-                Select Professor
-              </option>
-              <option value="prof1">Professor 1</option>
-              <option value="prof2">Professor 2</option>
-            </select>
-          </div>
+          {courseComments.data.length !== 0 && (
+            <div className="course-comments-query-container">
+              <select name="sortOption" className="sort-option" defaultValue="">
+                <option value="" disabled>
+                  Sort by
+                </option>
+                <option value="date">Date</option>
+                <option value="rating">Rating</option>
+              </select>
+              <select
+                name="professor"
+                className="professor-select"
+                defaultValue=""
+              >
+                <option value="" disabled>
+                  Select Professor
+                </option>
+                <option value="prof1">Professor 1</option>
+                <option value="prof2">Professor 2</option>
+              </select>
+            </div>
+          )}
           {/* Course Reviews */}
           {commentsType === "course" && (
             <div className="course-comments-content">
@@ -119,37 +121,35 @@ export default function CommentSection({
                 ))}
               </div>
               <div className="course-comments-form-container">
-                <h3 className="course-comments-type-title">Write a Review</h3>
-                <form className="course-comments-form">
-                  <input
-                    type="text"
-                    name="title"
-                    placeholder="Title"
-                    className="course-comments-form-title"
-                  />
-                  <textarea
-                    name="description"
-                    placeholder="Description"
-                    className="course-comments-form-description"
-                  />
-                  <select
-                    name="rating"
-                    className="course-comments-form-rating"
-                    defaultValue=""
-                  >
-                    <option value="" disabled>
-                      Rating
-                    </option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                  </select>
-                  <button type="submit" className="course-comments-form-submit">
-                    Submit
-                  </button>
-                </form>
+                <h3 className="">Share Your Experience!</h3>
+                <div className="course-comments-form">
+                  <div>
+                    <label>
+                      1<input type="radio" name="rating" value="1" />
+                    </label>
+                  </div>
+                  <div>
+                    <label>
+                      2<input type="radio" name="rating" value="2" />
+                    </label>
+                  </div>
+                  <div>
+                    <label>
+                      3<input type="radio" name="rating" value="3" />
+                    </label>
+                  </div>
+                  <div>
+                    <label>
+                      4<input type="radio" name="rating" value="4" />
+                    </label>
+                  </div>
+                  <div>
+                    <label>
+                      5<input type="radio" name="rating" value="5" />
+                    </label>
+                  </div>
+                </div>
+                <button>Write a Review</button>
               </div>
             </div>
           )}

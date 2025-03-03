@@ -8,6 +8,7 @@
   padding-right: 1rem; */
   border-top: 1px solid #f0f0f0;
 }
+
 .course-comments-container {
   display: flex;
   flex-direction: column;
@@ -19,11 +20,15 @@
   display: flex;
   flex-direction: column;
   height: fit-content;
-  flex: 1;
+  width: 15rem;
   gap: 1rem;
   padding: 1rem;
   border-radius: 8px;
   border: 1px solid #e0e0e0;
+
+  h3 {
+    margin: 0px;
+  }
 }
 
 /* Section to choose the types of the reviews */
@@ -34,7 +39,8 @@
 }
 .course-comments-form {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  justify-content: center;
   gap: 1rem;
 }
 
@@ -88,8 +94,14 @@
 .course-comments-list-container {
   display: flex;
   flex-direction: column;
-  flex: 3.5;
   gap: 1rem;
+  flex: 1;
+}
+.course-comments-list-container:empty {
+  flex: 0;
+}
+.course-comments-content:has(.course-comments-list-container:empty) {
+  gap: 0;
 }
 
 /*********************************************/
