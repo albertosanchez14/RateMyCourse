@@ -26,6 +26,14 @@ export default function CourseDetailSection({
 }: CourseDetailSectionProps) {
   const [details, setDetails] = useState("Course Details");
 
+  const printTeacher = (name: string) => {
+    return name
+      .split(",")
+      .map((x) => x.trim())
+      .reverse()
+      .join(" ");
+  };
+
   const handleDetailChange = (e: React.MouseEvent<HTMLHeadingElement>) => {
     setDetails(e.currentTarget.innerText);
     e.currentTarget.classList.add("selected");
@@ -42,7 +50,10 @@ export default function CourseDetailSection({
   return (
     <div className="course-detail-section">
       <div className="course-detail-title-container">
-        <h3 className="course-detail-title selected" onClick={handleDetailChange}>
+        <h3
+          className="course-detail-title selected"
+          onClick={handleDetailChange}
+        >
           Course Details
         </h3>
         <h3 className="course-detail-title" onClick={handleDetailChange}>
@@ -64,7 +75,7 @@ export default function CourseDetailSection({
               <span className="course-detail-item-subtitle">
                 Coordinating Teacher:
               </span>
-              <span>{coordinating_teacher}</span>
+              <span>{printTeacher(coordinating_teacher)}</span>
             </div>
             <div className="course-detail-item">
               <span className="course-detail-item-subtitle">Type:</span>
@@ -113,7 +124,7 @@ export default function CourseDetailSection({
                       <span className="course-detail-item-subtitle">
                         Lead Teacher:
                       </span>
-                      <span>{teacherElem.lead_teacher.name}</span>
+                      <span>{printTeacher(teacherElem.lead_teacher.name)}</span>
                     </div>
                     {teacherElem.aggregated_group_lead_teacher && (
                       <div>
@@ -121,7 +132,9 @@ export default function CourseDetailSection({
                           Aggregated Teacher:
                         </span>
                         <span>
-                          {teacherElem.aggregated_group_lead_teacher.name}
+                          {printTeacher(
+                            teacherElem.aggregated_group_lead_teacher.name
+                          )}
                         </span>
                       </div>
                     )}
