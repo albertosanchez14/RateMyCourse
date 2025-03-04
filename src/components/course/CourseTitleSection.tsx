@@ -12,12 +12,12 @@ export default function CourseTitleSection({
   degree,
 }: CourseTitleSectionProps) {
   return (
-    <div className="course-title-container">
-      <div>
-        <h1 className="course-title">{title}</h1>
-        <p className="course-code">({course})</p>
+    <div className="flex flex-col self-start mt-4">
+      <div className="flex flex-row items-end gap-2">
+        <h1 className="text-5xl mb-0">{title}</h1>
+        <p className="text-2xl mb-0">({course})</p>
       </div>
-      <span className="course_degree">{degree.title}</span>
+      <span className="mt-2">{degree.title}</span>
     </div>
   );
 }

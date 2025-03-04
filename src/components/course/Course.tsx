@@ -1,5 +1,3 @@
-import "./Course.css";
-
 import CourseTitleSection from "./CourseTitleSection";
 import CourseDescRateSection from "./CourseDescRateSection";
 import CourseScheduleSection from "./CourseScheduleSection";
@@ -28,7 +26,7 @@ export default function Course() {
   });
 
   return (
-    <div className="course-content">
+    <div className="flex flex-col gap-8 px-4">
       <CourseTitleSection
         title={data.title}
         course={data.code}

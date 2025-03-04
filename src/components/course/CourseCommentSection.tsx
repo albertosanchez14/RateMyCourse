@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 
-import "./CourseCommentSection.css";
-
 import {
   useCourseComments,
   useProfessorsComments,
@@ -58,31 +56,33 @@ export default function CommentSection({
   };
 
   return (
-    <div className="course-comments-section">
-      <div className="course-comments-container">
-        <div className="course-comments-type-container">
-          <div className="course-comments-type">
+    <div className="flex flex-row gap-4 border-t border-[#f0f0f0]">
+      <div className="flex flex-col flex-[3] gap-4">
+        <div className="flex flex-row gap-6">
+          <div>
             <h3
-              className="course-comments-type-title"
-              id="selected"
+              className={`m-2 cursor-pointer transition-opacity hover:opacity-100 ${
+                commentsType === "course" ? "opacity-100" : "opacity-30"
+              }`}
               onClick={handleCommentsType}
             >
               Course Reviews
             </h3>
           </div>
-          <div className="course-comments-type">
+          <div>
             <h3
-              className="course-comments-type-title"
-              id="unselected"
+              className={`m-2 cursor-pointer transition-opacity hover:opacity-100 ${
+                commentsType === "professor" ? "opacity-100" : "opacity-30"
+              }`}
               onClick={handleCommentsType}
             >
               Profesor Reviews
             </h3>
           </div>
         </div>
-        <div className="course-comments-content-container">
+        <div className="flex flex-col gap-4 rounded-lg">
           {courseComments.data.length !== 0 && (
-            <div className="course-comments-query-container">
+            <div className="flex flex-row gap-4">
               <select name="sortOption" className="sort-option" defaultValue="">
                 <option value="" disabled>
                   Sort by
@@ -105,8 +105,8 @@ export default function CommentSection({
           )}
           {/* Course Reviews */}
           {commentsType === "course" && (
-            <div className="course-comments-content">
-              <div className="course-comments-list-container">
+            <div className="flex flex-row gap-4">
+              <div className="flex flex-col gap-4 flex-1 empty:flex-0">
                 {courseComments.data.map((comment: CommentCourseType) => (
                   <Comment
                     key={comment.id}
@@ -120,34 +120,17 @@ export default function CommentSection({
                   />
                 ))}
               </div>
-              <div className="course-comments-form-container">
-                <h3 className="">Share Your Experience!</h3>
-                <div className="course-comments-form">
-                  <div>
-                    <label>
-                      1<input type="radio" name="rating" value="1" />
-                    </label>
-                  </div>
-                  <div>
-                    <label>
-                      2<input type="radio" name="rating" value="2" />
-                    </label>
-                  </div>
-                  <div>
-                    <label>
-                      3<input type="radio" name="rating" value="3" />
-                    </label>
-                  </div>
-                  <div>
-                    <label>
-                      4<input type="radio" name="rating" value="4" />
-                    </label>
-                  </div>
-                  <div>
-                    <label>
-                      5<input type="radio" name="rating" value="5" />
-                    </label>
-                  </div>
+              <div className="flex flex-col h-fit w-60 gap-4 p-4 rounded-lg border border-[#e0e0e0]">
+                <h3 className="m-0">Share Your Experience!</h3>
+                <div className="flex flex-row justify-center gap-4">
+                  {[1, 2, 3, 4, 5].map((value) => (
+                    <div key={value}>
+                      <label>
+                        {value}
+                        <input type="radio" name="rating" value={value} />
+                      </label>
+                    </div>
+                  ))}
                 </div>
                 <button>Write a Review</button>
               </div>

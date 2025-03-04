@@ -78,12 +78,12 @@ export default function CourseScheduleSection({
   };
 
   return (
-    <div className="course-schedule-section">
-      <div className="course-description-title-container">
+    <div className="border-t border-[#f0f0f0]">
+      <div className="flex flex-row gap-6">
         {schedule.map((facultySchedule) => (
           <h3
-          className={`course-schedule-title ${
-            selectedFaculty === facultySchedule.faculty ? "selected" : ""
+          className={`m-2 cursor-pointer opacity-30 transition-colors hover:opacity-100 ${
+            selectedFaculty === facultySchedule.faculty ? "cursor-auto opacity-100" : ""
           }`}
             onClick={handleChangeFaculty}
             key={facultySchedule.faculty}
@@ -92,7 +92,7 @@ export default function CourseScheduleSection({
           </h3>
         ))}
       </div>
-      <div className="course-schedule-container">
+      <div className="flex flex-row items-center justify-center gap-4">
         <Calendar events={filteredEvents} />
         <GroupSelector
           groups={
