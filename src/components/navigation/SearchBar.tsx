@@ -1,5 +1,5 @@
-import { useState, ChangeEvent, useRef, useEffect } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, ChangeEvent, useRef, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 import { useSearch, SearchResult } from "../../hooks/useSearch";
 
@@ -12,11 +12,18 @@ export default function SearchBar({
 }: SearchBarProps) {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [isOpen, setIsOpen] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState<number>(-1);
   const { data: results, isLoading, searchItems } = useSearch();
+  const navigate = useNavigate();
   const dropdownRef = useRef<HTMLDivElement>(null);
-
   console.log("Results", results);
 
+  // Reset selected index when results change
+  useEffect(() => {
+    setSelectedIndex(-1);
+  }, [results]);
+
+  // Close dropdown when clicked outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -37,9 +44,36 @@ export default function SearchBar({
     setIsOpen(true);
   };
 
-  const handleResultClick = (result: SearchResult) => {
+  const handleResultClick = (result: SearchResult,) => {
     setSearchTerm(result.title);
     setIsOpen(false);
+    navigate(`/course/${result.code}`);
+  };
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (!isOpen || results.length === 0) return;
+
+    switch (event.key) {
+      case 'ArrowDown':
+        event.preventDefault();
+        setSelectedIndex(prev => 
+          prev < results.length - 1 ? prev + 1 : prev
+        );
+        break;
+      case 'ArrowUp':
+        event.preventDefault();
+        setSelectedIndex(prev => 
+          prev > 0 ? prev - 1 : prev
+        );
+        break;
+      case 'Enter':
+        event.preventDefault();
+        const selectedResult = results[selectedIndex === -1 ? 0 : selectedIndex];
+        if (selectedResult) {
+          handleResultClick(selectedResult);
+        }
+        break;
+    }
   };
 
   return (
@@ -48,6 +82,7 @@ export default function SearchBar({
         type="text"
         value={searchTerm}
         onChange={handleInputChange}
+        onKeyDown={handleKeyDown}
         placeholder={placeholder}
         className="w-full px-4 py-2 text-gray-700 bg-white border rounded-lg focus:outline-none focus:border-blue-500"
         aria-label="Search"
@@ -73,10 +108,14 @@ export default function SearchBar({
             <div className="p-4 text-center text-gray-500">Loading...</div>
           ) : results.length > 0 ? (
             <ul>
-              {results.map((result) => (
+              {results.map((result, index) => (
                 <li
                   key={result._id}
-                  className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                  className={`px-4 py-2 cursor-pointer ${
+                    index === selectedIndex 
+                      ? 'bg-blue-50 hover:bg-blue-100' 
+                      : 'hover:bg-gray-100'
+                  }`}
                   onClick={() => handleResultClick(result)}
                 >
                   <Link to={`/course/${result.code}`} className="block">
