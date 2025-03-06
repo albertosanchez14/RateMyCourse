@@ -1,6 +1,4 @@
 import { Link } from "react-router-dom";
-import "./Footer.css";
-
 import {
   ABOUT_PAGE_ROUTE,
   PRIVACY_PAGE_ROUTE,
@@ -9,50 +7,152 @@ import {
 
 export default function Footer() {
   return (
-    <footer className="footer">
-      <div className="footer-content">
-        <div className="footer-section">
-          <h3>RateMyCourse</h3>
-          <p>Help students make informed decisions about their education journey.</p>
-          <div className="social-links">
-            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">Twitter</a>
-            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-            <a href="https://github.com" target="_blank" rel="noopener noreferrer">GitHub</a>
+    <footer className="w-full bg-[#f8f9fa] pt-12 pb-4 mt-16">
+      <div className="max-w-[1200px] mx-auto grid grid-cols-[2fr_1fr_1fr_1fr] gap-8 px-8 sm:grid-cols-4 xs:grid-cols-2">
+        <div className="flex flex-col gap-4">
+          <h3 className="text-[#333] text-2xl m-0">RateMyCourse</h3>
+          <p className="text-[#666] text-sm leading-6 m-0">
+            Help students make informed decisions about their education journey.
+          </p>
+          <div className="flex gap-4">
+            <a
+              href="https://twitter.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[#666] text-sm no-underline hover:text-[#0077b6] transition-colors duration-200"
+            >
+              Twitter
+            </a>
+            <a
+              href="https://linkedin.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[#666] text-sm no-underline hover:text-[#0077b6] transition-colors duration-200"
+            >
+              LinkedIn
+            </a>
+            <a
+              href="https://github.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[#666] text-sm no-underline hover:text-[#0077b6] transition-colors duration-200"
+            >
+              GitHub
+            </a>
           </div>
         </div>
 
-        <div className="footer-section">
-          <h4>Explore</h4>
-          <ul>
-            <li><Link to={EXPLORE_PAGE_ROUTE}>Browse Courses</Link></li>
-            <li><Link to="/professors">Find Professors</Link></li>
-            <li><Link to="/departments">Departments</Link></li>
-            <li><Link to="/degrees">Degree Programs</Link></li>
+        <div className="flex flex-col gap-4">
+          <h4 className="text-[#333] text-lg m-0">Explore</h4>
+          <ul className="list-none p-0 m-0 flex flex-col gap-2">
+            <li>
+              <Link
+                to={EXPLORE_PAGE_ROUTE}
+                className="text-[#666] text-sm no-underline hover:text-[#0077b6] transition-colors duration-200"
+              >
+                Browse Courses
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/professors"
+                className="text-[#666] text-sm no-underline hover:text-[#0077b6] transition-colors duration-200"
+              >
+                Find Professors
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/departments"
+                className="text-[#666] text-sm no-underline hover:text-[#0077b6] transition-colors duration-200"
+              >
+                Departments
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/degrees"
+                className="text-[#666] text-sm no-underline hover:text-[#0077b6] transition-colors duration-200"
+              >
+                Degree Programs
+              </Link>
+            </li>
           </ul>
         </div>
 
-        <div className="footer-section">
-          <h4>Support</h4>
-          <ul>
-            <li><Link to="/help">Help Center</Link></li>
-            <li><Link to="/contact">Contact Us</Link></li>
-            <li><Link to="/feedback">Submit Feedback</Link></li>
-            <li><Link to="/guidelines">Community Guidelines</Link></li>
+        <div className="flex flex-col gap-4">
+          <h4 className="text-[#333] text-lg m-0">Support</h4>
+          <ul className="list-none p-0 m-0 flex flex-col gap-2">
+            <li>
+              <Link
+                to="/help"
+                className="text-[#666] text-sm no-underline hover:text-[#0077b6] transition-colors duration-200"
+              >
+                Help Center
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/contact"
+                className="text-[#666] text-sm no-underline hover:text-[#0077b6] transition-colors duration-200"
+              >
+                Contact Us
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/feedback"
+                className="text-[#666] text-sm no-underline hover:text-[#0077b6] transition-colors duration-200"
+              >
+                Submit Feedback
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/guidelines"
+                className="text-[#666] text-sm no-underline hover:text-[#0077b6] transition-colors duration-200"
+              >
+                Community Guidelines
+              </Link>
+            </li>
           </ul>
         </div>
 
-        <div className="footer-section">
-          <h4>Legal</h4>
-          <ul>
-            <li><Link to={PRIVACY_PAGE_ROUTE}>Privacy Policy</Link></li>
-            <li><Link to="/terms">Terms of Service</Link></li>
-            <li><Link to={ABOUT_PAGE_ROUTE}>About Us</Link></li>
+        <div className="flex flex-col gap-4">
+          <h4 className="text-[#333] text-lg m-0">Legal</h4>
+          <ul className="list-none p-0 m-0 flex flex-col gap-2">
+            <li>
+              <Link
+                to={PRIVACY_PAGE_ROUTE}
+                className="text-[#666] text-sm no-underline hover:text-[#0077b6] transition-colors duration-200"
+              >
+                Privacy Policy
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/terms"
+                className="text-[#666] text-sm no-underline hover:text-[#0077b6] transition-colors duration-200"
+              >
+                Terms of Service
+              </Link>
+            </li>
+            <li>
+              <Link
+                to={ABOUT_PAGE_ROUTE}
+                className="text-[#666] text-sm no-underline hover:text-[#0077b6] transition-colors duration-200"
+              >
+                About Us
+              </Link>
+            </li>
           </ul>
         </div>
       </div>
-      
-      <div className="footer-bottom">
-        <p>&copy; {new Date().getFullYear()} RateMyCourse. All rights reserved.</p>
+
+      <div className="max-w-[1200px] mx-auto px-8 text-center border-t border-[#eee] mt-8 pt-8">
+        <p className="text-[#999] text-xs m-0">
+          &copy; {new Date().getFullYear()} RateMyCourse. All rights reserved.
+        </p>
       </div>
     </footer>
   );

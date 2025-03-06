@@ -1,3 +1,5 @@
+import { useParams } from "react-router-dom";
+
 import CourseTitleSection from "./CourseTitleSection";
 import CourseDescRateSection from "./CourseDescRateSection";
 import CourseScheduleSection from "./CourseScheduleSection";
@@ -8,10 +10,9 @@ import { useCourse } from "../../hooks/useCourse";
 
 export default function Course() {
   // Get course_code from URL
-  const url = window.location.href;
-  const course_code = url.substring(url.lastIndexOf("/") + 1);
+  const { courseCode } = useParams();
   // Load course data now from folder data
-  const { data, isLoading, error } = useCourse(Number(course_code));
+  const { data, isLoading, error } = useCourse(Number(courseCode));
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;

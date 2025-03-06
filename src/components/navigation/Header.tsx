@@ -1,10 +1,10 @@
-import "./Header.css";
+import SearchBar from "./SearchBar";
 
 export default function Header() {
   return (
-    <div className="header">
+    <div className="min-h-[80px] h-[80px] flex justify-between items-center bg-white border border-white">
       <div>Logo</div>
-      <div>Search Bar</div>
+      <SearchBar />
       <div>Profile</div>
     </div>
   );

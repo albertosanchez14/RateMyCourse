@@ -23,8 +23,9 @@ const fetchCourse = async (course_code: number): Promise<FRCourseType> => {
 
 export const useCourse = (course_code: number) => {
   return useQuery<FRCourseType, Error>({
-    queryKey: ["course"],
+    queryKey: ["course", course_code],
     queryFn: () => fetchCourse(course_code),
+    enabled: !!course_code,
   });
 };
 
