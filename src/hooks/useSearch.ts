@@ -45,9 +45,9 @@ export const useSearch = (initialTerm: string = '') => {
     setError(null);
 
     try {
-      if (term.length < 3) {
-        return;
-      }
+      // if (term.length < 3) {
+      //   return;
+      // }
       const response = await fetch(
         `http://localhost:8000/course/search?q=${encodeURIComponent(term)}`
       );

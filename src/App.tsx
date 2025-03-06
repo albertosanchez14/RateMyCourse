@@ -1,9 +1,10 @@
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes, useLocation } from "react-router-dom";
 
 import "./App.css";
 
 import Header from "./components/navigation/Header";
 import Course from "./components/course";
+import Landing from "./components/landing";
 import Footer from "./components/navigation/Footer";
 import {
   LANDING_PAGE_ROUTE,
@@ -17,13 +18,18 @@ import {
   WELCOME_PAGE_ROUTE,
 } from "./Routes";
 
+const HeaderWrapper = () => {
+  const location = useLocation();
+  return location.pathname !== LANDING_PAGE_ROUTE ? <Header /> : null;
+};
+
 function App() {
   return (
     <>
       <Router>
-        <Header />
+        <HeaderWrapper />
         <Routes>
-          <Route path={LANDING_PAGE_ROUTE} element={<div>Landing Page</div>} />
+          <Route path={LANDING_PAGE_ROUTE} element={<Landing />} />
           <Route path={PROFILE_PAGE_ROUTE} element={<div>Profile Page</div>} />
           <Route path={COURSE_PAGE_ROUTE} element={<Course />} />
           <Route path={PROF_PAGE_ROUTE} element={<div>Prof Page</div>} />
