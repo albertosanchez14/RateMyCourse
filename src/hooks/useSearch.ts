@@ -5,6 +5,7 @@ export interface SearchResult {
   code: string;
   title: string;
   degree_name: string;
+  semester: string;
 }
 
 // const fetchSearchResults = async (searchTerm: string): Promise<SearchResult[]> => {
@@ -27,18 +28,21 @@ export interface SearchResult {
 //   });
 // };
 
-export const useSearch = (initialTerm: string = '') => {
+export const useSearch = (initialTerm?: string, limit?: number) => {
   const [results, setResults] = useState<SearchResult[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState(initialTerm);
 
-  const searchItems = useCallback(async (term: string) => {
+  const searchItems = useCallback(async (term: string, limit:number) => {
     console.log("Searching for term", term);
     setSearchTerm(term);
     if (!term.trim()) {
       setResults([]);
       return;
+    }
+    if (!limit) {
+      limit = 10;
     }
 
     setIsLoading(true);
@@ -49,7 +53,7 @@ export const useSearch = (initialTerm: string = '') => {
       //   return;
       // }
       const response = await fetch(
-        `http://localhost:8000/course/search?q=${encodeURIComponent(term)}`
+        `http://localhost:8000/course/search?q=${encodeURIComponent(term)}&limit=${limit}`
       );
       console.log("Response", response);
       
@@ -68,8 +72,8 @@ export const useSearch = (initialTerm: string = '') => {
   }, []);
 
   useEffect(() => {
-    if (initialTerm) {
-      searchItems(initialTerm);
+    if (initialTerm && limit) {
+      searchItems(initialTerm, limit);
     }
   }, [initialTerm, searchItems]);
 

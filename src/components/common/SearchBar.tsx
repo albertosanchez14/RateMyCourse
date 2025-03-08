@@ -13,7 +13,7 @@ export default function SearchBar({
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [isOpen, setIsOpen] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState<number>(-1);
-  const { data: results, isLoading, searchItems } = useSearch();
+  const { data: results, isLoading, searchItems } = useSearch("", 4);
   const navigate = useNavigate();
   const dropdownRef = useRef<HTMLDivElement>(null);
   console.log("Results", results);
@@ -40,37 +40,41 @@ export default function SearchBar({
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
     setSearchTerm(value);
-    searchItems(value);
+    searchItems(value, 4);
     setIsOpen(true);
   };
 
-  const handleResultClick = (result: SearchResult,) => {
+  const handleResultClick = (result: SearchResult) => {
     setSearchTerm(result.title);
     setIsOpen(false);
     navigate(`/course/${result.code}`);
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (!isOpen || results.length === 0) return;
+    if (!isOpen || (!results.length && event.key !== 'Enter')) return;
 
     switch (event.key) {
-      case 'ArrowDown':
+      case "ArrowDown":
         event.preventDefault();
-        setSelectedIndex(prev => 
-          prev < results.length - 1 ? prev + 1 : prev
-        );
+        setSelectedIndex((prev) => (prev < results.length ? prev + 1 : prev));
         break;
-      case 'ArrowUp':
+      case "ArrowUp":
         event.preventDefault();
-        setSelectedIndex(prev => 
-          prev > 0 ? prev - 1 : prev
-        );
+        setSelectedIndex((prev) => (prev > 0 ? prev - 1 : prev));
         break;
-      case 'Enter':
+      case "Enter":
         event.preventDefault();
-        const selectedResult = results[selectedIndex === -1 ? 0 : selectedIndex];
-        if (selectedResult) {
-          handleResultClick(selectedResult);
+        if (selectedIndex === results.length) {
+          // Handle "Explore all results" option
+          setIsOpen(false);
+          // navigate(`/explore?q=${searchTerm}`);
+        } else {
+          // Handle regular search result
+          const selectedResult =
+            results[selectedIndex === -1 ? 0 : selectedIndex];
+          if (selectedResult) {
+            handleResultClick(selectedResult);
+          }
         }
         break;
     }
@@ -103,7 +107,7 @@ export default function SearchBar({
       </svg>
 
       {isOpen && searchTerm.length > 0 && (
-        <div className="absolute w-full h-fit mt-1 bg-white border rounded-lg shadow-lg max-h-60 overflow-y-hidden z-50">
+        <div className="absolute w-full h-fit mt-1 bg-white border rounded-lg shadow-lg  overflow-y-hidden z-50">
           {isLoading ? (
             <div className="p-4 text-center text-gray-500">Loading...</div>
           ) : results.length > 0 ? (
@@ -112,9 +116,9 @@ export default function SearchBar({
                 <li
                   key={result._id}
                   className={`px-4 py-2 cursor-pointer ${
-                    index === selectedIndex 
-                      ? 'bg-blue-50 hover:bg-blue-100' 
-                      : 'hover:bg-gray-100'
+                    index === selectedIndex
+                      ? "bg-blue-50 hover:bg-blue-100"
+                      : "hover:bg-gray-100"
                   }`}
                   onClick={() => handleResultClick(result)}
                 >
@@ -130,6 +134,21 @@ export default function SearchBar({
                   </Link>
                 </li>
               ))}
+              <li
+                className={`px-4 py-2 cursor-pointer ${
+                  selectedIndex === results.length
+                    ? "bg-blue-50 hover:bg-blue-100"
+                    : "hover:bg-gray-100"
+                }`}
+                onClick={() => {
+                  setIsOpen(false);
+                  navigate(`/explore?q=${searchTerm}`);
+                }}
+              >
+                <Link to={`/explore?q=${searchTerm}`} className="block">
+                  <div className="font-medium text-purple-700">Explore all results</div>
+                </Link>
+              </li>
             </ul>
           ) : (
             <div className="p-4 text-center text-gray-500">

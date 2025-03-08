@@ -1,9 +1,15 @@
-import { BrowserRouter as Router, Route, Routes, useLocation } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  useLocation,
+} from "react-router-dom";
 
 import "./App.css";
 
 import Header from "./components/navigation/Header";
 import Course from "./components/course";
+import Explore from "./components/search";
 import Landing from "./components/landing";
 import Footer from "./components/navigation/Footer";
 import {
@@ -34,7 +40,7 @@ function App() {
           <Route path={COURSE_PAGE_ROUTE} element={<Course />} />
           <Route path={PROF_PAGE_ROUTE} element={<div>Prof Page</div>} />
           <Route path={SHORT_PROF_PAGE_ROUTE} element={<div>Prof Page</div>} />
-          <Route path={EXPLORE_PAGE_ROUTE} element={<div>Explore Page</div>} />
+          <Route path={EXPLORE_PAGE_ROUTE} element={<Explore />} />
           <Route path={ABOUT_PAGE_ROUTE} element={<div>About Page</div>} />
           <Route path={PRIVACY_PAGE_ROUTE} element={<div>Privacy Page</div>} />
           <Route path={WELCOME_PAGE_ROUTE} element={<div>Welcome Page</div>} />
