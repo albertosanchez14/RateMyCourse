@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom";
 
 import { useSearch } from "../../hooks/useSearch";
 
-import SearchResults from "./SearchResults";
+import ResultsSection from "./ResultsSection";
 import FilterCard from "./FilterCard";
 
 export default function Explore() {
@@ -59,7 +59,7 @@ export default function Explore() {
         </div>
       ) : results.length > 0 ? (
         <div className="flex flex-row gap-8">
-          <SearchResults filteredResults={filteredResults} />
+          <ResultsSection filteredResults={filteredResults} />
           <FilterCard results={results} onFilterChange={handleFilterChange} />
         </div>
       ) : (

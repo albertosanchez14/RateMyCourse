@@ -67,7 +67,7 @@ export default function SearchBar({
         if (selectedIndex === results.length) {
           // Handle "Explore all results" option
           setIsOpen(false);
-          // navigate(`/explore?q=${searchTerm}`);
+          navigate(`/explore?q=${searchTerm}`);
         } else {
           // Handle regular search result
           const selectedResult =

@@ -2,6 +2,8 @@ import { useState } from "react";
 
 import { SearchResult } from "../../hooks/useSearch";
 
+import FilterElementCard from "./FilterElementCard";
+
 interface FilterCardProps {
   results: SearchResult[];
   onFilterChange: (filters: FilterState) => void;
@@ -39,50 +41,31 @@ export default function FilterCard({
     }
   };
 
+  const formatDegreeLabel = (degree: string) => {
+    return degree.split(" ").slice(2).join(" ");
+  };
+
   return (
-    <div className="bg-white h-fit w-80 flex-shrink-0 p-4 rounded-lg shadow-md">
-      <h3 className="text-2xl font-semibold">Filter</h3>
-      <div className="flex flex-col gap-4">
-        <div className="mt-4">
-          <label className="text-xl font-semibold mb-4">Degree</label>
-          <div className="flex flex-col gap-1">
-            {[...new Set(results.map((result) => result.degree_name))]
-              .sort()
-              .map((degree) => (
-                <label key={degree} className="flex items-center">
-                  <input
-                    className="mr-2"
-                    type="checkbox"
-                    name="degree"
-                    value={degree}
-                    checked={selectedDegrees.includes(degree)}
-                    onChange={() => handleFilterChange("degrees", degree)}
-                  />
-                  {degree.split(" ").slice(2).join(" ")}
-                </label>
-              ))}
-          </div>
-        </div>
-        <div>
-          <label className="text-xl font-semibold mb-5">Semester</label>
-          <div className="flex flex-row gap-4">
-            {[...new Set(results.map((result) => result.semester))].map(
-              (semester) => (
-                <label key={semester} className="flex items-center">
-                  <input
-                    className="mr-2"
-                    type="checkbox"
-                    name="semester"
-                    value={semester}
-                    checked={selectedSemesters.includes(semester)}
-                    onChange={() => handleFilterChange("semesters", semester)}
-                  />
-                  {semester}
-                </label>
-              )
-            )}
-          </div>
-        </div>
+    <div className="bg-white h-fit w-100 flex-shrink-0 p-4 rounded-lg shadow-md">
+      <h3 className="text-2xl font-semibold mb-2">Filter Options</h3>
+      <div className="flex flex-col gap-5">
+        {/* Degree Section */}
+        <FilterElementCard
+          title="Degree"
+          type="degrees"
+          items={[...new Set(results.map((result) => result.degree_name))]}
+          selectedItems={selectedDegrees}
+          onFilterChange={handleFilterChange}
+          formatLabel={formatDegreeLabel}
+        />
+        {/* Semester Section */}
+        <FilterElementCard
+          title="Semester"
+          type="semesters"
+          items={[...new Set(results.map((result) => result.semester))]}
+          selectedItems={selectedSemesters}
+          onFilterChange={handleFilterChange}
+        />
       </div>
     </div>
   );

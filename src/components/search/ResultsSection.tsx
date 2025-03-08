@@ -7,7 +7,7 @@ interface SearchResultsProps {
   filteredResults: SearchResult[];
 }
 
-export default function SearchResults({ filteredResults }: SearchResultsProps) {
+export default function ResultsSection({ filteredResults }: SearchResultsProps) {
   const [openSections, setOpenSections] = useState<{ [key: string]: boolean }>(
     {}
   );
