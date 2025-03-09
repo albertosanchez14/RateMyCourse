@@ -21,50 +21,57 @@ export default function GroupSelector({
     setSelectAll(allSelected);
   }, [groups, selectedGroups]);
 
-  const handleCheckboxChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    group: number
-  ) => {
-    // Update the checked groups -> onGroupChange
-    const isChecked = e.target.checked;
-    onGroupChange(group, isChecked);
-    // Update the select all checkbox
-    if (!isChecked) {
+  const handleButtonClick = (group: number) => {
+    const isCurrentlySelected = selectedGroups.includes(group);
+    onGroupChange(group, !isCurrentlySelected);
+
+    if (isCurrentlySelected) {
       setSelectAll(false);
     } else if (selectedGroups.length + 1 === groups.length) {
       setSelectAll(true);
     }
   };
 
-  const handleSelectAllChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const isChecked = e.target.checked;
-    setSelectAll(isChecked);
-    groups.forEach((group) => onGroupChange(group, isChecked));
+  const handleSelectAllClick = () => {
+    const newSelectAll = !selectAll;
+    groups.forEach((group) => {
+      if (newSelectAll !== selectedGroups.includes(group)) {
+        onGroupChange(group, newSelectAll);
+      }
+    });
+    setSelectAll(newSelectAll);
   };
 
   return (
     <div className="group-selector">
-      <h3>Group Selector</h3>
-      <div className="group">
-        <input
-          type="checkbox"
-          id="select-all"
-          checked={selectAll}
-          onChange={handleSelectAllChange}
-        />
-        <label htmlFor="select-all">Select All</label>
+      <div className="groups-container">
+        {groups.map((group, index) => (
+          <div
+            key={index}
+            className={`group sticky-note ${
+              selectedGroups.includes(group) ? "selected" : ""
+            }`}
+          >
+            <button
+              className={`group-button ${
+                selectedGroups.includes(group) ? "selected" : ""
+              }`}
+              onClick={() => handleButtonClick(group)}
+            >
+              {group}
+              <span className="arrow">▶</span>
+            </button>
+          </div>
+        ))}
       </div>
-      {groups.map((group, index) => (
-        <div key={index} className="group">
-          <input
-            type="checkbox"
-            id={`group-${index}`}
-            checked={selectedGroups.includes(group)}
-            onChange={(e) => handleCheckboxChange(e, group)}
-          />
-          <label htmlFor={`group-${index}`}>{group}</label>
-        </div>
-      ))}
+      <div className="group">
+        <button
+          className={`select-all-button ${selectAll ? "selected" : ""}`}
+          onClick={handleSelectAllClick}
+        >
+          {selectAll ? "Deselect All" : "Select All"}
+        </button>
+      </div>
     </div>
   );
 }

@@ -8,10 +8,10 @@ import {
 import "./App.css";
 
 import Header from "./components/navigation/Header";
+import Footer from "./components/navigation/Footer";
 import Course from "./pages/coursePage";
 import Explore from "./pages/explorePage";
 import Landing from "./pages/landingPage";
-import Footer from "./components/navigation/Footer";
 import {
   LANDING_PAGE_ROUTE,
   PROFILE_PAGE_ROUTE,

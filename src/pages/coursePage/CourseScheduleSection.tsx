@@ -78,13 +78,15 @@ export default function CourseScheduleSection({
   };
 
   return (
-    <div className="border-t border-[#f0f0f0]">
+    <div className="flex flex-col gap-6 border-t border-[#f0f0f0]">
       <div className="flex flex-row gap-6">
         {schedule.map((facultySchedule) => (
           <h3
-          className={`text-lg font-semibold m-2 cursor-pointer opacity-30 transition-colors hover:opacity-100 ${
-            selectedFaculty === facultySchedule.faculty ? "cursor-auto opacity-100" : ""
-          }`}
+            className={`text-lg font-semibold m-2 cursor-pointer opacity-30 transition-colors hover:opacity-100 ${
+              selectedFaculty === facultySchedule.faculty
+                ? "cursor-auto opacity-100"
+                : ""
+            }`}
             onClick={handleChangeFaculty}
             key={facultySchedule.faculty}
           >
@@ -92,7 +94,7 @@ export default function CourseScheduleSection({
           </h3>
         ))}
       </div>
-      <div className="flex flex-row items-center justify-center gap-4">
+      <div className="flex flex-row items-start w-full">
         <Calendar events={filteredEvents} />
         <GroupSelector
           groups={

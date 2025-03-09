@@ -1,9 +1,10 @@
 .weekly-calendar {
   display: flex;
   flex-direction: column;
-  min-width: 1025px;
-  max-width: 1025px;
+  min-width: 980px;
+  max-width: 980px;
   --header-height: 3em;
+  flex-grow: 1;
 }
 
 
@@ -11,7 +12,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.5em 1em 0.5em 2.5em;
+  padding: 0.5em 0.5em 0.5em 2.5em;
 }
 
 .calendar_header button {
