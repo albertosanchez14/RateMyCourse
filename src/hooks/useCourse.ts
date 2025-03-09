@@ -36,7 +36,7 @@ export const useCourse = (course_code: number) => {
  * @returns {FRCourseType} The transformed course object with the schedule mapped to a new format.
  */
 const transformCourse = (course: DBCourseType): FRCourseType => {
-  if (!course.schedule) return { ...course, schedule: undefined };
+  if (!course.schedule) return { ...course, schedule: [] };
   const transformedSchedule = course.schedule.map((schFaculty) => {
     return {
       faculty: schFaculty.faculty,
