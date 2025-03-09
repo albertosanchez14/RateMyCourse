@@ -61,7 +61,7 @@ export default function CommentSection({
         <div className="flex flex-row gap-6">
           <div>
             <h3
-              className={`m-2 cursor-pointer transition-opacity hover:opacity-100 ${
+              className={`text-lg font-semibold m-2 cursor-pointer transition-opacity hover:opacity-100 ${
                 commentsType === "course" ? "opacity-100" : "opacity-30"
               }`}
               onClick={handleCommentsType}
@@ -71,7 +71,7 @@ export default function CommentSection({
           </div>
           <div>
             <h3
-              className={`m-2 cursor-pointer transition-opacity hover:opacity-100 ${
+              className={`text-lg font-semibold m-2 cursor-pointer transition-opacity hover:opacity-100 ${
                 commentsType === "professor" ? "opacity-100" : "opacity-30"
               }`}
               onClick={handleCommentsType}

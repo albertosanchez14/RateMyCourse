@@ -51,7 +51,7 @@ export default function CourseDetailSection({
     <div className="flex flex-col gap-4 border-t border-[#f0f0f0]">
       <div className="flex flex-row gap-6">
         <h3
-          className={`m-2 cursor-pointer opacity-30 transition-colors hover:opacity-100 ${
+          className={`text-lg font-semibold m-2 cursor-pointer opacity-30 transition-colors hover:opacity-100 ${
             details === "Course Details" ? "cursor-auto opacity-100" : ""
           }`}
           onClick={handleDetailChange}
@@ -60,7 +60,7 @@ export default function CourseDetailSection({
         </h3>
         {teacher.length !== 0 && (
           <h3
-            className={` m-2 cursor-pointer opacity-30 transition-colors hover:opacity-100 ${
+            className={`text-lg font-semibold m-2 cursor-pointer opacity-30 transition-colors hover:opacity-100 ${
               details === "Groups and Teachers" ? "cursor-auto opacity-100" : ""
             }`}
             onClick={handleDetailChange}
@@ -70,7 +70,7 @@ export default function CourseDetailSection({
         )}
         {requirements.length !== 0 && (
           <h3
-            className={`m-2 cursor-pointer opacity-30 transition-colors hover:opacity-100 ${
+            className={`text-lg font-semibold m-2 cursor-pointer opacity-30 transition-colors hover:opacity-100 ${
               details === "Requirements" ? "cursor-auto opacity-100" : ""
             }`}
             onClick={handleDetailChange}

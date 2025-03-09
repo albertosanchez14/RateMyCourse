@@ -82,7 +82,7 @@ export default function CourseScheduleSection({
       <div className="flex flex-row gap-6">
         {schedule.map((facultySchedule) => (
           <h3
-          className={`m-2 cursor-pointer opacity-30 transition-colors hover:opacity-100 ${
+          className={`text-lg font-semibold m-2 cursor-pointer opacity-30 transition-colors hover:opacity-100 ${
             selectedFaculty === facultySchedule.faculty ? "cursor-auto opacity-100" : ""
           }`}
             onClick={handleChangeFaculty}

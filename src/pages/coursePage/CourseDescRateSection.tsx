@@ -78,20 +78,20 @@ export default function CourseDescRateSection({
     <div className="flex flex-col gap-4 border-t border-[#f0f0f0]">
       <div className="flex flex-row gap-6" ref={descriptionTitleContRef}>
         {objectives && (
-          <h3
-            className={`m-2 cursor-pointer transition-opacity ${
+            <h3
+            className={`text-lg font-semibold m-2 cursor-pointer transition-opacity ${
               description === objectives
-                ? "opacity-100"
-                : "opacity-30 hover:opacity-100"
+              ? "opacity-100"
+              : "opacity-30 hover:opacity-100"
             }`}
             onClick={handleDescriptionChange}
-          >
+            >
             Objectives
-          </h3>
+            </h3>
         )}
         {skills_and_learning_outcomes && (
           <h3
-            className={`m-2 cursor-pointer transition-opacity ${
+            className={`text-lg font-semibold m-2 cursor-pointer transition-opacity ${
               description === skills_and_learning_outcomes
                 ? "opacity-100"
                 : "opacity-30 hover:opacity-100"
@@ -103,7 +103,7 @@ export default function CourseDescRateSection({
         )}
         {description_of_contents && (
           <h3
-            className={`m-2 cursor-pointer transition-opacity ${
+            className={`text-lg font-semibold m-2 cursor-pointer transition-opacity ${
               description === description_of_contents
                 ? "opacity-100"
                 : "opacity-30 hover:opacity-100"

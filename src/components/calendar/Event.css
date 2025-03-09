@@ -6,11 +6,18 @@
   background-color: #f0f0f0;
   border: 1px solid #ccc;
   border-radius: 10px;
-  padding: 5px;
+  padding: 0.5rem;  
   margin-right: 10px;
   margin-bottom: 5px;
+  border-radius: 8px;
 
-  box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.1);
+  transition: all 0.2s ease;
+  cursor: pointer;
+  /* box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.1); */
+}
+.calendar-event:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .calendar-event > h4 {
@@ -34,3 +41,7 @@
   margin-top: 0;
   margin-bottom: 0;
 }
+
+.event-type-magistral { background-color: #fee2e2; }
+.event-type-practice { background-color: #dbeafe; }
+.event-type-laboratory { background-color: #dcfce7; }

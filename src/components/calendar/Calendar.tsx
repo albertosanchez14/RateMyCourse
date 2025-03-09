@@ -129,7 +129,7 @@ export default function Calendar({ events }: CalendarProps) {
     <div className="weekly-calendar">
       <div className="calendar_header">
         <button onClick={handlePrevWeek}>Previous</button>
-        <h3>{currentMonth}</h3>
+        <h3 className="text-lg font-semibold" >{currentMonth}</h3>
         <button onClick={handleNextWeek}>Next</button>
       </div>
       <div className="calendar_body">
