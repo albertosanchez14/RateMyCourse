@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from "react";
-import SearchBar from "../common/SearchBar";
+
+import SearchBar from "../../components/common/SearchBar";
 
 export default function Landing() {
   const [lastScrollY, setLastScrollY] = useState(0);
