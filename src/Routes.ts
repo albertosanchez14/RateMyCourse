@@ -8,4 +8,5 @@ export const EXPLORE_PAGE_ROUTE = '/explore';
 export const ABOUT_PAGE_ROUTE = '/about';
 export const PRIVACY_PAGE_ROUTE = '/privacy';
 export const WELCOME_PAGE_ROUTE = '/welcome';
+export const GUIDELINES_PAGE_ROUTE = '/guidelines';
 

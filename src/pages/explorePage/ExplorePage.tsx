@@ -6,7 +6,7 @@ import { useSearch } from "../../hooks/useSearch";
 import ResultsSection from "./ResultsSection";
 import FilterCard from "./FilterCard";
 
-export default function Explore() {
+export default function ExplorePage() {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const initialQuery = queryParams.get("q") || "";

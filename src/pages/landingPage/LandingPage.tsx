@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from "react";
 
 import SearchBar from "../../components/common/SearchBar";
 
-export default function Landing() {
+export default function LandingPage() {
   const [lastScrollY, setLastScrollY] = useState(0);
   const isAnimatingRef = useRef(false);
   const [hasClickedArrow, setHasClickedArrow] = useState(false);

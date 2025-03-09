@@ -8,7 +8,7 @@ import CourseCommentSection from "./CourseCommentSection";
 
 import { useCourse } from "../../hooks/useCourse";
 
-export default function Course() {
+export default function CoursePage() {
   // Get course_code from URL
   const { courseCode } = useParams();
   // Load course data now from folder data
