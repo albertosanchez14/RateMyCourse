@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { MdChevronLeft, MdChevronRight } from "react-icons/md";
 
 import "./Calendar.css";
 
@@ -128,9 +129,21 @@ export default function Calendar({ events }: CalendarProps) {
   return (
     <div className="weekly-calendar">
       <div className="calendar_header">
-        <button onClick={handlePrevWeek}>Previous</button>
-        <h3 className="text-lg font-semibold" >{currentMonth}</h3>
-        <button onClick={handleNextWeek}>Next</button>
+        <button
+          onClick={handlePrevWeek}
+          className="p-1 rounded-full hover:bg-gray-200 transition-colors"
+          aria-label="Previous week"
+        >
+          <MdChevronLeft size={24} />
+        </button>
+        <h3 className="text-lg font-semibold">{currentMonth}</h3>
+        <button
+          onClick={handleNextWeek}
+          className="p-1 rounded-full hover:bg-gray-200 transition-colors"
+          aria-label="Next week"
+        >
+          <MdChevronRight size={24} />
+        </button>
       </div>
       <div className="calendar_body">
         <div className="calendar_day" id="hours_label_column">

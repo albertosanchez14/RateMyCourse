@@ -120,7 +120,7 @@ export default function CourseDescRateSection({
             {generateDescription(description)}
           </p>
         </div>
-        <div className="flex flex-col h-fit flex-1" ref={ratingContainerRef}>
+        <div className="flex flex-col h-fit flex-1 gap-3" ref={ratingContainerRef}>
           {modifiedRating &&
             Object.entries(modifiedRating).map(([key, value]) => (
               <div
@@ -128,7 +128,7 @@ export default function CourseDescRateSection({
                 id={`course-rating-${key}-container`}
                 key={key}
               >
-                <h4 className="mb-0">
+                <h4 className="font-semibold">
                   {key === "overall"
                     ? "Rating"
                     : key.charAt(0).toUpperCase() + key.slice(1)}

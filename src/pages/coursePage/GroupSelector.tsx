@@ -46,22 +46,15 @@ export default function GroupSelector({
     <div className="group-selector">
       <div className="groups-container">
         {groups.map((group, index) => (
-          <div
+          <button
             key={index}
             className={`group sticky-note ${
               selectedGroups.includes(group) ? "selected" : ""
             }`}
+            onClick={() => handleButtonClick(group)}
           >
-            <button
-              className={`group-button ${
-                selectedGroups.includes(group) ? "selected" : ""
-              }`}
-              onClick={() => handleButtonClick(group)}
-            >
-              {group}
-              <span className="arrow">▶</span>
-            </button>
-          </div>
+            {group}
+          </button>
         ))}
       </div>
       <div className="group">
