@@ -10,8 +10,8 @@ import {
   Professor,
 } from "../../types/comments_type";
 
-import Comment from "../comments/Comment";
-import ProfessorCommentCard from "../comments/ProfessorCommentCard";
+import Comment from "../../components/comments/Comment";
+import ProfessorCommentCard from "../../components/comments/ProfessorCommentCard";
 
 interface CourseCommentSectionProps {
   course_id: number;

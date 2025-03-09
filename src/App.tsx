@@ -8,8 +8,8 @@ import {
 import "./App.css";
 
 import Header from "./components/navigation/Header";
-import Course from "./components/course";
-import Explore from "./components/search";
+import Course from "./pages/coursePage";
+import Explore from "./pages/explorePage";
 import Landing from "./components/landing";
 import Footer from "./components/navigation/Footer";
 import {

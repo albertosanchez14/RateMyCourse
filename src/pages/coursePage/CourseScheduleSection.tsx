@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import Calendar from "../calendar/Calendar";
+import Calendar from "../../components/calendar/Calendar";
 import GroupSelector from "./GroupSelector";
 
 import { FREventType } from "../../types/course_type";

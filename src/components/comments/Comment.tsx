@@ -4,7 +4,7 @@ import "./Comment.css";
 
 import { RatingType } from "../../types/comments_type";
 
-import RectangleChart from "../course/RectangleChart";
+import RectangleChart from "../../pages/coursePage/RectangleChart";
 
 interface CommentProps {
   id: number;
