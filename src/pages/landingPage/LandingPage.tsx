@@ -1,42 +1,20 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 
 import SearchBar from "../../components/common/SearchBar";
 
 export default function LandingPage() {
   const [lastScrollY, setLastScrollY] = useState(0);
-  const isAnimatingRef = useRef(false);
-  const [hasClickedArrow, setHasClickedArrow] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = (e: Event) => {
-      if (isAnimatingRef.current) {
-        e.preventDefault();
-        return;
-      }
-      const currentScrollY = window.scrollY;
-      const featuresSection = document.getElementById("features");
-      if (featuresSection && currentScrollY < lastScrollY && hasClickedArrow) {
-        const featuresSectionTop = featuresSection.offsetTop;
-        const tolerance = 200;
-        if (Math.abs(currentScrollY - featuresSectionTop) < tolerance) {
-          scrollToTop();
-          setHasClickedArrow(false);
-        }
-      }
-      setLastScrollY(currentScrollY);
-    };
-
-    window.addEventListener("scroll", handleScroll, { passive: false });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [lastScrollY]);
+  const isScrollingRef = useRef(false);
 
   const scrollToFeatures = () => {
-    setHasClickedArrow(true);
+    if (isScrollingRef.current) return;
+
     const featuresSection = document.getElementById("features");
     if (featuresSection) {
+      isScrollingRef.current = true;
       const start = window.scrollY;
       const end = featuresSection.offsetTop;
-      const duration = 1000; // Duration in milliseconds
+      const duration = 1000;
 
       const easeOutCubic = (t: number): number => {
         return 1 - Math.pow(1 - t, 3);
@@ -55,6 +33,8 @@ export default function LandingPage() {
 
         if (progress < 1) {
           requestAnimationFrame(animate);
+        } else {
+          isScrollingRef.current = false;
         }
       };
 
@@ -62,13 +42,13 @@ export default function LandingPage() {
     }
   };
 
-  const scrollToTop = () => {
-    if (isAnimatingRef.current) return;
+  const scrollToTop = useCallback(() => {
+    if (isScrollingRef.current) return;
 
-    isAnimatingRef.current = true;
+    isScrollingRef.current = true;
     const start = window.scrollY;
     const end = 0;
-    const duration = 1000;
+    const duration = 1000; // Increased duration for smoother animation
 
     const easeOutCubic = (t: number): number => {
       return 1 - Math.pow(1 - t, 3);
@@ -88,12 +68,33 @@ export default function LandingPage() {
       if (progress < 1) {
         requestAnimationFrame(animate);
       } else {
-        isAnimatingRef.current = false;
+        isScrollingRef.current = false;
       }
     };
 
     requestAnimationFrame(animate);
-  };
+  }, []); // Empty dependencies since we don't use any external values
+
+  const handleScroll = useCallback(() => {
+    if (isScrollingRef.current) return;
+
+    const currentScrollY = window.scrollY;
+    const viewportHeight = window.innerHeight;
+
+    if (
+      currentScrollY < lastScrollY &&
+      currentScrollY < viewportHeight * (3 / 4) &&
+      currentScrollY < viewportHeight
+    ) {
+      scrollToTop();
+    }
+    setLastScrollY(currentScrollY);
+  }, [lastScrollY, scrollToTop]);
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll, { passive: false });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [handleScroll]); // Add handleScroll as dependency
 
   return (
     <div className="min-h-screen">

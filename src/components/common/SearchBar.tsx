@@ -16,7 +16,6 @@ export default function SearchBar({
   const { data: results, isLoading, searchItems } = useSearch("", 4);
   const navigate = useNavigate();
   const dropdownRef = useRef<HTMLDivElement>(null);
-  console.log("Results", results);
 
   // Reset selected index when results change
   useEffect(() => {
