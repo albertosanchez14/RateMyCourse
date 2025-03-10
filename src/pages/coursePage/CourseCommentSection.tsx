@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import {
-  useCourseComments,
+  useCourseReviews,
   useProfessorsComments,
 } from "../../hooks/useComents";
 import {
-  CommentCourseType,
+  CourseReviewsType,
   CommentProfessorType,
   Professor,
 } from "../../types/comments_type";
@@ -14,34 +14,40 @@ import Comment from "../../components/comments/Comment";
 import ProfessorCommentCard from "../../components/comments/ProfessorCommentCard";
 
 interface CourseCommentSectionProps {
-  course_id: number;
+  course_code: number;
   professors: Set<{ id?: string; name?: string } | undefined>;
 }
 
 export default function CommentSection({
-  course_id,
+  course_code,
   professors,
 }: CourseCommentSectionProps) {
   // Load comments data now from folder data
   const [commentsType, setCommentsType] = useState<"course" | "professor">(
     "course"
   );
-  const courseComments = useCourseComments(course_id);
+  const [sortDirection, setSortDirection] = useState<{
+    date: boolean;
+    rating: boolean | undefined;
+  }>({
+    date: true, // Sort by date descending
+    rating: undefined, // Initialize rating as undefined
+  });
+  const courseComments = useCourseReviews(course_code);
+  const [filteredCourseReviews, setFilterdCourseReviews] = useState<
+    Array<CourseReviewsType>
+  >([]);
 
-  // TODO: Implement useProfessorsComments
-  // const professorComments = useProfessorsComments(
-  //   Array.from(professors).map((professor) => professor.id)
-  // );
-
-  if (courseComments.isLoading) return <div>Loading...</div>;
-  if (courseComments.error)
-    return <div>Error: {courseComments.error.message}</div>;
-  if (!courseComments.data) return <div>No data</div>;
-
-  // if (professorComments.isLoading) return <div>Loading...</div>;
-  // if (professorComments.error)
-  //   return <div>Error: {professorComments.error.message}</div>;
-  // if (!professorComments.data) return <div>No data</div>;
+  // Load the couse reviews
+  useEffect(() => {
+    if (courseComments.data) {
+      // Sort by date descending when data initially loads
+      const initialComments = [...courseComments.data].sort(
+        (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+      );
+      setFilterdCourseReviews(initialComments);
+    }
+  }, [courseComments.data]);
 
   // Handle comments type
   const handleCommentsType = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -54,6 +60,57 @@ export default function CommentSection({
       ? setCommentsType("course")
       : setCommentsType("professor");
   };
+
+  // Handle professor filter
+  const handleProfFilter = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const professor = e.target.value;
+    if (courseComments.data) {
+      if (professor === "") {
+        setFilterdCourseReviews(courseComments.data);
+      } else {
+        const filteredComments = courseComments.data.filter(
+          (comment) => comment.professor === professor
+        );
+        setFilterdCourseReviews(filteredComments);
+      }
+    }
+  };
+
+  // Handle sort button
+  const handleButtonSort = (sortType: string) => () => {
+    if (!filteredCourseReviews) return;
+    setSortDirection((prev) => ({
+      ...prev,
+      [sortType]:
+        sortType === "rating" && prev.rating === undefined
+          ? false
+          : !prev[sortType as keyof typeof sortDirection],
+    }));
+
+    const sortFunctions = {
+      date: (a: CourseReviewsType, b: CourseReviewsType) =>
+        new Date(a.date).getTime() - new Date(b.date).getTime(),
+      rating: (a: CourseReviewsType, b: CourseReviewsType) =>
+        a.rating.overall - b.rating.overall,
+    };
+
+    const sortFn = sortFunctions[sortType as keyof typeof sortFunctions];
+    const ascending =
+      sortType === "rating" && sortDirection.rating === undefined
+        ? false
+        : !sortDirection[sortType as keyof typeof sortDirection];
+
+    const sortedComments = [...filteredCourseReviews].sort((a, b) =>
+      ascending ? -sortFn(a, b) : sortFn(a, b)
+    );
+
+    setFilterdCourseReviews(sortedComments);
+  };
+
+  if (courseComments.isLoading) return <div>Loading...</div>;
+  if (courseComments.error)
+    return <div>Error: {courseComments.error.message}</div>;
+  if (!courseComments.data) return <div>No data</div>;
 
   return (
     <div className="flex flex-row gap-4 border-t border-[#f0f0f0]">
@@ -83,23 +140,32 @@ export default function CommentSection({
         <div className="flex flex-col gap-4 rounded-lg">
           {courseComments.data.length !== 0 && (
             <div className="flex flex-row gap-4">
-              <select name="sortOption" className="sort-option" defaultValue="">
-                <option value="" disabled>
-                  Sort by
-                </option>
-                <option value="date">Date</option>
-                <option value="rating">Rating</option>
-              </select>
+              <button onClick={handleButtonSort("date")}>
+                Date {sortDirection.date ? "↓" : "↑"}
+              </button>
+              <button onClick={handleButtonSort("rating")}>
+                Rating{" "}
+                {sortDirection.rating === undefined
+                  ? ""
+                  : sortDirection.rating
+                  ? "↓"
+                  : "↑"}
+              </button>
               <select
                 name="professor"
-                className="professor-select"
                 defaultValue=""
+                onChange={handleProfFilter}
               >
-                <option value="" disabled>
-                  Select Professor
-                </option>
-                <option value="prof1">Professor 1</option>
-                <option value="prof2">Professor 2</option>
+                <option value="">All Professors</option>
+                {[
+                  ...new Set(
+                    courseComments.data.map((comment) => comment.professor)
+                  ),
+                ].map((professor: string, index: number) => (
+                  <option key={index} value={professor}>
+                    {professor}
+                  </option>
+                ))}
               </select>
             </div>
           )}
@@ -107,15 +173,15 @@ export default function CommentSection({
           {commentsType === "course" && (
             <div className="flex flex-row gap-4">
               <div className="flex flex-col gap-4 flex-1 empty:flex-0">
-                {courseComments.data.map((comment: CommentCourseType) => (
+                {filteredCourseReviews.map((comment: CourseReviewsType) => (
                   <Comment
-                    key={comment.id}
-                    id={comment.id}
+                    key={comment._id}
+                    id={comment._id}
                     title={comment.title}
                     date={comment.date}
-                    description={comment.description}
+                    description={comment.review}
                     rating={comment.rating}
-                    by={comment.by}
+                    by={comment.user_id}
                     professor={comment.professor}
                   />
                 ))}

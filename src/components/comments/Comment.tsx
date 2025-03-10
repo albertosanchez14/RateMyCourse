@@ -1,10 +1,8 @@
-import { useLayoutEffect, useRef } from "react";
-
-import "./Comment.css";
+import { useRef } from "react";
 
 import { RatingType } from "../../types/comments_type";
 
-import RectangleChart from "../../pages/coursePage/RectangleChart";
+import RectangleChart from "../charts/RectangleChart";
 
 interface CommentProps {
   id: number;
@@ -27,64 +25,59 @@ export default function Comment({
 }: CommentProps) {
   const ratingContainerRef = useRef<HTMLDivElement>(null);
 
-  // Set the width of the rating titles to be the same
-  // useLayoutEffect(() => {
-  //   if (ratingContainerRef.current) {
-  //     const titles = ratingContainerRef.current.getElementsByClassName(
-  //       "course-comment-rating-title"
-  //     );
-  //     let maxWidth = 0;
-  //     Array.from(titles).forEach((title) => {
-  //       const width = title.getBoundingClientRect().width;
-  //       if (width > maxWidth) {
-  //         maxWidth = width;
-  //       }
-  //     });
-  //     maxWidth += 20; // TODO: Ver como hacerlo mejor
-  //     Array.from(titles).forEach((title) => {
-  //       (title as HTMLElement).style.width = `${maxWidth}px`;
-  //     });
-  //   }
-  // }, [rating]);
+  const printableDate = new Date(date)
+    .toDateString()
+    .split(" ")
+    .slice(1)
+    .join(" ");
 
   return (
-    <div className="course-comment-container" key={id}>
-      <div className="course-comment-profile-container">
+    <div
+      className="flex flex-col gap-4 p-4 border border-gray-200 rounded-lg"
+      key={id}
+    >
+      <div className="flex gap-2">
         <img
           src={"/blank-profile-picture.png"}
           alt="profile"
-          className="course-comment-profile"
+          className="w-[50px] h-[50px] rounded-full"
         />
-        <div>
-          <span className="course-comment-profile-user">{by}</span>
-          <span className="course-comment-profile-date">{date}</span>
+        <div className="flex flex-col">
+          <span className="font-semibold">{by}</span>
+          <span className="text-gray-400 text-sm">{printableDate}</span>
         </div>
       </div>
-      <div className="course-comment-description-rating">
-        <div className="course-comment-description-container">
-          <h3 className="title">{title}</h3>
-          <span>{description}</span>
-            {professor && (
-            <div className="professor">
-              <span className="professor">Taught by</span>
-              <a href="">{professor}</a>
+      <div className="flex gap-2">
+        <div className="flex flex-col h-full flex-[2]">
+          <h3 className="font-semibold text-lg">{title}</h3>
+          <span className="text-[0.95em]">{description}</span>
+          {professor && (
+            <div className="flex items-end h-full gap-1">
+              <span className="text-gray-400 text-sm">Taught by</span>
+              <a href="" className="text-[0.85em]">
+                {professor}
+              </a>
             </div>
-            )}
+          )}
         </div>
-        <div
-          className="course-comment-rating-container"
-          ref={ratingContainerRef}
-        >
-          {Object.keys(rating).map((key) => (
-            <div key={key}>
-              <div className="course-comment-rating-title">
-                <h4>{key.charAt(0).toUpperCase() + key.slice(1)}</h4>
-              </div>
-              <RectangleChart
-                rating={rating[key as keyof RatingType] as number}
-              />
-            </div>
-          ))}
+        <div className="flex flex-col flex-1 gap-3" ref={ratingContainerRef}>
+          {Object.keys(rating).map(
+            (key) =>
+              key !== "_id" && (
+                <div key={key} className="flex h-fit gap-2">
+                  <div className="flex flex-1 self-center justify-end">
+                    <h4 className="font-semibold">
+                      {key.charAt(0).toUpperCase() + key.slice(1)}
+                    </h4>
+                  </div>
+                  <div className="flex flex-2">
+                    <RectangleChart
+                      rating={rating[key as keyof RatingType] as number}
+                    />
+                  </div>
+                </div>
+              )
+          )}
         </div>
       </div>
     </div>

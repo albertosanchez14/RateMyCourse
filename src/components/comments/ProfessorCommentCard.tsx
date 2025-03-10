@@ -1,6 +1,6 @@
 import "./ProfessorCommentCard.css";
 
-import RectangleChart from "../../pages/coursePage/RectangleChart";
+import RectangleChart from "../charts/RectangleChart";
 import Comment from "./Comment";
 
 import { CommentProfessorType, Professor } from "../../types/comments_type";

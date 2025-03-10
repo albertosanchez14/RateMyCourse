@@ -3,14 +3,14 @@ export type RatingType = {
   [key: string]: number; // Allows for additional rating properties
 };
 
-export type CommentCourseType = {
-  id: number;
+export type CourseReviewsType = {
+  _id: number;
+  user_id: string;
   course_id: number;
-  title: string;
-  date: string;
-  description: string;
   rating: RatingType;
-  by: string;
+  title: string;
+  review: string;
+  date: string;
   professor: string;
 };
 

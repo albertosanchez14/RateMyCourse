@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 
-import RectangleChart from "./RectangleChart";
-import SemiCircleChart from "./SemiCircleChart";
+import RectangleChart from "../../components/charts/RectangleChart";
+import SemiCircleChart from "../../components/charts/SemiCircleChart";
 
 import { RatingType } from "../../types/comments_type";
 

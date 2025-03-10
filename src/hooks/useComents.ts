@@ -1,32 +1,27 @@
 import { useQuery } from "@tanstack/react-query";
 import {
-  CommentCourseType,
+  CourseReviewsType,
   CommentProfessorType,
   Professor,
 } from "../types/comments_type";
 
-import commentsCourseData from "../data/comments_course.json"; // Adjust the path as necessary
 import commentsProfessorData from "../data/comments_professor.json"; // Adjust the path as necessary
 import professorData from "../data/professors.json"; // Adjust the path as necessary
 
-const fetchCourseComents = async (
+const fetchCourseReviews = async (
   course_id: number
-): Promise<Array<CommentCourseType>> => {
+): Promise<Array<CourseReviewsType>> => {
   // Mock data
-  const response = commentsCourseData as Array<CommentCourseType>;
-  const filteredResponse = response.filter(
-    (comment) => comment.course_id === course_id
-  );
+  const response = await fetch(`http://localhost:8000/course/${course_id}/review`);
+  const data = await response.json() as Array<CourseReviewsType>;
 
-  // Simulate network delay
-  // await new Promise((resolve) => setTimeout(resolve, 1));
-  return filteredResponse;
+  return data;
 };
 
-export const useCourseComments = (course_id: number) => {
-  return useQuery<Array<CommentCourseType>, Error>({
+export const useCourseReviews = (course_id: number) => {
+  return useQuery<Array<CourseReviewsType>, Error>({
     queryKey: ["comments", course_id],
-    queryFn: () => fetchCourseComents(course_id),
+    queryFn: () => fetchCourseReviews(course_id),
   });
 };
 
