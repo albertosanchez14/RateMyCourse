@@ -75,8 +75,8 @@ export default function GuidelinesPage() {
   ];
 
   return (
-    <div className="container mx-auto max-w-3xl mt-4">
-      <div className="py-8">
+    <div className="min-h-screen pt-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-3xl mx-auto">
         <h1 className="text-4xl font-bold mb-6">Community Guidelines</h1>
         <p className="text-gray-600 mb-8">
           Welcome to RateMyCourse! These guidelines help ensure our platform

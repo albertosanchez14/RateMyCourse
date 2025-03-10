@@ -19,7 +19,7 @@ export default function PrivacyPage() {
   }, []);
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8">
+    <div className="min-h-screen pt-12 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
       <ReactMarkdown
         components={{
           h1: ({ children }) => (
