@@ -1,4 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
+import {
+  MdKeyboardArrowUp,
+  MdKeyboardArrowDown,
+  MdExpandMore,
+} from "react-icons/md";
 
 import {
   useCourseReviews,
@@ -114,7 +119,8 @@ export default function CommentSection({
 
   return (
     <div className="flex flex-row gap-4 border-t border-[#f0f0f0]">
-      <div className="flex flex-col flex-[3] gap-4">
+      <div className="flex flex-col flex-[3] gap-6">
+        {/* Review Type Section */}
         <div className="flex flex-row gap-6">
           <div>
             <h3
@@ -137,36 +143,62 @@ export default function CommentSection({
             </h3>
           </div>
         </div>
-        <div className="flex flex-col gap-4 rounded-lg">
+        {/* Course Reviews */}
+        <div className="flex flex-col gap-2 rounded-lg">
           {courseComments.data.length !== 0 && (
-            <div className="flex flex-row gap-4">
-              <button onClick={handleButtonSort("date")}>
-                Date {sortDirection.date ? "↓" : "↑"}
-              </button>
-              <button onClick={handleButtonSort("rating")}>
-                Rating{" "}
-                {sortDirection.rating === undefined
-                  ? ""
-                  : sortDirection.rating
-                  ? "↓"
-                  : "↑"}
-              </button>
-              <select
-                name="professor"
-                defaultValue=""
-                onChange={handleProfFilter}
+            <div className="flex flex-row items-center gap-4">
+              <button
+                onClick={handleButtonSort("date")}
+                className="flex items-center gap-1 p-0 text-gray-700 hover:text-blue-500
+                         transition-all duration-200 text-sm font-medium"
               >
-                <option value="">All Professors</option>
-                {[
-                  ...new Set(
-                    courseComments.data.map((comment) => comment.professor)
-                  ),
-                ].map((professor: string, index: number) => (
-                  <option key={index} value={professor}>
-                    {professor}
-                  </option>
-                ))}
-              </select>
+                Date
+                {sortDirection.date ? (
+                  <MdKeyboardArrowDown className="w-5 h-5" />
+                ) : (
+                  <MdKeyboardArrowUp className="w-5 h-5" />
+                )}
+              </button>
+
+              <button
+                onClick={handleButtonSort("rating")}
+                className="flex items-center gap-1 p-0 text-gray-700 hover:text-blue-500
+                          transition-all duration-200 text-sm font-medium"
+              >
+                <span>Rating</span>
+                {sortDirection.rating === undefined ? (
+                  <span className="w-5 h-5" />
+                ) : sortDirection.rating ? (
+                  <MdKeyboardArrowDown className="w-5 h-5" />
+                ) : (
+                  <MdKeyboardArrowUp className="w-5 h-5" />
+                )}
+              </button>
+
+              <div className="relative">
+                <select
+                  name="professor"
+                  defaultValue=""
+                  onChange={handleProfFilter}
+                  className="appearance-none w-full px-4 py-2 pr-10 text-gray-700 bg-white border 
+              border-gray-200 rounded-lg hover:bg-gray-50 hover:border-gray-300 
+              transition-all duration-200 text-sm font-medium cursor-pointer 
+              focus:outline-none focus:ring-2 focus:ring-blue-500 
+              focus:border-transparent"
+                >
+                  <option value="" className="text-gray-700">All Professors</option>
+                  {[
+                    ...new Set(
+                      courseComments.data.map((comment) => comment.professor)
+                    ),
+                  ].map((professor: string, index: number) => (
+                    <option key={index} value={professor}>
+                      {professor}
+                    </option>
+                  ))}
+                </select>
+                <MdExpandMore className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500 pointer-events-none" />
+              </div>
             </div>
           )}
           {/* Course Reviews */}
@@ -186,19 +218,40 @@ export default function CommentSection({
                   />
                 ))}
               </div>
-              <div className="flex flex-col h-fit w-60 gap-4 p-4 rounded-lg border border-[#e0e0e0]">
-                <h3 className="m-0">Share Your Experience!</h3>
-                <div className="flex flex-row justify-center gap-4">
+              {/* Write Form */}
+              <div className="flex flex-col h-fit w-80 gap-6 p-6 rounded-xl border border-[#e0e0e0] bg-white shadow-sm hover:shadow-md transition-shadow duration-300">
+                <h3 className="text-xl font-bold text-gray-800 text-center">
+                  Share Your Experience!
+                </h3>
+                <div className="flex flex-row justify-center items-center gap-3">
                   {[1, 2, 3, 4, 5].map((value) => (
-                    <div key={value}>
-                      <label>
+                    <div key={value} className="relative">
+                      <input
+                        type="radio"
+                        id={`rating-${value}`}
+                        name="rating"
+                        value={value}
+                        className="hidden peer"
+                      />
+                      <label
+                        htmlFor={`rating-${value}`}
+                        className="flex items-center justify-center w-10 h-10 rounded-full 
+                   bg-gray-100 hover:bg-gray-200 cursor-pointer
+                   peer-checked:bg-blue-500 peer-checked:text-white
+                   transition-all duration-200 font-medium"
+                      >
                         {value}
-                        <input type="radio" name="rating" value={value} />
                       </label>
                     </div>
                   ))}
                 </div>
-                <button>Write a Review</button>
+                <button
+                  className="w-full py-3 px-4 bg-blue-500 text-white font-semibold 
+                     rounded-lg hover:bg-blue-600 active:bg-blue-700 
+                     transition-colors duration-200 shadow-sm"
+                >
+                  Write a Review
+                </button>
               </div>
             </div>
           )}
