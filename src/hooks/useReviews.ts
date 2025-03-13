@@ -15,7 +15,7 @@ const fetchCourseReviews = async (
 ): Promise<Array<CourseReviewsType>> => {
   // Mock data
   const response = await fetch(
-    `http://localhost:8000/course/${course_id}/review`
+    `http://localhost:8000/course/${course_id}/reviews`
   );
   const data = (await response.json()) as Array<CourseReviewsType>;
 
@@ -34,7 +34,7 @@ export const useCourseReviews = (course_id: number) => {
 const fetchUserCourseReviews = async (
   token: string | null
 ): Promise<Array<UserCourseReviewType>> => {
-  const response = await fetch("http://localhost:8000/course/reviews/user", {
+  const response = await fetch("http://localhost:8000/user/reviews", {
     headers: {
       Authorization: `Bearer ${token}`,
     },

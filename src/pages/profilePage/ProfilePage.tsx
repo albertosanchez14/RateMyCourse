@@ -1,24 +1,15 @@
-import { useState } from "react";
 import { MdEdit, MdSchool, MdEmail, MdDateRange } from "react-icons/md";
 
 import { useUserCourseReviews } from "../../hooks/useReviews";
+import { useUser } from "../../hooks/useUser";
 
 export default function ProfilePage() {
-  const { data: reviews, isLoading, error } = useUserCourseReviews();
-  // Mock data - replace with real user data from your auth system
-  const [user] = useState({
-    name: "John Doe",
-    email: "john.doe@example.com",
-    joinDate: "March 2024",
-    university: "Universidad Carlos III de Madrid",
-    degree: "Bachelor in Computer Science and Engineering",
-    yearOfStudy: 3,
-    reviewCount: 12,
-  });
+  const { data: reviews, isLoading: isLoadingRev, error: errorRev } = useUserCourseReviews();  
+  const { data: user, isLoading: isLoadingUser, error: errorUser } = useUser();
 
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error.message}</div>;
-  if (!reviews) return <div>No data</div>;
+  if (isLoadingRev || isLoadingUser) return <div>Loading...</div>;
+  if (errorRev || errorUser) return <div>Error: {errorRev?.message || errorUser?.message}</div>;
+  if (!reviews || !user) return <div>No data</div>;
 
   return (
     <div className="min-h-screen p-8">
@@ -66,7 +57,7 @@ export default function ProfilePage() {
           <div className="bg-white rounded-xl shadow-sm p-6">
             <h3 className="text-lg font-semibold mb-2">Reviews Written</h3>
             <p className="text-3xl font-bold text-blue-500">
-              {user.reviewCount}
+              {user.reviewsCount}
             </p>
           </div>
           <div className="bg-white rounded-xl shadow-sm p-6">
