@@ -19,12 +19,12 @@ import Comment from "../../components/comments/Comment";
 import ProfessorCommentCard from "../../components/comments/ProfessorCommentCard";
 
 interface CourseCommentSectionProps {
-  course_code: number;
+  courseId: string;
   professors: Set<{ id?: string; name?: string } | undefined>;
 }
 
 export default function CommentSection({
-  course_code,
+  courseId,
   professors,
 }: CourseCommentSectionProps) {
   // Load comments data now from folder data
@@ -38,7 +38,7 @@ export default function CommentSection({
     date: true, // Sort by date descending
     rating: undefined, // Initialize rating as undefined
   });
-  const courseComments = useCourseReviews(course_code);
+  const courseComments = useCourseReviews(courseId);
   const [filteredCourseReviews, setFilterdCourseReviews] = useState<
     Array<CourseReviewsType>
   >([]);

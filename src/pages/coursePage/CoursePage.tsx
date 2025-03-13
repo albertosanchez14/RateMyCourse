@@ -10,9 +10,9 @@ import { useCourse } from "../../hooks/useCourse";
 
 export default function CoursePage() {
   // Get course_code from URL
-  const { courseCode } = useParams();
+  const { courseId } = useParams();
   // Load course data now from folder data
-  const { data, isLoading, error } = useCourse(Number(courseCode));
+  const { data, isLoading, error } = useCourse(courseId ?? "");
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;
@@ -56,7 +56,7 @@ export default function CoursePage() {
         requirements={data.requirements}
         teacher={data.teacher}
       />
-      <CourseCommentSection course_code={data.code} professors={uniqueTeachers} />
+      <CourseCommentSection courseId={data._id} professors={uniqueTeachers} />
     </div>
   );
 }

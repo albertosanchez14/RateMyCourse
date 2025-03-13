@@ -1,6 +1,7 @@
 import { RatingType } from "./reviews";
 
 export type DBCourseType = {
+  _id: string;
   title: string;
   code: number;
   degree: DegreeType;

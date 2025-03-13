@@ -6,12 +6,12 @@ import {
   FREventType,
 } from "../types/course_type";
 
-const fetchCourse = async (course_code: number): Promise<FRCourseType> => {
-  console.log("Fetching course data for course code", course_code);
+const fetchCourse = async (courseId: string): Promise<FRCourseType> => {
+  console.log("Fetching course data for course", courseId);
   // Fetch course data from the server
-  const response = await fetch(`http://localhost:8000/course/${course_code}`);
+  const response = await fetch(`http://localhost:8000/course/${courseId}`);
   if (!response.ok) {
-    throw new Error(`Course with code ${course_code} not found`);
+    throw new Error(`Course with code ${courseId} not found`);
   }
 
   const course: DBCourseType = await response.json();
@@ -21,11 +21,11 @@ const fetchCourse = async (course_code: number): Promise<FRCourseType> => {
   return transformedCourse;
 };
 
-export const useCourse = (course_code: number) => {
+export const useCourse = (courseId: string) => {
   return useQuery<FRCourseType, Error>({
-    queryKey: ["course", course_code],
-    queryFn: () => fetchCourse(course_code),
-    enabled: !!course_code,
+    queryKey: ["course", courseId],
+    queryFn: () => fetchCourse(courseId),
+    enabled: !!courseId,
   });
 };
 

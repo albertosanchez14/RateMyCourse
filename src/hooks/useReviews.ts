@@ -11,21 +11,21 @@ import commentsProfessorData from "../data/comments_professor.json"; // Adjust t
 import professorData from "../data/professors.json"; // Adjust the path as necessary
 
 const fetchCourseReviews = async (
-  course_id: number
+  courseId: string
 ): Promise<Array<CourseReviewsType>> => {
   // Mock data
   const response = await fetch(
-    `http://localhost:8000/course/${course_id}/reviews`
+    `http://localhost:8000/course/${courseId}/reviews`
   );
   const data = (await response.json()) as Array<CourseReviewsType>;
 
   return data;
 };
 
-export const useCourseReviews = (course_id: number) => {
+export const useCourseReviews = (courseId: string) => {
   return useQuery<Array<CourseReviewsType>, Error>({
-    queryKey: ["comments", course_id],
-    queryFn: () => fetchCourseReviews(course_id),
+    queryKey: ["comments", courseId],
+    queryFn: () => fetchCourseReviews(courseId),
   });
 };
 

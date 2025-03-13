@@ -46,7 +46,7 @@ export default function SearchBar({
   const handleResultClick = (result: SearchResult) => {
     setSearchTerm(result.title);
     setIsOpen(false);
-    navigate(`/course/${result.code}`);
+    navigate(`/course/${result._id}`);
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {

@@ -49,9 +49,6 @@ export const useSearch = (initialTerm?: string, limit?: number) => {
     setError(null);
 
     try {
-      // if (term.length < 3) {
-      //   return;
-      // }
       const response = await fetch(
         `http://localhost:8000/course/search?q=${encodeURIComponent(term)}&limit=${limit}`
       );
