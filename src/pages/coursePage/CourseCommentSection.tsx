@@ -8,12 +8,12 @@ import {
 import {
   useCourseReviews,
   useProfessorsComments,
-} from "../../hooks/useComents";
+} from "../../hooks/useReviews";
 import {
   CourseReviewsType,
   CommentProfessorType,
   Professor,
-} from "../../types/comments_type";
+} from "../../types/reviews";
 
 import Comment from "../../components/comments/Comment";
 import ProfessorCommentCard from "../../components/comments/ProfessorCommentCard";
@@ -186,7 +186,9 @@ export default function CommentSection({
               focus:outline-none focus:ring-2 focus:ring-blue-500 
               focus:border-transparent"
                 >
-                  <option value="" className="text-gray-700">All Professors</option>
+                  <option value="" className="text-gray-700">
+                    All Professors
+                  </option>
                   {[
                     ...new Set(
                       courseComments.data.map((comment) => comment.professor)

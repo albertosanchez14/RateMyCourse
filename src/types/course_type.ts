@@ -1,4 +1,4 @@
-import { RatingType } from "./comments_type";
+import { RatingType } from "./reviews";
 
 export type DBCourseType = {
   title: string;

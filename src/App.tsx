@@ -12,11 +12,15 @@ import Footer from "./components/navigation/Footer";
 import CoursePage from "./pages/coursePage";
 import ExplorePage from "./pages/explorePage";
 import LandingPage from "./pages/landingPage";
+import LoginPage from "./pages/loginPage";
+import ProfilePage from "./pages/profilePage";
 import GuidelinesPage from "./pages/guidelinesPage";
 import PrivacyPage from "./pages/privacyPage";
 import AboutPage from "./pages/aboutPage";
 import {
   LANDING_PAGE_ROUTE,
+  SIGN_IN_PAGE_ROUTE,
+  SIGN_UP_PAGE_ROUTE,
   PROFILE_PAGE_ROUTE,
   COURSE_PAGE_ROUTE,
   SHORT_PROF_PAGE_ROUTE,
@@ -30,7 +34,15 @@ import {
 
 const HeaderWrapper = () => {
   const location = useLocation();
-  return location.pathname !== LANDING_PAGE_ROUTE ? <Header /> : null;
+  return location.pathname !== LANDING_PAGE_ROUTE &&
+    location.pathname !== SIGN_IN_PAGE_ROUTE ? (
+    <Header />
+  ) : null;
+};
+
+const FooterWrapper = () => {
+  const location = useLocation();
+  return location.pathname !== SIGN_IN_PAGE_ROUTE ? <Footer /> : null;
 };
 
 function App() {
@@ -40,7 +52,9 @@ function App() {
         <HeaderWrapper />
         <Routes>
           <Route path={LANDING_PAGE_ROUTE} element={<LandingPage />} />
-          <Route path={PROFILE_PAGE_ROUTE} element={<div>Profile Page</div>} />
+          <Route path={SIGN_IN_PAGE_ROUTE} element={<LoginPage />} />
+          {/* <Route path={SIGN_UP_PAGE_ROUTE} element={<SignUp />} /> */}
+          <Route path={PROFILE_PAGE_ROUTE} element={<ProfilePage />} />
           <Route path={COURSE_PAGE_ROUTE} element={<CoursePage />} />
           <Route path={PROF_PAGE_ROUTE} element={<div>Prof Page</div>} />
           <Route path={SHORT_PROF_PAGE_ROUTE} element={<div>Prof Page</div>} />
@@ -50,7 +64,7 @@ function App() {
           <Route path={WELCOME_PAGE_ROUTE} element={<LandingPage />} />
           <Route path={GUIDELINES_PAGE_ROUTE} element={<GuidelinesPage />} />
         </Routes>
-        <Footer />
+        <FooterWrapper />
       </Router>
     </>
   );

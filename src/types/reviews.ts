@@ -14,12 +14,22 @@ export type CourseReviewsType = {
   professor: string;
 };
 
+export type UserCourseReviewType = Omit<CourseReviewsType, "course_id"> & {
+  course_id: {
+    code: number;
+    title: string;
+    degree: {
+      title: string;
+    };
+  };
+};
+
 export type CommentProfessorType = {
   id: number;
   professor: {
     id: string;
     name: string;
-  }
+  };
   title: string;
   date: string;
   description: string;

@@ -1,6 +1,6 @@
 import { useRef } from "react";
 
-import { RatingType } from "../../types/comments_type";
+import { RatingType } from "../../types/reviews";
 
 import RectangleChart from "../charts/RectangleChart";
 

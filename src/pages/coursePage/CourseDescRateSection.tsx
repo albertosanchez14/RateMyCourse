@@ -3,7 +3,7 @@ import { useState, useRef, useEffect } from "react";
 import RectangleChart from "../../components/charts/RectangleChart";
 import SemiCircleChart from "../../components/charts/SemiCircleChart";
 
-import { RatingType } from "../../types/comments_type";
+import { RatingType } from "../../types/reviews";
 
 interface CourseDescRateSectionProps {
   objectives: string | undefined;

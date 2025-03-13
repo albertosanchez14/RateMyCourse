@@ -3,7 +3,7 @@ import "./ProfessorCommentCard.css";
 import RectangleChart from "../charts/RectangleChart";
 import Comment from "./Comment";
 
-import { CommentProfessorType, Professor } from "../../types/comments_type";
+import { CommentProfessorType, Professor } from "../../types/reviews";
 
 interface ProfessorCommentCardProps {
   professor: Professor;
