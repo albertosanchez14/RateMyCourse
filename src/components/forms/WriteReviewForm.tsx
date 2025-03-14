@@ -1,30 +1,40 @@
 import React, { useState } from "react";
 import { useAuth } from "@clerk/clerk-react";
 
-import { addCourseReview } from "../../hooks/useReviews";
-import { FormCourseReviewType, RatingType } from "../../types/reviews";
+import { addCourseReview, editCourseReview } from "../../hooks/useReviews";
+import {
+  CourseReviewsType,
+  FormCourseReviewType,
+  RatingType,
+} from "../../types/reviews";
 
 interface WriteReviewFormProps {
   courseId: string;
   professors: string[];
   onSuccess: () => void;
+  initialData?: CourseReviewsType | null;
 }
 
 export default function WriteReviewForm({
   courseId,
   professors,
   onSuccess,
+  initialData,
 }: WriteReviewFormProps) {
   const { getToken } = useAuth();
-  const [rating, setRating] = useState<RatingType>({
-    easy: 0,
-    useful: 0,
-    workload: 0,
-    overall: 0,
-  });
-  const [title, setTitle] = useState<string>("");
-  const [comment, setComment] = useState<string>("");
-  const [professor, setProfessor] = useState<string>("");
+  const [rating, setRating] = useState<RatingType>(
+    initialData?.rating || {
+      easy: 0,
+      useful: 0,
+      workload: 0,
+      overall: 0,
+    }
+  );
+  const [title, setTitle] = useState<string>(initialData?.title || "");
+  const [comment, setComment] = useState<string>(initialData?.review || "");
+  const [professor, setProfessor] = useState<string>(
+    initialData?.professor || ""
+  );
   const [showSuccess, setShowSuccess] = useState<boolean>(false);
   const [showProfError, setShowProfError] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
@@ -61,8 +71,15 @@ export default function WriteReviewForm({
           review: comment,
           date: new Date().toISOString(),
         };
-        
-        await addCourseReview(courseId, review, token);
+
+        if (initialData?._id) {
+          // Update existing review
+          await editCourseReview(courseId, initialData._id, review, token);
+        } else {
+          // Add new review
+          await addCourseReview(courseId, review, token);
+        }
+
         setShowSuccess(true);
         setErrorMessage("");
 
@@ -84,16 +101,12 @@ export default function WriteReviewForm({
       } catch (error) {
         console.error("Failed to submit review:", error);
         if (error instanceof Error) {
-          if (
+          setErrorMessage(
             error.message ===
-            "You have already submitted a review for this course"
-          ) {
-            setErrorMessage(
               "You have already submitted a review for this course"
-            );
-          } else {
-            setErrorMessage("Failed to submit review. Please try again later.");
-          }
+              ? "You have already submitted a review for this course"
+              : "Failed to submit review. Please try again later."
+          );
         }
         setShowSuccess(false);
       }
@@ -102,7 +115,9 @@ export default function WriteReviewForm({
 
   return (
     <div className="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-lg">
-      <h2 className="text-2xl font-bold mb-6 text-gray-800">Write a Review</h2>
+      <h2 className="text-2xl font-bold mb-6 text-gray-800">
+        {initialData ? "Edit Review" : "Write a Review"}
+      </h2>
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Title Input */}
         <div className="space-y-2">
@@ -222,24 +237,6 @@ export default function WriteReviewForm({
           </p>
         )}
 
-        {/* TODO: Implement anonymous posting */}
-        {/* <div className="flex items-center space-x-2">
-          <input
-            type="checkbox"
-            id="anonymous"
-            name="anonymous"
-            checked={anonymous}
-            onChange={handleAnonymous}
-            className="w-4 h-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-          />
-          <label
-            htmlFor="anonymous"
-            className="text-sm font-medium text-gray-700"
-          >
-            Post anonymously
-          </label>
-        </div> */}
-
         <button
           type="submit"
           className="w-full bg-blue-600 text-white py-3 px-6 rounded-lg
@@ -248,13 +245,15 @@ export default function WriteReviewForm({
                    transition-all duration-200 font-semibold
                    hover:shadow-lg active:scale-95"
         >
-          Submit Review
+          {initialData ? "Update Review" : "Submit Review"}
         </button>
 
         {showSuccess && (
           <div className="flex items-center justify-center text-green-500 font-medium">
             <span className="mr-2">✅</span>
-            Review submitted successfully!
+            {initialData
+              ? "Review updated successfully!"
+              : "Review submitted successfully!"}
           </div>
         )}
       </form>

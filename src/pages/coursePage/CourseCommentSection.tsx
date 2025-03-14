@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { useAuth } from "../../hooks/useAuth";
 
+import { useAuth } from "../../hooks/useAuth";
 import { useCourseReviews } from "../../hooks/useReviews";
 import { CourseReviewsType } from "../../types/reviews";
 
@@ -36,6 +36,9 @@ export default function CommentSection({
     Array<CourseReviewsType>
   >([]);
   const [showWriteForm, setShowWriteForm] = useState<boolean>(false);
+  const [editingReview, setEditingReview] = useState<CourseReviewsType | null>(
+    null
+  );
 
   // Load the couse reviews
   useEffect(() => {
@@ -139,13 +142,17 @@ export default function CommentSection({
                     </div>
                   )}
                   <Comment
-                    id={comment._id}
+                    id={Number(comment._id)}
                     title={comment.title}
                     date={comment.date}
                     description={comment.review}
                     rating={comment.rating}
                     by={comment.username}
                     professor={comment.professor}
+                    onEdit={() => {
+                      setEditingReview(comment);
+                      setShowWriteForm(true);
+                    }}
                   />
                 </div>
               ))}
@@ -164,6 +171,7 @@ export default function CommentSection({
                     setShowWriteForm(false);
                     courseComments.refetch();
                   }}
+                  initialData={editingReview}
                 />
               ) : userHasReview ? (
                 <div className="flex flex-col gap-4 p-6 rounded-xl border border-[#e0e0e0] bg-white">

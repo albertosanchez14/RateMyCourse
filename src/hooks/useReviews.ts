@@ -54,6 +54,28 @@ export const addCourseReview = async (
   }
 };
 
+export const editCourseReview = async (
+  courseId: string,
+  reviewId: string,
+  review: FormCourseReviewType,
+  token: string | null
+): Promise<void> => {
+  const response = await fetch(
+    `http://localhost:8000/course/${courseId}/reviews/${reviewId}`,
+    {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(review),
+    }
+  );
+  if (!response.ok) {
+    throw new Error("Failed to edit review");
+  }
+};
+
 // ****************************************************************************
 
 const fetchUserCourseReviews = async (

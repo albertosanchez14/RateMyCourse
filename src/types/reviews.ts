@@ -12,7 +12,7 @@ export type FormCourseReviewType = {
 };
 
 export type CourseReviewsType = {
-  _id: number;
+  _id: string;
   userId: string;
   username: string;
   course_id: number;

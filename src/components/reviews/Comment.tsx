@@ -1,5 +1,7 @@
 import { useRef } from "react";
+import { MdOutlineEdit } from "react-icons/md";
 
+import { useAuth } from "../../hooks/useAuth";
 import { RatingType } from "../../types/reviews";
 
 import RectangleChart from "../charts/RectangleChart";
@@ -12,6 +14,7 @@ interface CommentProps {
   rating: RatingType;
   by: string;
   professor?: string;
+  onEdit?: () => void;
 }
 
 export default function Comment({
@@ -22,7 +25,9 @@ export default function Comment({
   rating,
   by,
   professor,
+  onEdit,
 }: CommentProps) {
+  const { user } = useAuth();
   const ratingContainerRef = useRef<HTMLDivElement>(null);
 
   const printableDate = new Date(date)
@@ -38,23 +43,33 @@ export default function Comment({
       key={id}
     >
       {/* Profile Section */}
-      <div className="flex items-center gap-4">
-        <div className="relative">
-          <img
-            src={"/blank-profile-picture.png"}
-            alt="profile"
-            className="w-12 h-12 rounded-full border-2 border-gray-100 shadow-sm"
-          />
-          <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-400 rounded-full border-2 border-white"></div>
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <div className="relative">
+            <img
+              src={"/blank-profile-picture.png"}
+              alt="profile"
+              className="w-12 h-12 rounded-full border-2 border-gray-100 shadow-sm"
+            />
+            <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-400 rounded-full border-2 border-white"></div>
+          </div>
+          <div className="flex flex-col">
+            <span className="font-semibold text-gray-800 hover:text-blue-600 transition-colors cursor-pointer">
+              {by}
+            </span>
+            <span className="text-gray-400 text-sm">{printableDate}</span>
+          </div>
         </div>
-        <div className="flex flex-col">
-          <span className="font-semibold text-gray-800 hover:text-blue-600 transition-colors cursor-pointer">
-            {by}
-          </span>
-          <span className="text-gray-400 text-sm">{printableDate}</span>
-        </div>
+        {user && user.username === by && (
+          <button
+            onClick={onEdit}
+            className="text-blue-500 hover:text-blue-700 text-sm font-medium transition-colors"
+          >
+            <MdOutlineEdit size={25}/>
+          </button>
+        )}
       </div>
-      
+
       {/* Comment Section */}
       <div className="flex flex-col h-full flex-[2] space-y-3">
         <h3 className="font-bold text-xl text-gray-800 mb-0.5">{title}</h3>
