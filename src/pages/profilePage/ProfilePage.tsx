@@ -1,7 +1,10 @@
+import { useState } from "react";
 import { MdEdit, MdSchool, MdEmail, MdDateRange } from "react-icons/md";
 
 import { useUserCourseReviews } from "../../hooks/useReviews";
 import { useUser } from "../../hooks/useUser";
+
+import { EditProfileModal } from "./EditProfileModal";
 
 export default function ProfilePage() {
   const {
@@ -9,7 +12,19 @@ export default function ProfilePage() {
     isLoading: isLoadingRev,
     error: errorRev,
   } = useUserCourseReviews();
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const { data: user, isLoading: isLoadingUser, error: errorUser } = useUser();
+
+  const handleSaveProfile = async (userData: {
+    name: string;
+    yearOfStudy: number;
+    degree: string;
+    university: string;
+  }) => {
+    // TODO: Implement API call to update user data
+    console.log("Saving user data:", userData);
+    setIsEditModalOpen(false);
+  };
 
   if (isLoadingRev || isLoadingUser) return <div>Loading...</div>;
   if (errorRev || errorUser)
@@ -54,9 +69,18 @@ export default function ProfilePage() {
                 </div>
               </div>
             </div>
-            <button className="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition-colors">
+            <button 
+            onClick={() => setIsEditModalOpen(true)}
+            className="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition-colors">
               Edit Profile
             </button>
+
+            <EditProfileModal
+  user={user}
+  isOpen={isEditModalOpen}
+  onClose={() => setIsEditModalOpen(false)}
+  onSave={handleSaveProfile}
+/>
           </div>
         </div>
 
