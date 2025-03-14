@@ -111,7 +111,9 @@ export default function CommentSection({
   if (!courseComments.data) return <div>No data</div>;
 
   return (
-    <div className="flex flex-col flex-[3] gap-6 border-t border-[#f0f0f0]">
+    <div 
+    id="reviews"
+    className="flex flex-col flex-[3] gap-6 border-t border-[#f0f0f0]">
       <ReviewTypeSelector
         commentsType={commentsType}
         onTypeChange={setCommentsType}

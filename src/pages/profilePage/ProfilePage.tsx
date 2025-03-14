@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { MdEdit, MdSchool, MdEmail, MdDateRange } from "react-icons/md";
 
 import { useUserCourseReviews } from "../../hooks/useReviews";
@@ -8,7 +8,6 @@ import { useUser } from "../../hooks/useUser";
 import { EditProfileModal } from "./EditProfileModal";
 
 export default function ProfilePage() {
-  const navigate = useNavigate();
   const {
     data: reviews,
     isLoading: isLoadingRev,
@@ -119,7 +118,7 @@ export default function ProfilePage() {
                 <div className="flex justify-between items-start mb-2">
                   <div>
                     <Link
-                      to={`/course/${review.course_id._id}#review-${review._id}`}
+                      to={`/course/${review.course_id._id}#reviews`}
                     >
                       <h3 className="font-semibold text-lg">
                         {review.course_id.title}
