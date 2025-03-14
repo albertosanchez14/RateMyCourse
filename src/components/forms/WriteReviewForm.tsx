@@ -47,7 +47,7 @@ export default function WriteReviewForm({
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (professor === "") {
+    if (professor === "" && professors.length > 0) {
       setShowProfError(true);
     } else if (rating.overall === 0 || comment === "") {
       setErrorMessage("Please fill in all fields");
@@ -61,7 +61,7 @@ export default function WriteReviewForm({
           review: comment,
           date: new Date().toISOString(),
         };
-
+        
         await addCourseReview(courseId, review, token);
         setShowSuccess(true);
         setErrorMessage("");
@@ -84,8 +84,13 @@ export default function WriteReviewForm({
       } catch (error) {
         console.error("Failed to submit review:", error);
         if (error instanceof Error) {
-          if (error.message === "You have already submitted a review for this course") {
-            setErrorMessage("You have already submitted a review for this course");
+          if (
+            error.message ===
+            "You have already submitted a review for this course"
+          ) {
+            setErrorMessage(
+              "You have already submitted a review for this course"
+            );
           } else {
             setErrorMessage("Failed to submit review. Please try again later.");
           }
@@ -158,35 +163,37 @@ export default function WriteReviewForm({
         ))}
 
         {/* Professor Select */}
-        <div className="space-y-2">
-          <label
-            htmlFor="professor"
-            className="block text-sm font-semibold text-gray-700"
-          >
-            Professor
-          </label>
-          <select
-            id="professor"
-            name="professor"
-            value={professor}
-            onChange={handleProfessor}
-            className="w-full p-3 border border-gray-300 rounded-lg 
-                     focus:ring-2 focus:ring-blue-500 focus:border-blue-500
-                     bg-gray-50 hover:bg-white transition-colors duration-200"
-          >
-            <option value="">Select a professor</option>
-            {professors.map((prof) => (
-              <option key={prof} value={prof}>
-                {prof}
-              </option>
-            ))}
-          </select>
-          {showProfError && (
-            <p className="text-red-500 text-sm mt-1 flex items-center">
-              <span className="mr-1">⚠️</span> Please select a professor
-            </p>
-          )}
-        </div>
+        {professors.length > 0 && (
+          <div className="space-y-2">
+            <label
+              htmlFor="professor"
+              className="block text-sm font-semibold text-gray-700"
+            >
+              Professor
+            </label>
+            <select
+              id="professor"
+              name="professor"
+              value={professor}
+              onChange={handleProfessor}
+              className="w-full p-3 border border-gray-300 rounded-lg 
+                focus:ring-2 focus:ring-blue-500 focus:border-blue-500
+                bg-gray-50 hover:bg-white transition-colors duration-200"
+            >
+              <option value="">Select a professor</option>
+              {professors.map((prof) => (
+                <option key={prof} value={prof}>
+                  {prof}
+                </option>
+              ))}
+            </select>
+            {showProfError && (
+              <p className="text-red-500 text-sm mt-1 flex items-center">
+                <span className="mr-1">⚠️</span> Please select a professor
+              </p>
+            )}
+          </div>
+        )}
 
         {/* Comment Textarea */}
         <div className="space-y-2">
