@@ -4,7 +4,7 @@ import CourseTitleSection from "./CourseTitleSection";
 import CourseDescRateSection from "./CourseDescRateSection";
 import CourseScheduleSection from "./CourseScheduleSection";
 import CourseDetailSection from "./CourseDetailSection";
-import CourseCommentSection from "./CourseCommentSection";
+import CourseCommentSection from "./CourseReviewSection";
 
 import { useCourse } from "../../hooks/useCourse";
 

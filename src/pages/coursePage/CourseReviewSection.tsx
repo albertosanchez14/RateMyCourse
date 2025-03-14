@@ -61,6 +61,19 @@ export default function CommentSection({
     }
   }, [courseComments.data, user]);
 
+  // Navigate to the review when the hash changes
+  useEffect(() => {
+    if (location.hash) {
+      const id = location.hash.replace("#", "");
+      const element = document.getElementById(id);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+        element.classList.add("highlight");
+        setTimeout(() => element.classList.remove("highlight"), 2000);
+      }
+    }
+  }, [location.hash, filteredCourseReviews]);
+
   // Handle sort button
   const handleButtonSort = (sortType: string) => () => {
     if (!filteredCourseReviews) return;
@@ -142,7 +155,7 @@ export default function CommentSection({
                     </div>
                   )}
                   <Review
-                    id={Number(comment._id)}
+                    id={comment._id}
                     title={comment.title}
                     date={comment.date}
                     description={comment.review}

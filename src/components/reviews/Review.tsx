@@ -7,7 +7,7 @@ import { RatingType } from "../../types/reviews";
 import RectangleChart from "../charts/RectangleChart";
 
 interface ReviewProps {
-  id: number;
+  id: string;
   title: string;
   date: string;
   description: string;
@@ -40,7 +40,8 @@ export default function Review({
     <div
       className="flex flex-col gap-6 p-4 bg-white border border-gray-200 rounded-xl
                shadow-sm hover:shadow-md transition-all duration-300"
-      key={id}
+      key={`review-${id}`}
+      id={`review-${id}`}
     >
       {/* Profile Section */}
       <div className="flex items-center justify-between">

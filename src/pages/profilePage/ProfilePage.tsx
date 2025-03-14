@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { MdEdit, MdSchool, MdEmail, MdDateRange } from "react-icons/md";
 
 import { useUserCourseReviews } from "../../hooks/useReviews";
@@ -7,6 +8,7 @@ import { useUser } from "../../hooks/useUser";
 import { EditProfileModal } from "./EditProfileModal";
 
 export default function ProfilePage() {
+  const navigate = useNavigate();
   const {
     data: reviews,
     isLoading: isLoadingRev,
@@ -69,18 +71,19 @@ export default function ProfilePage() {
                 </div>
               </div>
             </div>
-            <button 
-            onClick={() => setIsEditModalOpen(true)}
-            className="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition-colors">
+            <button
+              onClick={() => setIsEditModalOpen(true)}
+              className="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition-colors"
+            >
               Edit Profile
             </button>
 
             <EditProfileModal
-  user={user}
-  isOpen={isEditModalOpen}
-  onClose={() => setIsEditModalOpen(false)}
-  onSave={handleSaveProfile}
-/>
+              user={user}
+              isOpen={isEditModalOpen}
+              onClose={() => setIsEditModalOpen(false)}
+              onSave={handleSaveProfile}
+            />
           </div>
         </div>
 
@@ -115,9 +118,13 @@ export default function ProfilePage() {
               >
                 <div className="flex justify-between items-start mb-2">
                   <div>
-                    <h3 className="font-semibold text-lg">
-                      {review.course_id.title || "Untitled Course"}
-                    </h3>
+                    <Link
+                      to={`/course/${review.course_id._id}#review-${review._id}`}
+                    >
+                      <h3 className="font-semibold text-lg">
+                        {review.course_id.title}
+                      </h3>
+                    </Link>
                     <p className="text-sm text-gray-500">
                       Posted on {new Date(review.date).toLocaleDateString()}
                     </p>
@@ -126,7 +133,7 @@ export default function ProfilePage() {
                     {review.rating?.overall}/5
                   </div>
                 </div>
-                <h4 className="font-medium text-gray-800 mb-2">
+                <h4 className="font-medium text-gray-800 mt-2">
                   {review.title}
                 </h4>
                 <p className="text-gray-600">{review.review}</p>
