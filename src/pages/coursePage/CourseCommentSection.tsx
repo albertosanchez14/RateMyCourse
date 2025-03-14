@@ -17,6 +17,7 @@ import {
 
 import Comment from "../../components/comments/Comment";
 import ProfessorCommentCard from "../../components/comments/ProfessorCommentCard";
+import WriteReviewForm from "./WriteReviewForm";
 
 interface CourseCommentSectionProps {
   courseId: string;
@@ -42,6 +43,7 @@ export default function CommentSection({
   const [filteredCourseReviews, setFilterdCourseReviews] = useState<
     Array<CourseReviewsType>
   >([]);
+  const [showWriteForm, setShowWriteForm] = useState<boolean>(false);
 
   // Load the couse reviews
   useEffect(() => {
@@ -215,45 +217,64 @@ export default function CommentSection({
                     date={comment.date}
                     description={comment.review}
                     rating={comment.rating}
-                    by={comment.user_id}
+                    by={comment.userId}
                     professor={comment.professor}
                   />
                 ))}
               </div>
               {/* Write Form */}
-              <div className="flex flex-col h-fit w-80 gap-6 p-6 rounded-xl border border-[#e0e0e0] bg-white shadow-sm hover:shadow-md transition-shadow duration-300">
-                <h3 className="text-xl font-bold text-gray-800 text-center">
-                  Share Your Experience!
-                </h3>
-                <div className="flex flex-row justify-center items-center gap-3">
-                  {[1, 2, 3, 4, 5].map((value) => (
-                    <div key={value} className="relative">
-                      <input
-                        type="radio"
-                        id={`rating-${value}`}
-                        name="rating"
-                        value={value}
-                        className="hidden peer"
-                      />
-                      <label
-                        htmlFor={`rating-${value}`}
-                        className="flex items-center justify-center w-10 h-10 rounded-full 
-                   bg-gray-100 hover:bg-gray-200 cursor-pointer
-                   peer-checked:bg-blue-500 peer-checked:text-white
-                   transition-all duration-200 font-medium"
-                      >
-                        {value}
-                      </label>
+              <div className="flex flex-col h-fit w-80">
+                {showWriteForm ? (
+                  <WriteReviewForm
+                    courseId={courseId}
+                    professors={Array.from(
+                      new Set(
+                        Array.from(professors).map((prof) => prof?.name || "")
+                      )
+                    )}
+                    onSuccess={() => {
+                      setShowWriteForm(false);
+                      courseComments.refetch();
+                    }}
+                  />
+                ) : (
+                  <div className="flex flex-col gap-6 p-6 rounded-xl border border-[#e0e0e0] bg-white shadow-sm hover:shadow-md transition-shadow duration-300">
+                    <h3 className="text-xl font-bold text-gray-800 text-center">
+                      Share Your Experience!
+                    </h3>
+                    <div className="flex flex-row justify-center items-center gap-3">
+                      {[1, 2, 3, 4, 5].map((value) => (
+                        <div key={value} className="relative">
+                          <input
+                            type="radio"
+                            id={`rating-${value}`}
+                            name="rating"
+                            value={value}
+                            className="hidden peer"
+                            onClick={() => setShowWriteForm(true)}
+                          />
+                          <label
+                            htmlFor={`rating-${value}`}
+                            className="flex items-center justify-center w-10 h-10 rounded-full 
+                bg-gray-100 hover:bg-gray-200 cursor-pointer
+                peer-checked:bg-blue-500 peer-checked:text-white
+                transition-all duration-200 font-medium"
+                          >
+                            {value}
+                          </label>
+                        </div>
+                      ))}
                     </div>
-                  ))}
-                </div>
-                <button
-                  className="w-full py-3 px-4 bg-blue-500 text-white font-semibold 
-                     rounded-lg hover:bg-blue-600 active:bg-blue-700 
-                     transition-colors duration-200 shadow-sm"
-                >
-                  Write a Review
-                </button>
+                    <button
+                      onClick={() => setShowWriteForm(true)}
+                      className="w-full py-3 px-4 bg-blue-500 text-white font-semibold 
+          rounded-lg hover:bg-blue-600 active:bg-blue-700 
+          transition-colors duration-200 shadow-sm"
+                    >
+                      Write a Review
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
           )}

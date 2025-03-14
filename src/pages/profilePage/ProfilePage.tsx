@@ -4,7 +4,7 @@ import { useUserCourseReviews } from "../../hooks/useReviews";
 import { useUser } from "../../hooks/useUser";
 
 export default function ProfilePage() {
-  const { data: reviews, isLoading: isLoadingRev, error: errorRev } = useUserCourseReviews();  
+  const { data: reviews, isLoading: isLoadingRev, error: errorRev } = useUserCourseReviews();
   const { data: user, isLoading: isLoadingUser, error: errorUser } = useUser();
 
   if (isLoadingRev || isLoadingUser) return <div>Loading...</div>;

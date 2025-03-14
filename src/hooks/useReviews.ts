@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@clerk/clerk-react";
 import {
   CourseReviewsType,
+  FormCourseReviewType,
   UserCourseReviewType,
   CommentProfessorType,
   Professor,
@@ -27,6 +28,27 @@ export const useCourseReviews = (courseId: string) => {
     queryKey: ["comments", courseId],
     queryFn: () => fetchCourseReviews(courseId),
   });
+};
+
+export const addCourseReview = async (
+  courseId: string,
+  review: FormCourseReviewType,
+  token: string | null
+): Promise<void> => {
+  const response = await fetch(
+    `http://localhost:8000/course/${courseId}/reviews`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(review),
+    }
+  );
+  if (!response.ok) {
+    throw new Error("Failed to add review");
+  }
 };
 
 // ****************************************************************************

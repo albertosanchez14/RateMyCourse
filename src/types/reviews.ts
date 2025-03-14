@@ -3,9 +3,17 @@ export type RatingType = {
   [key: string]: number; // Allows for additional rating properties
 };
 
+export type FormCourseReviewType = {
+  rating: RatingType;
+  title: string;
+  review: string;
+  date: string;
+  professor: string;
+};
+
 export type CourseReviewsType = {
   _id: number;
-  user_id: string;
+  userId: string;
   course_id: number;
   rating: RatingType;
   title: string;
