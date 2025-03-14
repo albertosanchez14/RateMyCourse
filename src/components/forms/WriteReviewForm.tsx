@@ -93,7 +93,10 @@ export default function WriteReviewForm({
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Title Input */}
         <div className="space-y-2">
-          <label htmlFor="title" className="block text-sm font-semibold text-gray-700">
+          <label
+            htmlFor="title"
+            className="block text-sm font-semibold text-gray-700"
+          >
             Title
           </label>
           <input
@@ -148,7 +151,10 @@ export default function WriteReviewForm({
 
         {/* Professor Select */}
         <div className="space-y-2">
-          <label htmlFor="professor" className="block text-sm font-semibold text-gray-700">
+          <label
+            htmlFor="professor"
+            className="block text-sm font-semibold text-gray-700"
+          >
             Professor
           </label>
           <select
@@ -176,7 +182,10 @@ export default function WriteReviewForm({
 
         {/* Comment Textarea */}
         <div className="space-y-2">
-          <label htmlFor="comment" className="block text-sm font-semibold text-gray-700">
+          <label
+            htmlFor="comment"
+            className="block text-sm font-semibold text-gray-700"
+          >
             Comment
           </label>
           <textarea
