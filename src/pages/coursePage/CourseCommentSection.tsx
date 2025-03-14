@@ -5,7 +5,7 @@ import { useCourseReviews } from "../../hooks/useReviews";
 import { CourseReviewsType } from "../../types/reviews";
 
 import WriteFormSection from "./WriteFormSection";
-import Comment from "../../components/reviews/Comment";
+import Review from "../../components/reviews/Review";
 import WriteReviewForm from "../../components/forms/WriteReviewForm";
 import ReviewTypeSelector from "../../components/reviews/ReviewTypeSelector";
 import ReviewControls from "../../components/reviews/ReviewControls";
@@ -55,7 +55,7 @@ export default function CommentSection({
   useEffect(() => {
     if (courseComments.data && user) {
       const hasReview = courseComments.data.some(
-        (comment) => comment.username === user.username
+        (comment) => comment.userId === user.userId
       );
       setUserHasReview(hasReview);
     }
@@ -136,12 +136,12 @@ export default function CommentSection({
             <div className="flex flex-col gap-4 flex-1 empty:flex-0">
               {filteredCourseReviews.map((comment: CourseReviewsType) => (
                 <div key={comment._id} className="relative">
-                  {user && comment.username === user.username && (
+                  {user && comment.userId === user.userId && (
                     <div className="absolute -top-3 -right-3 bg-blue-500 text-white px-2 py-1 rounded-full text-xs font-medium z-10">
                       Your Review
                     </div>
                   )}
-                  <Comment
+                  <Review
                     id={Number(comment._id)}
                     title={comment.title}
                     date={comment.date}

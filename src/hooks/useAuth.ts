@@ -8,7 +8,7 @@ export function useAuth() {
     isAuthenticated: isLoaded && isSignedIn,
     user: user ? {
       username: user.username || user.firstName || user.primaryEmailAddress?.emailAddress || '',
-      // Add any other user properties you need
+      userId: user.id,
     } : null,
     isLoading: !isLoaded,
     getToken: getToken,

@@ -6,7 +6,7 @@ import { RatingType } from "../../types/reviews";
 
 import RectangleChart from "../charts/RectangleChart";
 
-interface CommentProps {
+interface ReviewProps {
   id: number;
   title: string;
   date: string;
@@ -17,7 +17,7 @@ interface CommentProps {
   onEdit?: () => void;
 }
 
-export default function Comment({
+export default function Review({
   id,
   title,
   date,
@@ -26,7 +26,7 @@ export default function Comment({
   by,
   professor,
   onEdit,
-}: CommentProps) {
+}: ReviewProps) {
   const { user } = useAuth();
   const ratingContainerRef = useRef<HTMLDivElement>(null);
 
