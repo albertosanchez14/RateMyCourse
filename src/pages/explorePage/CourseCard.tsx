@@ -30,7 +30,7 @@ interface CourseCardProps {
 
 export default function CourseCard({ course }: CourseCardProps) {
   return (
-    <Link to={`/course/${course.code}`}>
+    <Link to={`/course/${course._id}`}>
       <div className="bg-white rounded-lg shadow-md pl-6 pt-2 pb-2 hover:shadow-lg transition-shadow border-l-4 border-blue-500">
         <div className="flex items-start mb-1">
           <div className="flex items-start gap-2">

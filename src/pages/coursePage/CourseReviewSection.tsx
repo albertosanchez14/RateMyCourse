@@ -75,34 +75,38 @@ export default function CommentSection({
   }, [location.hash, filteredCourseReviews]);
 
   // Handle sort button
-  const handleButtonSort = (sortType: string) => () => {
+  const handleButtonSort = (sortType: string) => {
     if (!filteredCourseReviews) return;
-    setSortDirection((prev) => ({
-      ...prev,
-      [sortType]:
+
+    setSortDirection((prev) => {
+      const newDirection = {
+        ...prev,
+        [sortType]:
+          sortType === "rating" && prev.rating === undefined
+            ? false
+            : !prev[sortType as keyof typeof prev],
+      };
+
+      const sortFunctions = {
+        date: (a: CourseReviewsType, b: CourseReviewsType) =>
+          new Date(a.date).getTime() - new Date(b.date).getTime(),
+        rating: (a: CourseReviewsType, b: CourseReviewsType) =>
+          a.rating.overall - b.rating.overall,
+      };
+
+      const sortFn = sortFunctions[sortType as keyof typeof sortFunctions];
+      const ascending =
         sortType === "rating" && prev.rating === undefined
           ? false
-          : !prev[sortType as keyof typeof sortDirection],
-    }));
+          : !prev[sortType as keyof typeof prev];
 
-    const sortFunctions = {
-      date: (a: CourseReviewsType, b: CourseReviewsType) =>
-        new Date(a.date).getTime() - new Date(b.date).getTime(),
-      rating: (a: CourseReviewsType, b: CourseReviewsType) =>
-        a.rating.overall - b.rating.overall,
-    };
+      const sortedComments = [...filteredCourseReviews].sort((a, b) =>
+        ascending ? sortFn(a, b) : -sortFn(a, b)
+      );
 
-    const sortFn = sortFunctions[sortType as keyof typeof sortFunctions];
-    const ascending =
-      sortType === "rating" && sortDirection.rating === undefined
-        ? false
-        : !sortDirection[sortType as keyof typeof sortDirection];
-
-    const sortedComments = [...filteredCourseReviews].sort((a, b) =>
-      ascending ? -sortFn(a, b) : sortFn(a, b)
-    );
-
-    setFilterdCourseReviews(sortedComments);
+      setFilterdCourseReviews(sortedComments);
+      return newDirection;
+    });
   };
 
   if (courseComments.isLoading) return <div>Loading...</div>;
@@ -111,9 +115,10 @@ export default function CommentSection({
   if (!courseComments.data) return <div>No data</div>;
 
   return (
-    <div 
-    id="reviews"
-    className="flex flex-col flex-[3] gap-6 border-t border-[#f0f0f0]">
+    <div
+      id="reviews"
+      className="flex flex-col flex-[3] gap-6 border-t border-[#f0f0f0]"
+    >
       <ReviewTypeSelector
         commentsType={commentsType}
         onTypeChange={setCommentsType}
@@ -129,7 +134,7 @@ export default function CommentSection({
               ...new Set(
                 courseComments.data.map((comment) => comment.professor)
               ),
-            ]}
+            ].filter((prof) => prof !== "" && prof !== undefined)}
             onProfessorFilter={(e: React.ChangeEvent<HTMLSelectElement>) => {
               const professor = e.target.value;
               if (professor === "") {

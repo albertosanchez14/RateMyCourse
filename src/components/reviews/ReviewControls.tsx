@@ -53,28 +53,30 @@ export default function ReviewControls({
         )}
       </button>
 
-      <div className="relative">
-        <select
-          name="professor"
-          defaultValue=""
-          onChange={onProfessorFilter}
-          className="appearance-none w-full px-4 py-2 pr-10 text-gray-700 bg-white border 
-          border-gray-200 rounded-lg hover:bg-gray-50 hover:border-gray-300 
-          transition-all duration-200 text-sm font-medium cursor-pointer 
-          focus:outline-none focus:ring-2 focus:ring-blue-500 
-          focus:border-transparent"
-        >
-          <option value="" className="text-gray-700">
-            All Professors
-          </option>
-          {professors.map((professor: string, index: number) => (
-            <option key={index} value={professor}>
-              {professor}
+      {professors.length > 0 && (
+        <div className="relative">
+          <select
+            name="professor"
+            defaultValue=""
+            onChange={onProfessorFilter}
+            className="appearance-none w-full px-4 py-2 pr-10 text-gray-700 bg-white border 
+            border-gray-200 rounded-lg hover:bg-gray-50 hover:border-gray-300 
+            transition-all duration-200 text-sm font-medium cursor-pointer 
+            focus:outline-none focus:ring-2 focus:ring-blue-500 
+            focus:border-transparent"
+          >
+            <option value="" className="text-gray-700">
+              All Professors
             </option>
-          ))}
-        </select>
-        <MdExpandMore className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500 pointer-events-none" />
-      </div>
+            {professors.map((professor: string, index: number) => (
+              <option key={index} value={professor}>
+                {professor}
+              </option>
+            ))}
+          </select>
+          <MdExpandMore className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500 pointer-events-none" />
+        </div>
+      )}
     </div>
   );
 }

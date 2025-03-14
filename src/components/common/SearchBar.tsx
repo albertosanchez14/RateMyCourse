@@ -121,7 +121,7 @@ export default function SearchBar({
                   }`}
                   onClick={() => handleResultClick(result)}
                 >
-                  <Link to={`/course/${result.code}`} className="block">
+                  <Link to={`/course/${result._id}`} className="block">
                     <div className="font-medium">
                       {result.code}-{result.title}
                     </div>

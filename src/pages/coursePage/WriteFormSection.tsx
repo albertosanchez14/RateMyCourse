@@ -2,7 +2,7 @@ interface WriteFormSectionProps {
   setShowWriteForm: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export default function WriteFormSection({
+export default function WriteReviewSection({
   setShowWriteForm,
 }: WriteFormSectionProps) {
   return (
