@@ -43,7 +43,6 @@ export default function CourseScheduleSection({
           .find((t) => t.faculty === selectedFaculty)
           ?.teacher.map((t) => t.group) || []
       );
-      console.log(teacher);
     }
   }, [teacher, selectedFaculty]);
 

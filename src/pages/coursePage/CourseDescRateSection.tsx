@@ -30,7 +30,6 @@ export default function CourseDescRateSection({
   useEffect(() => {
     if (rating) {
       const newRating = { ...rating };
-      console.log(newRating);
       delete newRating._id;
       setModifiedRating(newRating);
     }

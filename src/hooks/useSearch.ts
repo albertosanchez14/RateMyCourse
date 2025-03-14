@@ -35,7 +35,6 @@ export const useSearch = (initialTerm?: string, limit?: number) => {
   const [searchTerm, setSearchTerm] = useState(initialTerm);
 
   const searchItems = useCallback(async (term: string, limit:number) => {
-    console.log("Searching for term", term);
     setSearchTerm(term);
     if (!term.trim()) {
       setResults([]);
@@ -52,7 +51,6 @@ export const useSearch = (initialTerm?: string, limit?: number) => {
       const response = await fetch(
         `http://localhost:8000/course/search?q=${encodeURIComponent(term)}&limit=${limit}`
       );
-      console.log("Response", response);
       
       if (!response.ok) {
         throw new Error(`Search failed: ${response.statusText}`);

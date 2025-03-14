@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
+import { useAuth } from "../../hooks/useAuth";
 
 import { useCourseReviews } from "../../hooks/useReviews";
 import { CourseReviewsType } from "../../types/reviews";
 
+import WriteFormSection from "./WriteFormSection";
 import Comment from "../../components/reviews/Comment";
 import WriteReviewForm from "../../components/forms/WriteReviewForm";
 import ReviewTypeSelector from "../../components/reviews/ReviewTypeSelector";
@@ -17,7 +19,8 @@ export default function CommentSection({
   courseId,
   professors,
 }: CourseCommentSectionProps) {
-  // Load comments data now from folder data
+  const { user } = useAuth();
+  const [userHasReview, setUserHasReview] = useState(false);
   const [commentsType, setCommentsType] = useState<"course" | "professor">(
     "course"
   );
@@ -44,6 +47,16 @@ export default function CommentSection({
       setFilterdCourseReviews(initialComments);
     }
   }, [courseComments.data]);
+
+  // Check if user has already reviewed the course
+  useEffect(() => {
+    if (courseComments.data && user) {
+      const hasReview = courseComments.data.some(
+        (comment) => comment.username === user.username
+      );
+      setUserHasReview(hasReview);
+    }
+  }, [courseComments.data, user]);
 
   // Handle sort button
   const handleButtonSort = (sortType: string) => () => {
@@ -119,16 +132,22 @@ export default function CommentSection({
           <div className="flex flex-row gap-4">
             <div className="flex flex-col gap-4 flex-1 empty:flex-0">
               {filteredCourseReviews.map((comment: CourseReviewsType) => (
-                <Comment
-                  key={comment._id}
-                  id={comment._id}
-                  title={comment.title}
-                  date={comment.date}
-                  description={comment.review}
-                  rating={comment.rating}
-                  by={comment.username}
-                  professor={comment.professor}
-                />
+                <div key={comment._id} className="relative">
+                  {user && comment.username === user.username && (
+                    <div className="absolute -top-3 -right-3 bg-blue-500 text-white px-2 py-1 rounded-full text-xs font-medium z-10">
+                      Your Review
+                    </div>
+                  )}
+                  <Comment
+                    id={comment._id}
+                    title={comment.title}
+                    date={comment.date}
+                    description={comment.review}
+                    rating={comment.rating}
+                    by={comment.username}
+                    professor={comment.professor}
+                  />
+                </div>
               ))}
             </div>
             {/* Write Form */}
@@ -146,43 +165,20 @@ export default function CommentSection({
                     courseComments.refetch();
                   }}
                 />
-              ) : (
-                <div className="flex flex-col gap-6 p-6 rounded-xl border border-[#e0e0e0] bg-white shadow-sm hover:shadow-md transition-shadow duration-300">
-                  <h3 className="text-xl font-bold text-gray-800 text-center">
-                    Share Your Experience!
-                  </h3>
-                  <div className="flex flex-row justify-center items-center gap-3">
-                    {[1, 2, 3, 4, 5].map((value) => (
-                      <div key={value} className="relative">
-                        <input
-                          type="radio"
-                          id={`rating-${value}`}
-                          name="rating"
-                          value={value}
-                          className="hidden peer"
-                          onClick={() => setShowWriteForm(true)}
-                        />
-                        <label
-                          htmlFor={`rating-${value}`}
-                          className="flex items-center justify-center w-10 h-10 rounded-full 
-                bg-gray-100 hover:bg-gray-200 cursor-pointer
-                peer-checked:bg-blue-500 peer-checked:text-white
-                transition-all duration-200 font-medium"
-                        >
-                          {value}
-                        </label>
-                      </div>
-                    ))}
+              ) : userHasReview ? (
+                <div className="flex flex-col gap-4 p-6 rounded-xl border border-[#e0e0e0] bg-white">
+                  <div className="text-center">
+                    <div className="text-lg font-semibold text-gray-800 mb-2">
+                      Thanks for Your Review!
+                    </div>
+                    <p className="text-gray-600 text-sm">
+                      You've already shared your experience with this course.
+                      You can find your review at the top.
+                    </p>
                   </div>
-                  <button
-                    onClick={() => setShowWriteForm(true)}
-                    className="w-full py-3 px-4 bg-blue-500 text-white font-semibold 
-          rounded-lg hover:bg-blue-600 active:bg-blue-700 
-          transition-colors duration-200 shadow-sm"
-                  >
-                    Write a Review
-                  </button>
                 </div>
+              ) : (
+                <WriteFormSection setShowWriteForm={setShowWriteForm} />
               )}
             </div>
           </div>

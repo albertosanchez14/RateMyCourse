@@ -14,8 +14,6 @@ export default function ProfessorCommentCard({
   professor,
   comments,
 }: ProfessorCommentCardProps) {
-  console.log(professor, comments);
-
   return (
     <div className="professor-comment-container">
       <div className="professor-comment-profile-container">

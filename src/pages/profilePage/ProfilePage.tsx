@@ -4,11 +4,16 @@ import { useUserCourseReviews } from "../../hooks/useReviews";
 import { useUser } from "../../hooks/useUser";
 
 export default function ProfilePage() {
-  const { data: reviews, isLoading: isLoadingRev, error: errorRev } = useUserCourseReviews();
+  const {
+    data: reviews,
+    isLoading: isLoadingRev,
+    error: errorRev,
+  } = useUserCourseReviews();
   const { data: user, isLoading: isLoadingUser, error: errorUser } = useUser();
 
   if (isLoadingRev || isLoadingUser) return <div>Loading...</div>;
-  if (errorRev || errorUser) return <div>Error: {errorRev?.message || errorUser?.message}</div>;
+  if (errorRev || errorUser)
+    return <div>Error: {errorRev?.message || errorUser?.message}</div>;
   if (!reviews || !user) return <div>No data</div>;
 
   return (
@@ -41,7 +46,10 @@ export default function ProfilePage() {
                   </div>
                   <div className="flex items-center gap-2">
                     <MdDateRange className="w-5 h-5" />
-                    <span>Joined {user.joinDate}</span>
+                    {new Date(user.joinDate).toLocaleDateString("en-US", {
+                      month: "long",
+                      year: "numeric",
+                    })}
                   </div>
                 </div>
               </div>
