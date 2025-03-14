@@ -126,7 +126,7 @@ export default function CommentSection({
                   date={comment.date}
                   description={comment.review}
                   rating={comment.rating}
-                  by={comment.userId}
+                  by={comment.username}
                   professor={comment.professor}
                 />
               ))}

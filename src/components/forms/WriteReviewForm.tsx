@@ -25,9 +25,9 @@ export default function WriteReviewForm({
   const [title, setTitle] = useState<string>("");
   const [comment, setComment] = useState<string>("");
   const [professor, setProfessor] = useState<string>("");
-  const [showError, setShowError] = useState<boolean>(false);
   const [showSuccess, setShowSuccess] = useState<boolean>(false);
   const [showProfError, setShowProfError] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string>("");
 
   const handleRating =
     (field: keyof RatingType) => (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -50,7 +50,7 @@ export default function WriteReviewForm({
     if (professor === "") {
       setShowProfError(true);
     } else if (rating.overall === 0 || comment === "") {
-      setShowError(true);
+      setErrorMessage("Please fill in all fields");
     } else {
       try {
         const token = await getToken();
@@ -64,6 +64,7 @@ export default function WriteReviewForm({
 
         await addCourseReview(courseId, review, token);
         setShowSuccess(true);
+        setErrorMessage("");
 
         // Reset the form
         setRating({
@@ -82,7 +83,14 @@ export default function WriteReviewForm({
         }
       } catch (error) {
         console.error("Failed to submit review:", error);
-        // You might want to show an error message to the user here
+        if (error instanceof Error) {
+          if (error.message === "You have already submitted a review for this course") {
+            setErrorMessage("You have already submitted a review for this course");
+          } else {
+            setErrorMessage("Failed to submit review. Please try again later.");
+          }
+        }
+        setShowSuccess(false);
       }
     }
   };
@@ -201,9 +209,9 @@ export default function WriteReviewForm({
           />
         </div>
 
-        {showError && (
+        {errorMessage && (
           <p className="text-red-500 text-sm flex items-center justify-center">
-            <span className="mr-1">⚠️</span> Please fill out all required fields
+            <span className="mr-1">⚠️</span> {errorMessage}
           </p>
         )}
 

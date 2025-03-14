@@ -14,6 +14,7 @@ export type FormCourseReviewType = {
 export type CourseReviewsType = {
   _id: number;
   userId: string;
+  username: string;
   course_id: number;
   rating: RatingType;
   title: string;

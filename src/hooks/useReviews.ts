@@ -46,6 +46,9 @@ export const addCourseReview = async (
       body: JSON.stringify(review),
     }
   );
+  if (response.status === 409) {
+    throw new Error("You have already submitted a review for this course");
+  }
   if (!response.ok) {
     throw new Error("Failed to add review");
   }
