@@ -46,7 +46,7 @@ export default function HeroImage() {
   }, []);
 
   return (
-    <div className="relative" ref={popupRef}>
+    <div className="relative z-[9999]" ref={popupRef}>
       <button
         onClick={() => setIsPopupOpen(!isPopupOpen)}
         className="flex justify-center items-center focus:outline-none"
@@ -55,11 +55,14 @@ export default function HeroImage() {
           <img
             src={profilePic}
             alt="Profile"
-            className="h-[40px] w-[40px] rounded-full hover:ring-2 hover:ring-blue-500 transition-all"
+            className="h-[40px] w-[40px] rounded-full 
+            hover:ring-2 hover:ring-blue-500 transition-all"
             loading="eager"
           />
         ) : (
-          <div className="h-[40px] w-[40px] bg-gray-300 rounded-full hover:ring-2 hover:ring-blue-500 transition-all" />
+          <div className="h-[40px] w-[40px] bg-gray-300 
+          rounded-full hover:ring-2 hover:ring-blue-500 
+          transition-all" />
         )}
       </button>
 

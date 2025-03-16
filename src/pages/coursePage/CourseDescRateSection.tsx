@@ -75,72 +75,108 @@ export default function CourseDescRateSection({
 
   return (
     <div className="flex flex-col gap-4 border-t border-[#f0f0f0]">
-      <div className="flex flex-row gap-6" ref={descriptionTitleContRef}>
-        {objectives && (
-            <h3
-            className={`text-lg font-semibold m-2 cursor-pointer transition-opacity ${
-              description === objectives
-              ? "opacity-100"
-              : "opacity-30 hover:opacity-100"
-            }`}
-            onClick={handleDescriptionChange}
-            >
-            Objectives
-            </h3>
-        )}
-        {skills_and_learning_outcomes && (
-          <h3
-            className={`text-lg font-semibold m-2 cursor-pointer transition-opacity ${
-              description === skills_and_learning_outcomes
-                ? "opacity-100"
-                : "opacity-30 hover:opacity-100"
-            }`}
-            onClick={handleDescriptionChange}
-          >
-            Skills and learning outcomes
-          </h3>
-        )}
-        {description_of_contents && (
-          <h3
-            className={`text-lg font-semibold m-2 cursor-pointer transition-opacity ${
-              description === description_of_contents
-                ? "opacity-100"
-                : "opacity-30 hover:opacity-100"
-            }`}
-            onClick={handleDescriptionChange}
-          >
-            Description of contents
-          </h3>
-        )}
-      </div>
-      <div className="flex flex-row gap-6">
-        <div className="flex flex-col flex-[2]">
-          <p className="h-full text-[0.95rem] mb-0" ref={descriptionRef}>
-            {generateDescription(description)}
-          </p>
-        </div>
-        <div className="flex flex-col h-fit flex-1 gap-3" ref={ratingContainerRef}>
-          {modifiedRating &&
-            Object.entries(modifiedRating).map(([key, value]) => (
-              <div
-                className="flex flex-col"
-                id={`course-rating-${key}-container`}
-                key={key}
+      {objectives || skills_and_learning_outcomes || description_of_contents ? (
+        <>
+          <div className="flex flex-row gap-6" ref={descriptionTitleContRef}>
+            {objectives && (
+              <h3
+                className={`text-lg font-semibold m-2 cursor-pointer transition-opacity ${
+                  description === objectives
+                    ? "opacity-100"
+                    : "opacity-30 hover:opacity-100"
+                }`}
+                onClick={handleDescriptionChange}
               >
-                <h4 className="font-semibold">
-                  {key === "overall"
-                    ? "Rating"
-                    : key.charAt(0).toUpperCase() + key.slice(1)}
-                </h4>
-                {key === "overall" ? (
-                  <SemiCircleChart rating={value as number} />
-                ) : (
-                  <RectangleChart rating={value as number} />
-                )}
+                Objectives
+              </h3>
+            )}
+            {skills_and_learning_outcomes && (
+              <h3
+                className={`text-lg font-semibold m-2 cursor-pointer transition-opacity ${
+                  description === skills_and_learning_outcomes
+                    ? "opacity-100"
+                    : "opacity-30 hover:opacity-100"
+                }`}
+                onClick={handleDescriptionChange}
+              >
+                Skills and learning outcomes
+              </h3>
+            )}
+            {description_of_contents && (
+              <h3
+                className={`text-lg font-semibold m-2 cursor-pointer transition-opacity ${
+                  description === description_of_contents
+                    ? "opacity-100"
+                    : "opacity-30 hover:opacity-100"
+                }`}
+                onClick={handleDescriptionChange}
+              >
+                Description of contents
+              </h3>
+            )}
+          </div>
+          <div className="flex flex-row gap-6">
+            <div className="flex flex-col flex-[2]">
+              <p className="h-full text-[0.95rem] mb-0" ref={descriptionRef}>
+                {generateDescription(description)}
+              </p>
+            </div>
+            <div
+              className="flex flex-col h-fit flex-1 gap-3"
+              ref={ratingContainerRef}
+            >
+              {modifiedRating &&
+                Object.entries(modifiedRating).map(([key, value]) => (
+                  <div
+                    className="flex flex-col"
+                    id={`course-rating-${key}-container`}
+                    key={key}
+                  >
+                    <h4 className="font-semibold">
+                      {key === "overall"
+                        ? "Rating"
+                        : key.charAt(0).toUpperCase() + key.slice(1)}
+                    </h4>
+                    {key === "overall" ? (
+                      <SemiCircleChart rating={value as number} />
+                    ) : (
+                      <RectangleChart rating={value as number} />
+                    )}
+                  </div>
+                ))}
+            </div>
+          </div>
+        </>
+      ) : (
+        <div className="flex flex-row gap-6 mt-6">
+          <div className="flex flex-col flex-1 gap-3">
+            {modifiedRating &&
+              Object.entries(modifiedRating).map(
+                ([key, value]) =>
+                  key !== "overall" && (
+                    <div
+                      className="flex flex-col"
+                      id={`course-rating-${key}-container`}
+                      key={key}
+                    >
+                      <h4 className="font-semibold">
+                        {key.charAt(0).toUpperCase() + key.slice(1)}
+                      </h4>
+                      <RectangleChart rating={value as number} />
+                    </div>
+                  )
+              )}
+          </div>
+          <div className="flex flex-col flex-1 justify-center items-center">
+            {modifiedRating && modifiedRating.overall && (
+              <div className="flex flex-col items-center">
+                {/* <h4 className="font-semibold">Rating</h4> */}
+                <SemiCircleChart rating={modifiedRating.overall} />
               </div>
-            ))}
+            )}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }
