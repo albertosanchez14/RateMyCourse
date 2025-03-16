@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { useAuth } from "@clerk/clerk-react";
+import { useAuth } from "../../hooks/useAuth";
+import { MdClose } from "react-icons/md";
 
 import { addCourseReview, editCourseReview } from "../../hooks/useReviews";
 import {
@@ -12,6 +13,7 @@ interface WriteReviewFormProps {
   courseId: string;
   professors: string[];
   onSuccess: () => void;
+  onClose: () => void; 
   initialData?: CourseReviewsType | null;
 }
 
@@ -19,6 +21,7 @@ export default function WriteReviewForm({
   courseId,
   professors,
   onSuccess,
+  onClose,
   initialData,
 }: WriteReviewFormProps) {
   const { getToken } = useAuth();
@@ -114,10 +117,19 @@ export default function WriteReviewForm({
   };
 
   return (
-    <div className="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-lg">
-      <h2 className="text-2xl font-bold mb-6 text-gray-800">
-        {initialData ? "Edit Review" : "Write a Review"}
-      </h2>
+    <div className="w-auto p-6 bg-white rounded-lg shadow-lg">
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-2xl font-bold text-gray-800">
+          {initialData ? "Edit Review" : "Write a Review"}
+        </h2>
+        <button
+          onClick={onClose}
+          className="p-1 hover:bg-gray-100 rounded-full transition-colors"
+          aria-label="Close form"
+        >
+          <MdClose size={24} className="text-gray-600" />
+        </button>
+      </div>
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Title Input */}
         <div className="space-y-2">
@@ -227,7 +239,7 @@ export default function WriteReviewForm({
             className="w-full p-4 border border-gray-300 rounded-lg
                      focus:ring-2 focus:ring-blue-500 focus:border-blue-500
                      bg-gray-50 hover:bg-white transition-colors duration-200
-                     h-32 resize-none"
+                     h-40 resize-none"
           />
         </div>
 

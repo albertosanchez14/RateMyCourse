@@ -22,6 +22,8 @@ import ContactPage from "./pages/contactPage";
 import NotFoundPage from "./pages/notFoundPage";
 import TermsOfServicePage from "./pages/termsPage";
 
+import ScrollToTop from "./utils/ScrollToTop";
+
 import {
   LANDING_PAGE_ROUTE,
   SIGN_IN_PAGE_ROUTE,
@@ -40,6 +42,7 @@ import {
   TERMS_PAGE_ROUTE,
 } from "./Routes";
 
+
 const HeaderWrapper = () => {
   const location = useLocation();
   return location.pathname !== LANDING_PAGE_ROUTE &&
@@ -57,6 +60,7 @@ function App() {
   return (
     <>
       <Router>
+        <ScrollToTop />
         <HeaderWrapper />
         <Routes>
           <Route path={LANDING_PAGE_ROUTE} element={<LandingPage />} />

@@ -154,32 +154,45 @@ export default function CommentSection({
         {/* Course Reviews */}
         {commentsType === "course" && (
           <div className="flex flex-row gap-4">
-            <div className="flex flex-col gap-4 flex-1 empty:flex-0">
-              {filteredCourseReviews.map((comment: CourseReviewsType) => (
-                <div key={comment._id} className="relative">
-                  {user && comment.userId === user.userId && (
-                    <div className="absolute -top-3 -right-3 bg-blue-500 text-white px-2 py-1 rounded-full text-xs font-medium z-10">
-                      Your Review
+            <div className="flex flex-col gap-4 flex-1">
+              {filteredCourseReviews.length > 0 ? (
+                filteredCourseReviews.map((comment: CourseReviewsType) => (
+                  <div key={comment._id} className="relative">
+                    {user && comment.userId === user.userId && (
+                      <div className="absolute -top-3 -right-3 bg-blue-500 text-white px-2 py-1 rounded-full text-xs font-medium z-10">
+                        Your Review
+                      </div>
+                    )}
+                    <Review
+                      id={comment._id}
+                      title={comment.title}
+                      date={comment.date}
+                      description={comment.review}
+                      rating={comment.rating}
+                      by={comment.username}
+                      professor={comment.professor}
+                      onEdit={() => {
+                        setEditingReview(comment);
+                        setShowWriteForm(true);
+                      }}
+                    />
+                  </div>
+                ))
+              ) : (
+                <div className="flex flex-col gap-4 p-6 rounded-xl border border-[#e0e0e0] bg-white text-center">
+                  <div className="text-center">
+                    <div className="text-lg font-semibold text-gray-800 mb-2">
+                      No Reviews Yet
                     </div>
-                  )}
-                  <Review
-                    id={comment._id}
-                    title={comment.title}
-                    date={comment.date}
-                    description={comment.review}
-                    rating={comment.rating}
-                    by={comment.username}
-                    professor={comment.professor}
-                    onEdit={() => {
-                      setEditingReview(comment);
-                      setShowWriteForm(true);
-                    }}
-                  />
+                    <p className="text-gray-600 text-sm">
+                      Be the first to share your experience with this course!
+                    </p>
+                  </div>
                 </div>
-              ))}
+              )}
             </div>
             {/* Write Form */}
-            <div className="flex flex-col h-fit w-80">
+            <div className="flex flex-col h-fit w-90">
               {showWriteForm ? (
                 <WriteReviewForm
                   courseId={courseId}
@@ -192,10 +205,14 @@ export default function CommentSection({
                     setShowWriteForm(false);
                     courseComments.refetch();
                   }}
+                  onClose={() => {
+                    setShowWriteForm(false);
+                    setEditingReview(null);
+                  }}
                   initialData={editingReview}
                 />
               ) : userHasReview ? (
-                <div className="flex flex-col gap-4 p-6 rounded-xl border border-[#e0e0e0] bg-white">
+                <div className="flex flex-col self-center gap-4 p-6 rounded-xl border border-[#e0e0e0] bg-white">
                   <div className="text-center">
                     <div className="text-lg font-semibold text-gray-800 mb-2">
                       Thanks for Your Review!
