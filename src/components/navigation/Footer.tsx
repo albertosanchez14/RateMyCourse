@@ -101,14 +101,6 @@ export default function Footer() {
             </li>
             <li>
               <Link
-                to="/feedback"
-                className="text-[#666] text-sm no-underline hover:text-[#0077b6] transition-colors duration-200"
-              >
-                Submit Feedback
-              </Link>
-            </li>
-            <li>
-              <Link
                 to="/guidelines"
                 className="text-[#666] text-sm no-underline hover:text-[#0077b6] transition-colors duration-200"
               >

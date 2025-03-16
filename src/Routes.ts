@@ -11,4 +11,6 @@ export const ABOUT_PAGE_ROUTE = '/about';
 export const PRIVACY_PAGE_ROUTE = '/privacy';
 export const WELCOME_PAGE_ROUTE = '/welcome';
 export const GUIDELINES_PAGE_ROUTE = '/guidelines';
-
+export const HELP_PAGE_ROUTE = '/help';
+export const CONTACT_PAGE_ROUTE = '/contact';
+export const TERMS_PAGE_ROUTE = '/terms';

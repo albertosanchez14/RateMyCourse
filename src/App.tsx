@@ -17,6 +17,11 @@ import ProfilePage from "./pages/profilePage";
 import GuidelinesPage from "./pages/guidelinesPage";
 import PrivacyPage from "./pages/privacyPage";
 import AboutPage from "./pages/aboutPage";
+import HelpPage from "./pages/helpPage";
+import ContactPage from "./pages/contactPage";
+import NotFoundPage from "./pages/notFoundPage";
+import TermsOfServicePage from "./pages/termsPage";
+
 import {
   LANDING_PAGE_ROUTE,
   SIGN_IN_PAGE_ROUTE,
@@ -30,6 +35,9 @@ import {
   PRIVACY_PAGE_ROUTE,
   WELCOME_PAGE_ROUTE,
   GUIDELINES_PAGE_ROUTE,
+  HELP_PAGE_ROUTE,
+  CONTACT_PAGE_ROUTE,
+  TERMS_PAGE_ROUTE,
 } from "./Routes";
 
 const HeaderWrapper = () => {
@@ -63,6 +71,10 @@ function App() {
           <Route path={PRIVACY_PAGE_ROUTE} element={<PrivacyPage />} />
           <Route path={WELCOME_PAGE_ROUTE} element={<LandingPage />} />
           <Route path={GUIDELINES_PAGE_ROUTE} element={<GuidelinesPage />} />
+          <Route path={HELP_PAGE_ROUTE} element={<HelpPage />} />
+          <Route path={CONTACT_PAGE_ROUTE} element={<ContactPage />} />
+          <Route path={TERMS_PAGE_ROUTE} element={<TermsOfServicePage />} />
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
         <FooterWrapper />
       </Router>
