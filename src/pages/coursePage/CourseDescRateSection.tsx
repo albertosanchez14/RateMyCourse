@@ -1,4 +1,8 @@
 import { useState, useRef, useEffect } from "react";
+import {
+  MdOutlineKeyboardArrowDown,
+  MdOutlineKeyboardArrowUp,
+} from "react-icons/md";
 
 import RectangleChart from "../../components/charts/RectangleChart";
 import SemiCircleChart from "../../components/charts/SemiCircleChart";
@@ -22,6 +26,9 @@ export default function CourseDescRateSection({
   const descriptionTitleContRef = useRef<HTMLDivElement>(null);
   const descriptionRef = useRef<HTMLParagraphElement>(null);
   const ratingContainerRef = useRef<HTMLDivElement>(null);
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [isContentTruncated, setIsContentTruncated] = useState(false);
+  const MAX_HEIGHT = 300;
 
   // Eliminate the _id field from the rating object
   const [modifiedRating, setModifiedRating] = useState<RatingType | undefined>(
@@ -44,6 +51,17 @@ export default function CourseDescRateSection({
       setDescription(description_of_contents);
     }
   }, [objectives, skills_and_learning_outcomes, description_of_contents]);
+  // Check if the content is truncated
+  useEffect(() => {
+    const descriptionElement = descriptionRef.current;
+    if (descriptionElement) {
+      const isTruncated = descriptionElement.scrollHeight > MAX_HEIGHT;
+      setIsContentTruncated(isTruncated);
+      if (!isTruncated) {
+        setIsExpanded(false);
+      }
+    }
+  }, [description, descriptionTitleContRef.current]);
 
   const handleDescriptionChange = (e: React.MouseEvent<HTMLHeadingElement>) => {
     // Change the description based on the clicked title
@@ -117,9 +135,36 @@ export default function CourseDescRateSection({
           </div>
           <div className="flex flex-row gap-6">
             <div className="flex flex-col flex-[2]">
-              <p className="h-full text-[0.95rem] mb-0" ref={descriptionRef}>
-                {generateDescription(description)}
-              </p>
+              <div
+                className={`relative ${
+                  !isExpanded ? "max-h-[300px] overflow-hidden" : ""
+                }`}
+              >
+                <p className="text-[0.95rem] mb-0" ref={descriptionRef}>
+                  {generateDescription(description)}
+                </p>
+                {!isExpanded && (
+                  <div className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-white to-transparent" />
+                )}
+              </div>
+              {isContentTruncated && (
+                <button
+                  onClick={() => setIsExpanded(!isExpanded)}
+                  className="text-blue-600 hover:text-blue-800 mt-2 flex items-center gap-1"
+                >
+                  {isExpanded ? (
+                    <>
+                      Show less
+                      <MdOutlineKeyboardArrowUp />
+                    </>
+                  ) : (
+                    <>
+                      Show more
+                      <MdOutlineKeyboardArrowDown />
+                    </>
+                  )}
+                </button>
+              )}
             </div>
             <div
               className="flex flex-col h-fit flex-1 gap-3"
