@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { CgProfile } from "react-icons/cg";
 import { GrConfigure } from "react-icons/gr";
 import { MdOutlineRateReview } from "react-icons/md";
+import { IoMdHeart } from "react-icons/io";
 import { MdLogout } from "react-icons/md";
 
 import { useAuth } from "../../hooks/useAuth";
@@ -23,6 +24,7 @@ export default function HeroPopUp({ onClose }: HeroPopUpProps) {
 
   const goToProfile = (extension: string) => {
     if (extension.startsWith('#')) {
+      console.log('scrolling to', extension);
       navigate(PROFILE_PAGE_ROUTE);
       setTimeout(() => {
         const element = document.getElementById(extension.substring(1));
@@ -64,6 +66,14 @@ export default function HeroPopUp({ onClose }: HeroPopUpProps) {
         >
           <MdOutlineRateReview className="w-5 h-5 ml-2 mr-3" />
           Your Reviews
+        </button>
+
+        <button
+          onClick={() => goToProfile("#fav-courses")}
+          className="w-full text-left text-gray-700 hover:bg-gray-100 flex items-center"
+        >
+          <IoMdHeart className="w-5 h-5 ml-2 mr-3"/>
+          Favourite Courses
         </button>
 
         <button

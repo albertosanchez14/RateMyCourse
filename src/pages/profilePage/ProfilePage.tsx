@@ -170,7 +170,7 @@ export default function ProfilePage() {
         {/* Liked Courses Section */}
         <div
           className="bg-white rounded-xl shadow-sm p-8 mt-8"
-          id="liked-courses"
+          id="fav-courses"
         >
           <h2 className="text-xl font-bold mb-6">Liked Courses</h2>
           <div className="space-y-6">
