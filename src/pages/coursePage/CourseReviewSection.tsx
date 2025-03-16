@@ -9,6 +9,7 @@ import Review from "../../components/reviews/Review";
 import WriteReviewForm from "../../components/forms/WriteReviewForm";
 import ReviewTypeSelector from "../../components/reviews/ReviewTypeSelector";
 import ReviewControls from "../../components/reviews/ReviewControls";
+import LoadingSpinnerScreen from "../../components/loading/LoadingSpinnerScreen";
 
 interface CourseCommentSectionProps {
   courseId: string;
@@ -109,7 +110,7 @@ export default function CommentSection({
     });
   };
 
-  if (courseComments.isLoading) return <div>Loading...</div>;
+  if (courseComments.isLoading) return <LoadingSpinnerScreen />;
   if (courseComments.error)
     return <div>Error: {courseComments.error.message}</div>;
   if (!courseComments.data) return <div>No data</div>;

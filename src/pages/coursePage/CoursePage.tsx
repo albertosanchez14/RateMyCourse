@@ -1,12 +1,14 @@
 import { useParams } from "react-router-dom";
 
+import { useCourse } from "../../hooks/useCourse";
+
 import CourseTitleSection from "./CourseTitleSection";
 import CourseDescRateSection from "./CourseDescRateSection";
 import CourseScheduleSection from "./CourseScheduleSection";
 import CourseDetailSection from "./CourseDetailSection";
 import CourseCommentSection from "./CourseReviewSection";
 
-import { useCourse } from "../../hooks/useCourse";
+import LoadingSpinnerScreen from "../../components/loading/LoadingSpinnerScreen";
 
 export default function CoursePage() {
   // Get course_code from URL
@@ -14,7 +16,7 @@ export default function CoursePage() {
   // Load course data now from folder data
   const { data, isLoading, error } = useCourse(courseId ?? "");
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <LoadingSpinnerScreen />;
   if (error) return <div>Error: {error.message}</div>;
   if (!data) return <div>No data</div>;
 

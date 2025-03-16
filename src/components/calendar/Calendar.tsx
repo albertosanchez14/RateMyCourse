@@ -7,6 +7,7 @@ import { useWeekSchedule } from "../../hooks/useWeek";
 import { FREventType } from "../../types/course";
 
 import Event from "./Event";
+import LoadingSpinnerScreen from "../loading/LoadingSpinnerScreen";
 
 type CalendarProps = {
   events: Array<FREventType>;
@@ -72,7 +73,7 @@ export default function Calendar({ events }: CalendarProps) {
     setCurrentMonth(startingDate.toLocaleString("en-US", { month: "long" }));
   }, [events, startingDate]);
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <LoadingSpinnerScreen />;
   if (error) return <div>Error: {error.message}</div>;
   if (!weekSchedule) return <div>No data</div>;
 

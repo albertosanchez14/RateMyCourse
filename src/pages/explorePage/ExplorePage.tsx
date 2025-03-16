@@ -5,6 +5,7 @@ import { useSearch } from "../../hooks/useSearch";
 
 import ResultsSection from "./ResultsSection";
 import FilterCard from "./FilterCard";
+import LoadingSpinnerScreen from "../../components/loading/LoadingSpinnerScreen";
 
 export default function ExplorePage() {
   const location = useLocation();
@@ -54,9 +55,7 @@ export default function ExplorePage() {
       </div>
 
       {isLoading ? (
-        <div className="flex justify-center items-center h-64">
-          <div className="text-gray-500">Loading results...</div>
-        </div>
+        <LoadingSpinnerScreen />
       ) : results.length > 0 ? (
         <div className="flex flex-row gap-8">
           <ResultsSection filteredResults={filteredResults} />

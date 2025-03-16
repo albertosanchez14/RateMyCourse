@@ -5,6 +5,7 @@ import { MdEdit, MdSchool, MdEmail, MdDateRange } from "react-icons/md";
 import { useUserCourseReviews } from "../../hooks/useReviews";
 import { useUser } from "../../hooks/useUser";
 
+import LoadingSpinnerScreen from "../../components/loading/LoadingSpinnerScreen";
 import { EditProfileModal } from "./EditProfileModal";
 
 export default function ProfilePage() {
@@ -50,8 +51,7 @@ export default function ProfilePage() {
     setIsEditModalOpen(false);
   };
 
-  if (isLoadingRev || isLoadingUser)
-    return <div className="min-h-screen">Loading...</div>;
+  if (isLoadingRev || isLoadingUser) return <LoadingSpinnerScreen />;
   if (errorRev || errorUser)
     return (
       <div className="min-h-screen">
