@@ -22,9 +22,7 @@ export default function Header() {
           <SignInButton />
         </SignedOut>
         <SignedIn>
-          <Link to="/profile">
             <HeroImage />
-          </Link>
         </SignedIn>
       </div>
     </div>

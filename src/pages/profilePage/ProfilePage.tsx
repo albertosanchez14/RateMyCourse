@@ -26,6 +26,19 @@ export default function ProfilePage() {
     setProfilePic(localStorage.getItem(`profilePic_${user.userId}`) || "");
   }, [localStorage, user]);
 
+  // Navigate to the review when the hash changes
+  useEffect(() => {
+    if (location.hash) {
+      const id = location.hash.replace("#", "");
+      const element = document.getElementById(id);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+        element.classList.add("highlight");
+        setTimeout(() => element.classList.remove("highlight"), 2000);
+      }
+    }
+  }, [location.hash, reviews]);
+
   const handleSaveProfile = async (userData: {
     name: string;
     yearOfStudy: number;
@@ -37,10 +50,15 @@ export default function ProfilePage() {
     setIsEditModalOpen(false);
   };
 
-  if (isLoadingRev || isLoadingUser) return <div>Loading...</div>;
+  if (isLoadingRev || isLoadingUser)
+    return <div className="min-h-screen">Loading...</div>;
   if (errorRev || errorUser)
-    return <div>Error: {errorRev?.message || errorUser?.message}</div>;
-  if (!reviews || !user) return <div>No data</div>;
+    return (
+      <div className="min-h-screen">
+        Error: {errorRev?.message || errorUser?.message}
+      </div>
+    );
+  if (!reviews || !user) return <div className="min-h-screen">No data</div>;
 
   return (
     <div className="min-h-screen p-8">
@@ -117,7 +135,7 @@ export default function ProfilePage() {
         </div>
 
         {/* Reviews Section */}
-        <div className="bg-white rounded-xl shadow-sm p-8">
+        <div className="bg-white rounded-xl shadow-sm p-8" id="reviews">
           <h2 className="text-xl font-bold mb-6">My Reviews</h2>
           <div className="space-y-6">
             {reviews.map((review) => (
@@ -127,9 +145,7 @@ export default function ProfilePage() {
               >
                 <div className="flex justify-between items-start mb-2">
                   <div>
-                    <Link
-                      to={`/course/${review.course_id._id}#reviews`}
-                    >
+                    <Link to={`/course/${review.course_id._id}#reviews`}>
                       <h3 className="font-semibold text-lg">
                         {review.course_id.title}
                       </h3>
