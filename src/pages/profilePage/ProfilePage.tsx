@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { MdEdit, MdSchool, MdEmail, MdDateRange } from "react-icons/md";
 
@@ -15,6 +15,16 @@ export default function ProfilePage() {
   } = useUserCourseReviews();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const { data: user, isLoading: isLoadingUser, error: errorUser } = useUser();
+  const [profilePic, setProfilePic] = useState<string>(() => {
+    if (!user?.userId) return "";
+    return localStorage.getItem(`profilePic_${user.userId}`) || "";
+  });
+
+  // Set the profile picture when the user data is loaded
+  useEffect(() => {
+    if (!user?.userId) return;
+    setProfilePic(localStorage.getItem(`profilePic_${user.userId}`) || "");
+  }, [localStorage, user]);
 
   const handleSaveProfile = async (userData: {
     name: string;
@@ -41,7 +51,7 @@ export default function ProfilePage() {
             <div className="flex items-center gap-6">
               <div className="relative">
                 <img
-                  src="/blank-profile-picture.png"
+                  src={profilePic}
                   alt="Profile"
                   className="w-24 h-24 rounded-full border-2 border-gray-200"
                 />

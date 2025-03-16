@@ -11,6 +11,7 @@ export default function HeroImage() {
     return localStorage.getItem(`profilePic_${user.user.userId}`) || "";
   });
 
+  // Download the profile picture if we don't have it in state
   useEffect(() => {
     async function checkAndDownloadImage() {
       if (!user?.user?.userId || !user.user?.imageUrl) return;
