@@ -4,7 +4,7 @@ import { MdChevronLeft, MdChevronRight } from "react-icons/md";
 import "./Calendar.css";
 
 import { useWeekSchedule } from "../../hooks/useWeek";
-import { FREventType } from "../../types/course_type";
+import { FREventType } from "../../types/course";
 
 import Event from "./Event";
 

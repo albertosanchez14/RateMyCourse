@@ -4,7 +4,7 @@ import {
   DBEventType,
   FRCourseType,
   FREventType,
-} from "../types/course_type";
+} from "../types/course";
 
 const fetchCourse = async (courseId: string): Promise<FRCourseType> => {
   console.log("Fetching course data for course", courseId);

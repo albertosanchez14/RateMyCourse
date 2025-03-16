@@ -1,4 +1,4 @@
-import { DegreeType } from "../../types/course_type";
+import { DegreeType } from "../../types/course";
 
 interface CourseTitleSectionProps {
   title: string;

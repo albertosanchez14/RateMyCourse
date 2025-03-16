@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { DBTeacherType } from "../../types/course_type";
+import { DBTeacherType } from "../../types/course";
 
 interface CourseDetailSectionProps {
   type: string;
