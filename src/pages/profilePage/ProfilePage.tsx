@@ -146,7 +146,7 @@ export default function ProfilePage() {
                 <div className="flex justify-between items-start mb-2">
                   <div>
                     <Link to={`/course/${review.course_id._id}#reviews`}>
-                      <h3 className="font-semibold text-lg">
+                      <h3 className="font-semibold text-lg hover:underline">
                         {review.course_id.title}
                       </h3>
                     </Link>
@@ -164,6 +164,41 @@ export default function ProfilePage() {
                 <p className="text-gray-600">{review.review}</p>
               </div>
             ))}
+          </div>
+        </div>
+
+        {/* Liked Courses Section */}
+        <div
+          className="bg-white rounded-xl shadow-sm p-8 mt-8"
+          id="liked-courses"
+        >
+          <h2 className="text-xl font-bold mb-6">Liked Courses</h2>
+          <div className="space-y-6">
+            {user.likedCourses.map((course) => (
+              <div
+                key={course.id}
+                className="border-b border-gray-100 last:border-0 pb-6 last:pb-0"
+              >
+                <div className="flex justify-between items-start">
+                  <div>
+                    <Link to={`/course/${course.id}`}>
+                      <h3 className="font-semibold text-lg hover:underline">
+                        {course.code} - {course.title}
+                      </h3>
+                    </Link>
+                  </div>
+                  <div className="bg-blue-50 text-blue-700 px-3 py-1 rounded-full font-semibold">
+                    {course.rating.overall}/5
+                  </div>
+                </div>
+                <span className="text-gray-600">{course.degree.title}</span>
+              </div>
+            ))}
+            {user.likedCourses.length === 0 && (
+              <p className="text-gray-500 col-span-full text-center py-4">
+                You haven't liked any courses yet
+              </p>
+            )}
           </div>
         </div>
       </div>

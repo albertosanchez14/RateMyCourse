@@ -43,3 +43,31 @@ export const addUser = async (user: User, token: string | null): Promise<User> =
   const data = (await response.json()) as User;
   return data;
 };
+
+export const likeCouse = async (courseId: string, token: string | null): Promise<User> => {
+  const response = await fetch(`http://localhost:8000/user/likes/${courseId}`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  if (!response.ok) {
+    throw new Error("Failed to like course");
+  }
+  const data = (await response.json()) as User;
+  return data;
+};
+
+export const unlikeCouse = async (courseId: string, token: string | null): Promise<User> => {
+  const response = await fetch(`http://localhost:8000/user/likes/${courseId}`, { 
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  if (!response.ok) {
+    throw new Error("Failed to unlike course");
+  }
+  const data = (await response.json()) as User;
+  return data;
+};

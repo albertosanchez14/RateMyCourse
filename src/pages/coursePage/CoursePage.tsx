@@ -29,6 +29,7 @@ export default function CoursePage() {
   return (
     <div className="flex flex-col gap-8 px-4">
       <CourseTitleSection
+        id={data._id}
         title={data.title}
         course={data.code}
         degree={data.degree}
