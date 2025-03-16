@@ -47,7 +47,7 @@ export default function Footer() {
           <ul className="list-none p-0 m-0 flex flex-col gap-2">
             <li>
               <Link
-                to={EXPLORE_PAGE_ROUTE}
+                to={EXPLORE_PAGE_ROUTE + "?q=*&limit=1000"}
                 className="text-[#666] text-sm no-underline hover:text-[#0077b6] transition-colors duration-200"
               >
                 Browse Courses
