@@ -21,6 +21,7 @@ import HelpPage from "./pages/helpPage";
 import ContactPage from "./pages/contactPage";
 import NotFoundPage from "./pages/notFoundPage";
 import TermsOfServicePage from "./pages/termsPage";
+import SettingsPage from "./pages/settingsPage";
 
 import ScrollToTop from "./utils/ScrollToTop";
 
@@ -40,6 +41,7 @@ import {
   HELP_PAGE_ROUTE,
   CONTACT_PAGE_ROUTE,
   TERMS_PAGE_ROUTE,
+  SETTINGS_PAGE_ROUTE,
 } from "./Routes";
 
 const HeaderWrapper = () => {
@@ -66,6 +68,7 @@ function App() {
           <Route path={SIGN_IN_PAGE_ROUTE} element={<LoginPage />} />
           {/* <Route path={SIGN_UP_PAGE_ROUTE} element={<SignUp />} /> */}
           <Route path={PROFILE_PAGE_ROUTE} element={<ProfilePage />} />
+          <Route path={PROFILE_PAGE_ROUTE + SETTINGS_PAGE_ROUTE} element={<SettingsPage />} />
           <Route path={COURSE_PAGE_ROUTE} element={<CoursePage />} />
           <Route path={PROF_PAGE_ROUTE} element={<div>Prof Page</div>} />
           <Route path={SHORT_PROF_PAGE_ROUTE} element={<div>Prof Page</div>} />
