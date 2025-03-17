@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { MdEdit, MdSchool, MdEmail, MdDateRange } from "react-icons/md";
 
@@ -27,18 +27,20 @@ export default function ProfilePage() {
     setProfilePic(localStorage.getItem(`profilePic_${user.userId}`) || "");
   }, [localStorage, user]);
 
-  // Navigate to the review when the hash changes
-  useEffect(() => {
+  // Navigate when the hash changes
+  useLayoutEffect(() => {
     if (location.hash) {
-      const id = location.hash.replace("#", "");
-      const element = document.getElementById(id);
-      if (element) {
-        element.scrollIntoView({ behavior: "smooth" });
-        element.classList.add("highlight");
-        setTimeout(() => element.classList.remove("highlight"), 2000);
-      }
+      setTimeout(() => {
+        const id = location.hash.replace("#", "");
+        const element = document.getElementById(id);
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth" });
+          element.classList.add("highlight");
+          setTimeout(() => element.classList.remove("highlight"), 2000);
+        }
+      }, 100);
     }
-  }, [location.hash, reviews]);
+  }, [location.hash, document]);
 
   const handleSaveProfile = async (userData: {
     name: string;

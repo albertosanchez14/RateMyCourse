@@ -23,16 +23,7 @@ export default function HeroPopUp({ onClose }: HeroPopUpProps) {
   };
 
   const goToProfile = (extension: string) => {
-    if (extension.startsWith('#')) {
-      console.log('scrolling to', extension);
-      navigate(PROFILE_PAGE_ROUTE);
-      setTimeout(() => {
-        const element = document.getElementById(extension.substring(1));
-        element?.scrollIntoView({ behavior: 'smooth' });
-      }, 100);
-    } else {
-      navigate(PROFILE_PAGE_ROUTE + extension);
-    }
+    navigate(PROFILE_PAGE_ROUTE + extension);
     onClose();
   };
 

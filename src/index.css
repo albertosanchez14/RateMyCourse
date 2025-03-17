@@ -72,3 +72,12 @@ button:hover {
     background-color: #f9f9f9;
   }
 }
+
+@keyframes highlightFade {
+  0% { background-color: rgba(59, 130, 246, 0.1); }
+  100% { background-color: transparent; }
+}
+
+.highlight {
+  animation: highlightFade 2s ease-out;
+}

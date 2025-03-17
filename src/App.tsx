@@ -42,7 +42,6 @@ import {
   TERMS_PAGE_ROUTE,
 } from "./Routes";
 
-
 const HeaderWrapper = () => {
   const location = useLocation();
   return location.pathname !== LANDING_PAGE_ROUTE &&
