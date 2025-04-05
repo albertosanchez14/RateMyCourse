@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef, useCallback } from "react";
 
 import SearchBar from "../../components/common/SearchBar";
+import { Link } from "react-router-dom";
 
 export default function LandingPage() {
   const [lastScrollY, setLastScrollY] = useState(0);
@@ -198,9 +199,12 @@ export default function LandingPage() {
           <p className="mb-6">
             Join our community and start exploring courses today!
           </p>
-          <button className="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-blue-50 transition-colors">
+          <Link
+            to="/signup"
+            className="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-blue-50 transition-colors"
+          >
             Sign Up Now
-          </button>
+          </Link>
         </div>
       </section>
     </div>

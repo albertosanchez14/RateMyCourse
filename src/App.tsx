@@ -13,6 +13,7 @@ import CoursePage from "./pages/coursePage";
 import ExplorePage from "./pages/explorePage";
 import LandingPage from "./pages/landingPage";
 import LoginPage from "./pages/loginPage";
+import SignUpPage from "./pages/signupPage";
 import ProfilePage from "./pages/profilePage";
 import GuidelinesPage from "./pages/guidelinesPage";
 import PrivacyPage from "./pages/privacyPage";
@@ -21,14 +22,14 @@ import HelpPage from "./pages/helpPage";
 import ContactPage from "./pages/contactPage";
 import NotFoundPage from "./pages/notFoundPage";
 import TermsOfServicePage from "./pages/termsPage";
-import SettingsPage from "./pages/settingsPage";
+// import SettingsPage from "./pages/settingsPage";
 
 import ScrollToTop from "./utils/ScrollToTop";
 
 import {
   LANDING_PAGE_ROUTE,
   SIGN_IN_PAGE_ROUTE,
-  // SIGN_UP_PAGE_ROUTE,
+  SIGN_UP_PAGE_ROUTE,
   PROFILE_PAGE_ROUTE,
   COURSE_PAGE_ROUTE,
   SHORT_PROF_PAGE_ROUTE,
@@ -41,20 +42,24 @@ import {
   HELP_PAGE_ROUTE,
   CONTACT_PAGE_ROUTE,
   TERMS_PAGE_ROUTE,
-  SETTINGS_PAGE_ROUTE,
+  // SETTINGS_PAGE_ROUTE,
 } from "./Routes";
 
 const HeaderWrapper = () => {
   const location = useLocation();
   return location.pathname !== LANDING_PAGE_ROUTE &&
-    location.pathname !== SIGN_IN_PAGE_ROUTE ? (
+    location.pathname !== SIGN_IN_PAGE_ROUTE &&
+    location.pathname !== SIGN_UP_PAGE_ROUTE ? (
     <Header />
   ) : null;
 };
 
 const FooterWrapper = () => {
   const location = useLocation();
-  return location.pathname !== SIGN_IN_PAGE_ROUTE ? <Footer /> : null;
+  return location.pathname !== SIGN_IN_PAGE_ROUTE &&
+    location.pathname !== SIGN_UP_PAGE_ROUTE ? (
+    <Footer />
+  ) : null;
 };
 
 function App() {
@@ -66,9 +71,12 @@ function App() {
         <Routes>
           <Route path={LANDING_PAGE_ROUTE} element={<LandingPage />} />
           <Route path={SIGN_IN_PAGE_ROUTE} element={<LoginPage />} />
-          {/* <Route path={SIGN_UP_PAGE_ROUTE} element={<SignUp />} /> */}
+          <Route path={SIGN_UP_PAGE_ROUTE} element={<SignUpPage />} />
           <Route path={PROFILE_PAGE_ROUTE} element={<ProfilePage />} />
-          <Route path={PROFILE_PAGE_ROUTE + SETTINGS_PAGE_ROUTE} element={<SettingsPage />} />
+          {/* <Route
+            path={PROFILE_PAGE_ROUTE + SETTINGS_PAGE_ROUTE}
+            element={<SettingsPage />}
+          /> */}
           <Route path={COURSE_PAGE_ROUTE} element={<CoursePage />} />
           <Route path={PROF_PAGE_ROUTE} element={<div>Prof Page</div>} />
           <Route path={SHORT_PROF_PAGE_ROUTE} element={<div>Prof Page</div>} />

@@ -6,7 +6,7 @@ import HeroImage from "./HeroImage";
 
 export default function Header() {
   return (
-    <div className="min-h-[80px] h-[80px] flex justify-between items-center bg-white border border-white">
+    <div className="min-h-[80px] h-[80px] flex justify-between items-center border border-transparent">
       <div className="w-[90px] flex justify-center">
         <Link to="/">Logo</Link>
       </div>
@@ -15,7 +15,7 @@ export default function Header() {
 
       <div className="w-[90px] flex justify-center">
         <SignedOut>
-          <SignInButton />
+          <SignInButton   />
         </SignedOut>
         <SignedIn>
           <HeroImage />
