@@ -1,14 +1,14 @@
-import { EmailAddressResource } from "@clerk/types";
-
-export type AuthType = {
+export interface AuthType {
   isAuthenticated: boolean;
   user: {
     username: string;
-    emailAddresses: EmailAddressResource[];
+    emailAddresses: { emailAddress: string }[];
     userId: string;
     imageUrl: string;
   } | null;
+  id?: string;
+  avatar_url?: string;
   isLoading: boolean;
-  getToken: () => Promise<string>;
+  getToken: () => Promise<string | undefined>;
   signOut: () => Promise<void>;
-};
+}

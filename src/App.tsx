@@ -13,7 +13,7 @@ import CoursePage from "./pages/coursePage";
 import ExplorePage from "./pages/explorePage";
 import LandingPage from "./pages/landingPage";
 import LoginPage from "./pages/loginPage";
-import SignUpPage from "./pages/signupPage";
+import SignUpPage from "./pages/signUpPage";
 import ProfilePage from "./pages/profilePage";
 import GuidelinesPage from "./pages/guidelinesPage";
 import PrivacyPage from "./pages/privacyPage";

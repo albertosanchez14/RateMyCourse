@@ -18,11 +18,14 @@ export default function HeroImage() {
   // Download the profile picture if we don't have it in state
   useEffect(() => {
     async function checkAndDownloadImage() {
-      if (!user?.user?.userId || !user.user?.imageUrl) return;
-      const localStorageKey = `profilePic_${user.user.userId}`;
+      if (!user?.id || !user?.avatar_url) {
+        setProfilePic("/defaultProfilePic.png");
+        return;
+      }
+      const localStorageKey = `profilePic_${user.id}`;
       // Only download if we don't have the image in state
       if (!profilePic) {
-        const base64Image = await downloadProfilePicture(user.user.imageUrl);
+        const base64Image = await downloadProfilePicture(user.avatar_url);
         if (base64Image) {
           localStorage.setItem(localStorageKey, base64Image);
           setProfilePic(base64Image);
@@ -36,7 +39,10 @@ export default function HeroImage() {
   // Close popup when clicking outside
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
-      if (popupRef.current && !popupRef.current.contains(event.target as Node)) {
+      if (
+        popupRef.current &&
+        !popupRef.current.contains(event.target as Node)
+      ) {
         setIsPopupOpen(false);
       }
     }
@@ -53,21 +59,29 @@ export default function HeroImage() {
       >
         {profilePic ? (
           <img
-            src={profilePic}
+          src={profilePic}
             alt="Profile"
             className="h-[40px] w-[40px] rounded-full 
             hover:ring-2 hover:ring-blue-500 transition-all"
             loading="eager"
           />
         ) : (
-          <div className="h-[40px] w-[40px] bg-gray-300 
+          <div
+            className="h-[40px] w-[40px] bg-gray-300 
           rounded-full hover:ring-2 hover:ring-blue-500 
-          transition-all" />
+          transition-all"
+          />
         )}
       </button>
 
-      <div className={`${isPopupOpen ? 'opacity-100 scale-100' : 'opacity-0 scale-95 pointer-events-none'} 
-        absolute right-0 top-14 transform transition-all duration-200 ease-out`}>
+      <div
+        className={`${
+          isPopupOpen
+            ? "opacity-100 scale-100"
+            : "opacity-0 scale-95 pointer-events-none"
+        } 
+        absolute right-0 top-14 transform transition-all duration-200 ease-out`}
+      >
         {isPopupOpen && <HeroPopUp onClose={() => setIsPopupOpen(false)} />}
       </div>
     </div>
