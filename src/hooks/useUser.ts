@@ -18,7 +18,8 @@ const fetchUser = async (userId: string): Promise<User> => {
       course_year,
       university,
       degree,
-      created_at
+      created_at,
+      reviews_count
     `)
     .eq('user_id', userId)
     .single();

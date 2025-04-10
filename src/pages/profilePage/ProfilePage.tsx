@@ -1,5 +1,6 @@
 import { useEffect, useLayoutEffect, useState } from "react";
 import { Link } from "react-router-dom";
+
 import { MdEdit, MdSchool, MdEmail, MdDateRange } from "react-icons/md";
 
 import { useUserCourseReviews } from "../../hooks/useReviews";
@@ -9,11 +10,11 @@ import LoadingSpinnerScreen from "../../components/loading/LoadingSpinnerScreen"
 import { EditProfileModal } from "./EditProfileModal";
 
 export default function ProfilePage() {
-  // const {
-  //   data: reviews,
-  //   isLoading: isLoadingRev,
-  //   error: errorRev,
-  // } = useUserCourseReviews();
+  const {
+    data: reviews,
+    isLoading: isLoadingRev,
+    error: errorRev,
+  } = useUserCourseReviews();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const { data: user, isLoading: isLoadingUser, error: errorUser } = useUser();
   const [profilePic, setProfilePic] = useState<string>(() => {
@@ -53,11 +54,11 @@ export default function ProfilePage() {
     setIsEditModalOpen(false);
   };
 
-  if (isLoadingUser) return <LoadingSpinnerScreen />;
-  if (errorUser)
+  if (isLoadingRev || isLoadingUser) return <LoadingSpinnerScreen />;
+  if (errorRev || errorUser)
     return (
       <div className="min-h-screen">
-        Error: {errorUser?.message}
+        Error: {errorRev?.message || errorUser?.message}
       </div>
     );
   if (!user) return <div className="min-h-screen">No data</div>;
@@ -140,7 +141,7 @@ export default function ProfilePage() {
         <div className="bg-white rounded-xl shadow-sm p-8" id="reviews">
           <h2 className="text-xl font-bold mb-6">My Reviews</h2>
           <div className="space-y-6">
-            {/* {reviews.map((review) => (
+            {reviews?.map((review) => (
               <div
                 key={review._id}
                 className="border-b border-gray-100 last:border-0 pb-6 last:pb-0"
@@ -165,7 +166,7 @@ export default function ProfilePage() {
                 </h4>
                 <p className="text-gray-600">{review.review}</p>
               </div>
-            ))} */}
+            ))}
           </div>
         </div>
 

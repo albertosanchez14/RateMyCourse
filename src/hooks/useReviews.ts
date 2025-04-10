@@ -1,5 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
-import { useAuth } from "@clerk/clerk-react";
+import { useAuth } from "../hooks/useAuth";
+
+import supabase from '../utils/supabaseClient';
+
 import {
   CourseReviewsType,
   FormCourseReviewType,
@@ -14,19 +17,27 @@ import professorData from "../data/professors.json"; // Adjust the path as neces
 const fetchCourseReviews = async (
   courseId: string
 ): Promise<Array<CourseReviewsType>> => {
-  // Mock data
-  const response = await fetch(
-    `http://localhost:8000/course/${courseId}/reviews`
-  );
-  const data = (await response.json()) as Array<CourseReviewsType>;
-
-  return data;
+  if (!courseId) {
+    throw new Error("Course ID is required");
+  }
+  
+  const { data, error } = await supabase
+    .from('course_reviews')
+    .select('*')
+    .eq('course_id', courseId);
+    
+  if (error) {
+    throw new Error(`Failed to fetch reviews: ${error.message}`);
+  }
+  
+  return data as Array<CourseReviewsType>;
 };
 
 export const useCourseReviews = (courseId: string) => {
   return useQuery<Array<CourseReviewsType>, Error>({
     queryKey: ["comments", courseId],
     queryFn: () => fetchCourseReviews(courseId),
+    enabled: !!courseId,
   });
 };
 
@@ -79,29 +90,31 @@ export const editCourseReview = async (
 // ****************************************************************************
 
 const fetchUserCourseReviews = async (
-  token: string | null
+  userId: string | undefined
 ): Promise<Array<UserCourseReviewType>> => {
-  const response = await fetch("http://localhost:8000/user/reviews", {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-  if (!response.ok) {
-    throw new Error("Failed to fetch reviews");
+  if (!userId) {
+    throw new Error("User ID is required");
   }
-  const data = (await response.json()) as Array<UserCourseReviewType>;
-  return data;
+  
+  const { data, error } = await supabase
+    .from('course_reviews')
+    .select('*')
+    .eq('user_id', userId);
+    
+  if (error) {
+    throw new Error(`Failed to fetch reviews: ${error.message}`);
+  }
+  
+  return data as Array<UserCourseReviewType>;
 };
 
 export const useUserCourseReviews = () => {
-  const { getToken } = useAuth();
+  const { id } = useAuth();
 
   return useQuery<Array<UserCourseReviewType>, Error>({
     queryKey: ["userReviews"],
-    queryFn: async () => {
-      const token = await getToken();
-      return fetchUserCourseReviews(token);
-    },
+    queryFn: () => fetchUserCourseReviews(id),
+    enabled: !!id,
   });
 };
 
