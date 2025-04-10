@@ -12,9 +12,9 @@ export type FormCourseReviewType = {
 };
 
 export type CourseReviewsType = {
-  _id: string;
+  id: string;
   userId: string;
-  username: string;
+  full_name: string;
   course_id: number;
   rating: RatingType;
   title: string;

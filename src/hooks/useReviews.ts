@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "../hooks/useAuth";
 
-import supabase from '../utils/supabaseClient';
+import supabase from "../utils/supabaseClient";
 
 import {
   CourseReviewsType,
@@ -20,17 +20,29 @@ const fetchCourseReviews = async (
   if (!courseId) {
     throw new Error("Course ID is required");
   }
-  
+
   const { data, error } = await supabase
-    .from('course_reviews')
-    .select('*')
-    .eq('course_id', courseId);
-    
+    .from("course_reviews")
+    .select("*")
+    .eq("course_id", courseId);
+  console.log("data", data);
+
   if (error) {
     throw new Error(`Failed to fetch reviews: ${error.message}`);
   }
-  
-  return data as Array<CourseReviewsType>;
+
+  // Map the raw data to match the CourseReviewsType structure
+  return data.map((review) => ({
+    id: review.id.toString(),
+    userId: review.user_id,
+    full_name: review.full_name,
+    course_id: review.course_id,
+    rating: review.rating,
+    title: review.title,
+    review: review.review,
+    date: new Date(review.date).toISOString(),
+    professor: review.professor,
+  }));
 };
 
 export const useCourseReviews = (courseId: string) => {
@@ -41,49 +53,123 @@ export const useCourseReviews = (courseId: string) => {
   });
 };
 
+// ****************************************************************************
+
 export const addCourseReview = async (
   courseId: string,
-  review: FormCourseReviewType,
-  token: string | null
+  review: FormCourseReviewType
 ): Promise<void> => {
-  const response = await fetch(
-    `http://localhost:8000/course/${courseId}/reviews`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(review),
-    }
-  );
-  if (response.status === 409) {
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    throw new Error("You must be logged in to submit a review");
+  }
+
+  // First check if the user has already reviewed this course
+  const { data: existingReview, error: checkError } = await supabase
+    .from("course_reviews")
+    .select("id")
+    .eq("course_id", courseId)
+    .eq("user_id", user.id)
+    .single();
+
+  if (checkError && checkError.code !== "PGRST116") {
+    // PGRST116 is "no rows returned"
+    throw new Error("Failed to check existing reviews");
+  }
+
+  if (existingReview) {
     throw new Error("You have already submitted a review for this course");
   }
-  if (!response.ok) {
-    throw new Error("Failed to add review");
+
+  // Get user profile to access full name
+  const { data: profile, error: profileError } = await supabase
+    .from("profiles")
+    .select("full_name")
+    .eq("user_id", user.id)
+    .single();
+
+  if (profileError) {
+    throw new Error(`Failed to fetch user profile: ${profileError.message}`);
+  }
+
+  // Insert the review
+  const { error: insertError } = await supabase.from("course_reviews").insert({
+    course_id: courseId,
+    user_id: user.id,
+    full_name: profile.full_name,
+    rating: {
+      overall: review.rating.overall,
+      easy: review.rating.easy,
+      useful: review.rating.useful,
+      workload: review.rating.workload,
+    },
+    title: review.title,
+    review: review.review,
+    date: new Date().toISOString(),
+    professor: review.professor,
+  });
+
+  if (insertError) {
+    throw new Error(`Failed to add review: ${insertError.message}`);
+  }
+
+  // Update the reviews_count in the user's profile
+  const { error: updateError } = await supabase.rpc("increment_reviews_count", {
+    user_id: user.id,
+  });
+
+  if (updateError) {
+    console.error("Failed to update review count:", updateError);
+    // Don't throw an error here, as the review was added successfully
   }
 };
 
 export const editCourseReview = async (
-  courseId: string,
   reviewId: string,
-  review: FormCourseReviewType,
-  token: string | null
+  review: FormCourseReviewType
 ): Promise<void> => {
-  const response = await fetch(
-    `http://localhost:8000/course/${courseId}/reviews/${reviewId}`,
-    {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    throw new Error("You must be logged in to edit a review");
+  }
+
+  // Check if the review exists and belongs to the user
+  const { error: checkError } = await supabase
+    .from("course_reviews")
+    .select("id")
+    .eq("id", reviewId)
+    .eq("user_id", user.id)
+    .single();
+  if (checkError) {
+    throw new Error("Review not found or you don't have permission to edit it");
+  }
+
+  // Update the review
+  const { error: updateError } = await supabase
+    .from("course_reviews")
+    .update({
+      rating: {
+        overall: review.rating.overall,
+        easy: review.rating.easy,
+        useful: review.rating.useful,
+        workload: review.rating.workload,
       },
-      body: JSON.stringify(review),
-    }
-  );
-  if (!response.ok) {
-    throw new Error("Failed to edit review");
+      title: review.title,
+      review: review.review,
+      date: new Date().toISOString(), // Optionally update the date to reflect the edit time
+      professor: review.professor,
+    })
+    .eq("id", reviewId)
+    .eq("user_id", user.id); // Ensure only the owner can edit
+
+  if (updateError) {
+    throw new Error(`Failed to update review: ${updateError.message}`);
   }
 };
 
@@ -95,16 +181,16 @@ const fetchUserCourseReviews = async (
   if (!userId) {
     throw new Error("User ID is required");
   }
-  
+
   const { data, error } = await supabase
-    .from('course_reviews')
-    .select('*')
-    .eq('user_id', userId);
-    
+    .from("course_reviews")
+    .select("*")
+    .eq("user_id", userId);
+
   if (error) {
     throw new Error(`Failed to fetch reviews: ${error.message}`);
   }
-  
+
   return data as Array<UserCourseReviewType>;
 };
 

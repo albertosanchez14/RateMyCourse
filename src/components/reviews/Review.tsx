@@ -13,6 +13,7 @@ interface ReviewProps {
   description: string;
   rating: RatingType;
   by: string;
+  userId: string;
   professor?: string;
   onEdit?: () => void;
 }
@@ -24,6 +25,7 @@ export default function Review({
   description,
   rating,
   by,
+  userId,
   professor,
   onEdit,
 }: ReviewProps) {
@@ -61,7 +63,7 @@ export default function Review({
             <span className="text-gray-400 text-sm">{printableDate}</span>
           </div>
         </div>
-        {user && user.username === by && (
+        {user && user.userId === userId && (
           <button
             onClick={onEdit}
             className="text-blue-500 hover:text-blue-700 text-sm font-medium transition-colors"

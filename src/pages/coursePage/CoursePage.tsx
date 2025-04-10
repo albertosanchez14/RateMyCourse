@@ -59,7 +59,7 @@ export default function CoursePage() {
         requirements={data.requirements}
         teacher={data.teacher}
       />
-      {/* <CourseCommentSection courseId={data._id} professors={uniqueTeachers} /> */}
+      <CourseCommentSection courseId={data._id} professors={uniqueTeachers} />
     </div>
   );
 }

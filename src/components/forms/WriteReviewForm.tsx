@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useAuth } from "../../hooks/useAuth";
 import { MdClose } from "react-icons/md";
 
 import { addCourseReview, editCourseReview } from "../../hooks/useReviews";
@@ -24,7 +23,6 @@ export default function WriteReviewForm({
   onClose,
   initialData,
 }: WriteReviewFormProps) {
-  const { getToken } = useAuth();
   const [rating, setRating] = useState<RatingType>(
     initialData?.rating || {
       easy: 0,
@@ -66,7 +64,6 @@ export default function WriteReviewForm({
       setErrorMessage("Please fill in all fields");
     } else {
       try {
-        const token = await getToken();
         const review: FormCourseReviewType = {
           professor: professor,
           rating: rating,
@@ -75,12 +72,12 @@ export default function WriteReviewForm({
           date: new Date().toISOString(),
         };
 
-        if (initialData?._id) {
+        if (initialData?.id) {
           // Update existing review
-          await editCourseReview(courseId, initialData._id, review, token);
+          await editCourseReview(initialData.id, review);
         } else {
           // Add new review
-          await addCourseReview(courseId, review, token);
+          await addCourseReview(courseId, review);
         }
 
         setShowSuccess(true);

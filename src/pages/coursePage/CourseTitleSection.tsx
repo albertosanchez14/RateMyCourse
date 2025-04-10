@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { IoMdHeart } from "react-icons/io";
 import { IoMdHeartEmpty } from "react-icons/io";
@@ -29,12 +28,6 @@ export default function CourseTitleSection({
   const likeMutation = useLikeCourse();
   const unlikeMutation = useUnlikeCourse();
   const isLoading = likeMutation.isPending || unlikeMutation.isPending;
-
-  // useEffect(() => {
-  //   if (user && user.liked_courses) {
-  //     setIsLiked(user.liked_courses.some((course) => course.id === id));
-  //   }
-  // }, [user, id]);
 
   const handleLikeCourse = async () => {
     if (isLoading) return;

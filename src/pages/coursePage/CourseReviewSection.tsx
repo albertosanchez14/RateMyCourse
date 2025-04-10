@@ -157,19 +157,20 @@ export default function CommentSection({
             <div className="flex flex-col gap-4 flex-1">
               {filteredCourseReviews.length > 0 ? (
                 filteredCourseReviews.map((comment: CourseReviewsType) => (
-                  <div key={comment._id} className="relative">
+                  <div key={comment.id} className="relative">
                     {user && comment.userId === user.userId && (
                       <div className="absolute -top-3 -right-3 bg-blue-500 text-white px-2 py-1 rounded-full text-xs font-medium z-10">
                         Your Review
                       </div>
                     )}
                     <Review
-                      id={comment._id}
+                      id={comment.id}
                       title={comment.title}
                       date={comment.date}
                       description={comment.review}
                       rating={comment.rating}
-                      by={comment.username}
+                      by={comment.full_name}
+                      userId={comment.userId}
                       professor={comment.professor}
                       onEdit={() => {
                         setEditingReview(comment);
