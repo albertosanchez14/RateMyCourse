@@ -28,8 +28,8 @@ export default function CourseTitleSection({
   const [isLiked, setIsLiked] = useState(false);
 
   useEffect(() => {
-    if (user) {
-      setIsLiked(user.likedCourses.some((course) => course.id === id));
+    if (user && user.liked_courses) {
+      setIsLiked(user.liked_courses.some((course) => course.id === id));
     }
   }, [user, id]);
 
@@ -45,9 +45,9 @@ export default function CourseTitleSection({
     }
     const token = await getToken();
     if (!isLiked) {
-      likeCouse(id, token);
+      likeCouse(id, token ?? null);
     } else {
-      unlikeCouse(id, token);
+      unlikeCouse(id, token ?? null);
     }
     setIsLiked(!isLiked);
   };

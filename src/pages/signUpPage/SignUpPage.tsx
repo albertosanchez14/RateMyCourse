@@ -120,11 +120,20 @@ export default function SignUpPage() {
           },
         },
       });
-
       if (error) {
-        setErrors({ general: error.message });
+        console.error("Detailed error:", error);
+        if (error.message.includes("Database error")) {
+          setErrors({ general: "Unable to create account. Please try again later or contact tech@ratemycourse.com if the problem persists." });
+        } else {
+          setErrors({ general: error.message });
+        }
         return;
       }
+
+      // if (error) {
+      //   setErrors({ general: error.message });
+      //   return;
+      // }
 
       // Check if email confirmation is required
       if (data?.user?.identities?.length === 0) {
@@ -133,9 +142,9 @@ export default function SignUpPage() {
         );
       } else if (data?.user) {
         // Save additional user data to profiles table
-        const { error: profileError } = await supabase.from("profiles").insert([
+        const { data: asdf, error: profileError } = await supabase.from("profiles").insert([
           {
-            id: data.user.id,
+            user_id: data.user.id,
             first_name: formData.firstName,
             last_name: formData.lastName,
             full_name: `${formData.firstName} ${formData.lastName}`,
@@ -144,6 +153,7 @@ export default function SignUpPage() {
             university: formData.university,
           },
         ]);
+        console.log("Profile data:", asdf);
 
         if (profileError) {
           console.error("Error saving profile:", profileError);

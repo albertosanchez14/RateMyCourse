@@ -1,50 +1,56 @@
 import { useQuery } from "@tanstack/react-query";
+
 import { useAuth } from "./useAuth";
+
+import supabase from "../utils/supabaseClient";
 
 import { User } from "../types/profile";
 
-const fetchUser = async (token: string | null): Promise<User> => {
-  const response = await fetch("http://localhost:8000/user", {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-  if (!response.ok) {
-    throw new Error("Failed to fetch user");
+const fetchUser = async (userId: string): Promise<User> => {
+  const { data, error } = await supabase
+    .from('profiles')
+    .select(`
+      user_id,
+      first_name,
+      last_name,
+      full_name,
+      email,
+      course_year,
+      university,
+      degree,
+      created_at
+    `)
+    .eq('user_id', userId)
+    .single();
+
+  console.log(data, error);
+
+  if (error) {
+    throw new Error(`Error fetching user: ${error.message}`);
   }
-  const data = (await response.json()) as User;
-  return data;
+
+  if (!data) {
+    throw new Error('User not found');
+  }
+
+  return data as User;
 };
 
 export const useUser = () => {
-  const { getToken } = useAuth();
+  const { user } = useAuth();
 
-  return useQuery<User, Error>({
-    queryKey: ["user"],
-    queryFn: async () => {
-      const token = await getToken();
-      return fetchUser(token);
-    },
+  return useQuery({
+    queryKey: ['user', user?.userId],
+    queryFn: () => fetchUser(user?.userId || ''),
+    enabled: !!user?.userId,
+    staleTime: 5 * 60 * 1000,
   });
 };
 
-export const addUser = async (user: User, token: string | null): Promise<User> => {
-  const response = await fetch("http://localhost:8000/user", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify(user),
-  });
-  if (!response.ok) {
-    throw new Error("Failed to add user");
-  }
-  const data = (await response.json()) as User;
-  return data;
-};
-
-export const likeCouse = async (courseId: string, token: string | null): Promise<User> => {
+export const likeCouse = async (
+  courseId: string,
+  token: string | null
+): Promise<User> => {
   const response = await fetch(`http://localhost:8000/user/likes/${courseId}`, {
     method: "POST",
     headers: {
@@ -58,8 +64,11 @@ export const likeCouse = async (courseId: string, token: string | null): Promise
   return data;
 };
 
-export const unlikeCouse = async (courseId: string, token: string | null): Promise<User> => {
-  const response = await fetch(`http://localhost:8000/user/likes/${courseId}`, { 
+export const unlikeCouse = async (
+  courseId: string,
+  token: string | null
+): Promise<User> => {
+  const response = await fetch(`http://localhost:8000/user/likes/${courseId}`, {
     method: "DELETE",
     headers: {
       Authorization: `Bearer ${token}`,

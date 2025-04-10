@@ -5,6 +5,7 @@ export interface AuthType {
     emailAddresses: { emailAddress: string }[];
     userId: string;
     imageUrl: string;
+    displayName: string;
   } | null;
   id?: string;
   avatar_url?: string;
