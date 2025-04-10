@@ -3,9 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { IoMdHeart } from "react-icons/io";
 import { IoMdHeartEmpty } from "react-icons/io";
 
-import { useAuth } from "../../hooks/useAuth";
 import { useUser } from "../../hooks/useUser";
-import { likeCouse, unlikeCouse } from "../../hooks/useUser";
+import { useIsCourseLiked, useLikeCourse, useUnlikeCourse } from "../../hooks/useUser";
 
 import { DegreeType } from "../../types/course";
 
@@ -22,18 +21,24 @@ export default function CourseTitleSection({
   course,
   degree,
 }: CourseTitleSectionProps) {
-  const { getToken } = useAuth();
   const { data: user } = useUser();
   const navigate = useNavigate();
-  const [isLiked, setIsLiked] = useState(false);
+  const { data: isLiked = false } = useIsCourseLiked(id);
+  
+  // Get the mutation functions from hooks
+  const likeMutation = useLikeCourse();
+  const unlikeMutation = useUnlikeCourse();
+  const isLoading = likeMutation.isPending || unlikeMutation.isPending;
 
-  useEffect(() => {
-    if (user && user.liked_courses) {
-      setIsLiked(user.liked_courses.some((course) => course.id === id));
-    }
-  }, [user, id]);
+  // useEffect(() => {
+  //   if (user && user.liked_courses) {
+  //     setIsLiked(user.liked_courses.some((course) => course.id === id));
+  //   }
+  // }, [user, id]);
 
   const handleLikeCourse = async () => {
+    if (isLoading) return;
+
     if (!user) {
       const wantsToLogin = window.confirm(
         "Please log in to like this course. Would you like to log in now?"
@@ -43,13 +48,11 @@ export default function CourseTitleSection({
       }
       return;
     }
-    const token = await getToken();
     if (!isLiked) {
-      likeCouse(id, token ?? null);
+      likeMutation.mutate(id);
     } else {
-      unlikeCouse(id, token ?? null);
+      unlikeMutation.mutate(id);
     }
-    setIsLiked(!isLiked);
   };
 
   return (

@@ -14,9 +14,10 @@ export default function ProfilePage() {
     data: reviews,
     isLoading: isLoadingRev,
     error: errorRev,
-  } = useUserCourseReviews();
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  } = useUserCourseReviews();  
   const { data: user, isLoading: isLoadingUser, error: errorUser } = useUser();
+  
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [profilePic, setProfilePic] = useState<string>(() => {
     if (!user?.user_id) return "";
     return localStorage.getItem(`profilePic_${user.user_id}`) || "";
