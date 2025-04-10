@@ -25,7 +25,7 @@ export type CourseReviewsType = {
 
 export type UserCourseReviewType = Omit<CourseReviewsType, "course_id"> & {
   course_id: {
-    _id: string;
+    id: string;
     code: number;
     title: string;
     degree: {

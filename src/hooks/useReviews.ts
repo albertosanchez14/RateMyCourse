@@ -13,6 +13,7 @@ import {
 
 import commentsProfessorData from "../data/comments_professor.json"; // Adjust the path as necessary
 import professorData from "../data/professors.json"; // Adjust the path as necessary
+import { fetchCourse } from "./useCourse";
 
 const fetchCourseReviews = async (
   courseId: string
@@ -186,12 +187,36 @@ const fetchUserCourseReviews = async (
     .from("course_reviews")
     .select("*")
     .eq("user_id", userId);
-
   if (error) {
     throw new Error(`Failed to fetch reviews: ${error.message}`);
   }
 
-  return data as Array<UserCourseReviewType>;
+  // Fetch the course data from the API
+  // TODO: Migrate to supabase
+  const courses = await Promise.all(
+    data.map(async (course) => {
+      const courseData = await fetchCourse(course.course_id.toString());
+      return courseData;
+    })
+  );
+
+  // Map the raw data to match the UserCourseReviewType structure
+  const mappedData = data.map((review) => {
+    const course = courses.find((c) => c._id === review.course_id);
+    return {
+      ...review,
+      course_id: {
+        id: review.course_id.toString(),
+        code: course?.code,
+        title: course?.title,
+        degree: {
+          title: course?.degree.title,
+        },
+      },
+    };
+  });
+
+  return mappedData as Array<UserCourseReviewType>;
 };
 
 export const useUserCourseReviews = () => {

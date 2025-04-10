@@ -16,7 +16,7 @@ export default function ProfilePage() {
     error: errorRev,
   } = useUserCourseReviews();  
   const { data: user, isLoading: isLoadingUser, error: errorUser } = useUser();
-  
+  console.log(reviews);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [profilePic, setProfilePic] = useState<string>(() => {
     if (!user?.user_id) return "";
@@ -144,12 +144,12 @@ export default function ProfilePage() {
           <div className="space-y-6">
             {reviews?.map((review) => (
               <div
-                key={review._id}
+                key={review.id}
                 className="border-b border-gray-100 last:border-0 pb-6 last:pb-0"
               >
                 <div className="flex justify-between items-start mb-2">
                   <div>
-                    <Link to={`/course/${review.course_id._id}#reviews`}>
+                    <Link to={`/course/${review.course_id.id}#reviews`}>
                       <h3 className="font-semibold text-lg hover:underline">
                         {review.course_id.title}
                       </h3>

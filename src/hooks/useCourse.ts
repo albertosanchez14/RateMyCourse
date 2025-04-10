@@ -6,7 +6,7 @@ import {
   FREventType,
 } from "../types/course";
 
-const fetchCourse = async (courseId: string): Promise<FRCourseType> => {
+export const fetchCourse = async (courseId: string): Promise<FRCourseType> => {
   console.log("Fetching course data for course", courseId);
   // Fetch course data from the server
   const response = await fetch(`http://localhost:8000/course/${courseId}`);

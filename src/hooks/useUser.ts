@@ -6,6 +6,9 @@ import supabase from "../utils/supabaseClient";
 
 import { User } from "../types/profile";
 
+// TODO: Change
+import { fetchCourse } from "./useCourse";
+
 const fetchUser = async (userId: string): Promise<User> => {
   // First fetch the user profile
   const { data: userData, error: userError } = await supabase
@@ -35,41 +38,37 @@ const fetchUser = async (userId: string): Promise<User> => {
 
   // TODO: Uncomment this when the database is ready
   // Then fetch the liked courses for this user
-  // const { data: likedCoursesData, error: likedCoursesError } = await supabase
-  //   .from('profile_liked_courses')
-  //   .select(`
-  //     course_id,
-  //     courses:course_id (
-  //       id,
-  //       title,
-  //       code,
-  //       rating:ratings(overall, easy, useful, workload),
-  //       degree:degrees(title, plan, estudio)
-  //     )
-  //   `)
-  //   .eq('profile_id', userId);
+  const { data: likedCoursesData, error: likedCoursesError } = await supabase
+    .from('profile_liked_courses')
+    .select(`course_id`)
+    .eq('profile_id', userId);
 
-  // if (likedCoursesError) {
-  //   throw new Error(`Error fetching liked courses: ${likedCoursesError.message}`);
-  // }
-  // // Transform the liked courses data into the expected format
-  // const liked_courses = likedCoursesData?.map(item => {
-  //   // The rating and degree are arrays due to the join, but we need the first item
-  //   const rating = item.courses?.rating?.[0] || null;
-  //   const degree = item.courses?.degree?.[0] || null;
-  //   return {
-  //     id: item.courses?.id,
-  //     title: item.courses?.title,
-  //     code: item.courses?.code,
-  //     rating: rating,
-  //     degree: degree
-  //   };
-  // }) || [];
+  if (likedCoursesError) {
+    throw new Error(`Error fetching liked courses: ${likedCoursesError.message}`);
+  }
+  // Fetch the course data from the API
+  // TODO: Migrate to supabase
+  const course = await Promise.all(
+    likedCoursesData?.map(async (course) => {
+      const courseData = await fetchCourse(course.course_id);
+      return courseData;
+    })
+  );
+  // Map the liked courses to the desired format
+  const liked_courses = course?.map((course) => {
+    return {
+      id: course._id,
+      title: course.title,
+      code: course.code,
+      rating: course.rating,
+      degree: course.degree,
+    };
+  });
 
   // Return the user data with liked courses
   return {
     ...userData,
-    liked_courses: [],
+    liked_courses,
   } as User;
 };
 
