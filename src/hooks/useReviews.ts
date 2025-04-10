@@ -26,7 +26,6 @@ const fetchCourseReviews = async (
     .from("course_reviews")
     .select("*")
     .eq("course_id", courseId);
-  console.log("data", data);
 
   if (error) {
     throw new Error(`Failed to fetch reviews: ${error.message}`);
@@ -115,16 +114,6 @@ export const addCourseReview = async (
 
   if (insertError) {
     throw new Error(`Failed to add review: ${insertError.message}`);
-  }
-
-  // Update the reviews_count in the user's profile
-  const { error: updateError } = await supabase.rpc("increment_reviews_count", {
-    user_id: user.id,
-  });
-
-  if (updateError) {
-    console.error("Failed to update review count:", updateError);
-    // Don't throw an error here, as the review was added successfully
   }
 };
 

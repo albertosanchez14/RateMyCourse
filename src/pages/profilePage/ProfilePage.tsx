@@ -16,7 +16,7 @@ export default function ProfilePage() {
     error: errorRev,
   } = useUserCourseReviews();  
   const { data: user, isLoading: isLoadingUser, error: errorUser } = useUser();
-  console.log(reviews);
+
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [profilePic, setProfilePic] = useState<string>(() => {
     if (!user?.user_id) return "";
