@@ -56,7 +56,13 @@ export default function CommentSection({
       setFilterdCourseReviews(initialComments);
     }
   }, [courseComments.data]);
-
+  // Reset filtered reviews when user changes
+  useEffect(() => {
+    // When user is null (signed out), reset userHasReview
+    if (!user) {
+      setUserHasReview(false);
+    }
+  }, [user]);
   // Check if user has already reviewed the course
   useEffect(() => {
     if (courseComments.data && user) {
@@ -124,10 +130,9 @@ export default function CommentSection({
       },
       onError: (error) => {
         console.error("Failed to delete review:", error);
-      }
+      },
     });
   };
-
 
   if (courseComments.isLoading) return <LoadingSpinnerScreen />;
   if (courseComments.error)
