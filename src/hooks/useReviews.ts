@@ -1,5 +1,8 @@
-import { useQuery } from "@tanstack/react-query";
-import { useAuth } from "@clerk/clerk-react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useAuth } from "../hooks/useAuth";
+
+import supabase from "../utils/supabaseClient";
+
 import {
   CourseReviewsType,
   FormCourseReviewType,
@@ -10,98 +13,302 @@ import {
 
 import commentsProfessorData from "../data/comments_professor.json"; // Adjust the path as necessary
 import professorData from "../data/professors.json"; // Adjust the path as necessary
+import { fetchCourse } from "./useCourse";
 
 const fetchCourseReviews = async (
   courseId: string
 ): Promise<Array<CourseReviewsType>> => {
-  // Mock data
-  const response = await fetch(
-    `http://localhost:8000/course/${courseId}/reviews`
-  );
-  const data = (await response.json()) as Array<CourseReviewsType>;
+  if (!courseId) {
+    throw new Error("Course ID is required");
+  }
 
-  return data;
+  const { data, error } = await supabase
+    .from("course_reviews")
+    .select("*")
+    .eq("course_id", courseId);
+
+  if (error) {
+    throw new Error(`Failed to fetch reviews: ${error.message}`);
+  }
+
+  // Map the raw data to match the CourseReviewsType structure
+  return data.map((review) => ({
+    id: review.id.toString(),
+    userId: review.user_id,
+    full_name: review.full_name,
+    course_id: review.course_id,
+    rating: review.rating,
+    title: review.title,
+    review: review.review,
+    date: new Date(review.date).toISOString(),
+    professor: review.professor,
+  }));
 };
 
 export const useCourseReviews = (courseId: string) => {
   return useQuery<Array<CourseReviewsType>, Error>({
     queryKey: ["comments", courseId],
     queryFn: () => fetchCourseReviews(courseId),
+    enabled: !!courseId,
   });
 };
 
+// ****************************************************************************
+
 export const addCourseReview = async (
   courseId: string,
-  review: FormCourseReviewType,
-  token: string | null
+  review: FormCourseReviewType
 ): Promise<void> => {
-  const response = await fetch(
-    `http://localhost:8000/course/${courseId}/reviews`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(review),
-    }
-  );
-  if (response.status === 409) {
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    throw new Error("You must be logged in to submit a review");
+  }
+
+  // First check if the user has already reviewed this course
+  const { data: existingReview, error: checkError } = await supabase
+    .from("course_reviews")
+    .select("id")
+    .eq("course_id", courseId)
+    .eq("user_id", user.id)
+    .maybeSingle();
+
+  if (checkError) {
+    throw new Error("Failed to check existing reviews");
+  }
+
+  if (existingReview) {
     throw new Error("You have already submitted a review for this course");
   }
-  if (!response.ok) {
-    throw new Error("Failed to add review");
+
+  // Get user profile to access full name
+  const { data: profile, error: profileError } = await supabase
+    .from("profiles")
+    .select("full_name")
+    .eq("user_id", user.id)
+    .single();
+
+  if (profileError) {
+    throw new Error(`Failed to fetch user profile: ${profileError.message}`);
+  }
+
+  // Insert the review
+  const { error: insertError } = await supabase.from("course_reviews").insert({
+    course_id: courseId,
+    user_id: user.id,
+    full_name: profile.full_name,
+    rating: {
+      overall: review.rating.overall,
+      easy: review.rating.easy,
+      useful: review.rating.useful,
+      workload: review.rating.workload,
+    },
+    title: review.title,
+    review: review.review,
+    date: new Date().toISOString(),
+    professor: review.professor,
+  });
+
+  if (insertError) {
+    throw new Error(`Failed to add review: ${insertError.message}`);
   }
 };
 
+// Create a new hook that uses the function but also handles cache invalidation
+export const useAddCourseReview = () => {
+  const queryClient = useQueryClient();
+  const { id } = useAuth();
+
+  return useMutation({
+    mutationFn: ({
+      courseId,
+      review,
+    }: {
+      courseId: string;
+      review: FormCourseReviewType;
+    }) => addCourseReview(courseId, review),
+    onSuccess: (_, { courseId }) => {
+      // Invalidate user reviews query when a new review is added
+      queryClient.invalidateQueries({ queryKey: ["userReviews"] });
+      // Invalidate user data which includes review count
+      queryClient.invalidateQueries({ queryKey: ["user", id] });
+      // Invalidate course reviews for the specific course
+      queryClient.invalidateQueries({ queryKey: ["comments", courseId] });
+    },
+  });
+};
+
+// ****************************************************************************
+
 export const editCourseReview = async (
-  courseId: string,
   reviewId: string,
-  review: FormCourseReviewType,
-  token: string | null
+  review: FormCourseReviewType
 ): Promise<void> => {
-  const response = await fetch(
-    `http://localhost:8000/course/${courseId}/reviews/${reviewId}`,
-    {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(review),
-    }
-  );
-  if (!response.ok) {
-    throw new Error("Failed to edit review");
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    throw new Error("You must be logged in to edit a review");
   }
+
+  // Check if the review exists and belongs to the user
+  const { error: checkError } = await supabase
+    .from("course_reviews")
+    .select("id")
+    .eq("id", reviewId)
+    .eq("user_id", user.id)
+    .single();
+  if (checkError) {
+    throw new Error("Review not found or you don't have permission to edit it");
+  }
+
+  // Update the review
+  const { error: updateError } = await supabase
+    .from("course_reviews")
+    .update({
+      rating: {
+        overall: review.rating.overall,
+        easy: review.rating.easy,
+        useful: review.rating.useful,
+        workload: review.rating.workload,
+      },
+      title: review.title,
+      review: review.review,
+      date: new Date().toISOString(), // Optionally update the date to reflect the edit time
+      professor: review.professor,
+    })
+    .eq("id", reviewId)
+    .eq("user_id", user.id); // Ensure only the owner can edit
+
+  if (updateError) {
+    throw new Error(`Failed to update review: ${updateError.message}`);
+  }
+};
+
+export const useEditCourseReview = () => {
+  const queryClient = useQueryClient();
+  const { id } = useAuth();
+  
+  return useMutation({
+    mutationFn: ({ reviewId, review }: { reviewId: string; review: FormCourseReviewType }) => 
+      editCourseReview(reviewId, review),
+    onSuccess: () => {
+      // Invalidate user reviews query when a review is edited
+      queryClient.invalidateQueries({ queryKey: ["userReviews"] });
+      // Also invalidate the specific course's reviews
+      queryClient.invalidateQueries({ queryKey: ["user", id] });
+    }
+  });
+};
+
+// ****************************************************************************
+
+// ...existing code...
+
+export const deleteCourseReview = async (reviewId: string): Promise<void> => {
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    throw new Error("You must be logged in to delete a review");
+  }
+
+  // Check if the review exists and belongs to the user
+  const { data: review, error: checkError } = await supabase
+    .from("course_reviews")
+    .select("course_id")
+    .eq("id", reviewId)
+    .eq("user_id", user.id)
+    .single();
+    
+  if (checkError) {
+    throw new Error("Review not found or you don't have permission to delete it");
+  }
+
+  // Delete the review
+  const { error: deleteError } = await supabase
+    .from("course_reviews")
+    .delete()
+    .eq("id", reviewId)
+    .eq("user_id", user.id); // Ensure only the owner can delete
+
+  if (deleteError) {
+    throw new Error(`Failed to delete review: ${deleteError.message}`);
+  }
+  
+  return review.course_id;
+};
+
+export const useDeleteCourseReview = () => {
+  const queryClient = useQueryClient();
+  const { id } = useAuth();
+  
+  return useMutation({
+    mutationFn: (reviewId: string) => deleteCourseReview(reviewId),
+    onSuccess: (courseId) => {
+      queryClient.invalidateQueries({ queryKey: ["userReviews"] });
+      queryClient.invalidateQueries({ queryKey: ["comments", courseId] });
+      queryClient.invalidateQueries({ queryKey: ["user", id] });
+    }
+  });
 };
 
 // ****************************************************************************
 
 const fetchUserCourseReviews = async (
-  token: string | null
+  userId: string | undefined
 ): Promise<Array<UserCourseReviewType>> => {
-  const response = await fetch("http://localhost:8000/user/reviews", {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-  if (!response.ok) {
-    throw new Error("Failed to fetch reviews");
+  if (!userId) {
+    throw new Error("User ID is required");
   }
-  const data = (await response.json()) as Array<UserCourseReviewType>;
-  return data;
+
+  const { data, error } = await supabase
+    .from("course_reviews")
+    .select("*")
+    .eq("user_id", userId);
+  if (error) {
+    throw new Error(`Failed to fetch reviews: ${error.message}`);
+  }
+
+  // Fetch the course data from the API
+  // TODO: Migrate to supabase
+  const courses = await Promise.all(
+    data.map(async (course) => {
+      const courseData = await fetchCourse(course.course_id.toString());
+      return courseData;
+    })
+  );
+
+  // Map the raw data to match the UserCourseReviewType structure
+  const mappedData = data.map((review) => {
+    const course = courses.find((c) => c._id === review.course_id);
+    return {
+      ...review,
+      course_id: {
+        id: review.course_id.toString(),
+        code: course?.code,
+        title: course?.title,
+        degree: {
+          title: course?.degree.title,
+        },
+      },
+    };
+  });
+
+  return mappedData as Array<UserCourseReviewType>;
 };
 
 export const useUserCourseReviews = () => {
-  const { getToken } = useAuth();
+  const { id } = useAuth();
 
   return useQuery<Array<UserCourseReviewType>, Error>({
     queryKey: ["userReviews"],
-    queryFn: async () => {
-      const token = await getToken();
-      return fetchUserCourseReviews(token);
-    },
+    queryFn: () => fetchUserCourseReviews(id),
+    enabled: !!id,
   });
 };
 

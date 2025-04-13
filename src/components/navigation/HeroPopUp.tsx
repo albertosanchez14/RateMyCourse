@@ -14,7 +14,6 @@ interface HeroPopUpProps {
 
 export default function HeroPopUp({ onClose }: HeroPopUpProps) {
   const { user, signOut } = useAuth();
-  console.log(user);
   const navigate = useNavigate();
 
   const handleLogout = async () => {
@@ -34,7 +33,7 @@ export default function HeroPopUp({ onClose }: HeroPopUpProps) {
     >
       {/* User Info Section */}
       <div className="px-4 py-3 border-b border-gray-200">
-        <p className="font-medium text-gray-900">{user?.username || "User"}</p>
+        <p className="font-medium text-gray-900">{user?.displayName}</p>
         {user?.emailAddresses?.map((email, index) => (
           <p key={index} className="text-sm text-gray-500">
             {email.emailAddress}

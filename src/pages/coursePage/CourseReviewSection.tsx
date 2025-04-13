@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
 
 import { useAuth } from "../../hooks/useAuth";
-import { useCourseReviews } from "../../hooks/useReviews";
+import {
+  useCourseReviews,
+  useDeleteCourseReview,
+} from "../../hooks/useReviews";
 import { CourseReviewsType } from "../../types/reviews";
 
 import WriteFormSection from "./WriteFormSection";
@@ -40,6 +43,8 @@ export default function CommentSection({
   const [editingReview, setEditingReview] = useState<CourseReviewsType | null>(
     null
   );
+
+  const deleteReviewMutation = useDeleteCourseReview();
 
   // Load the couse reviews
   useEffect(() => {
@@ -110,6 +115,20 @@ export default function CommentSection({
     });
   };
 
+  // Handle delete review
+  const handleDeleteReview = (reviewId: string) => {
+    deleteReviewMutation.mutate(reviewId, {
+      onSuccess: () => {
+        courseComments.refetch();
+        setUserHasReview(false);
+      },
+      onError: (error) => {
+        console.error("Failed to delete review:", error);
+      }
+    });
+  };
+
+
   if (courseComments.isLoading) return <LoadingSpinnerScreen />;
   if (courseComments.error)
     return <div>Error: {courseComments.error.message}</div>;
@@ -157,24 +176,26 @@ export default function CommentSection({
             <div className="flex flex-col gap-4 flex-1">
               {filteredCourseReviews.length > 0 ? (
                 filteredCourseReviews.map((comment: CourseReviewsType) => (
-                  <div key={comment._id} className="relative">
+                  <div key={comment.id} className="relative">
                     {user && comment.userId === user.userId && (
                       <div className="absolute -top-3 -right-3 bg-blue-500 text-white px-2 py-1 rounded-full text-xs font-medium z-10">
                         Your Review
                       </div>
                     )}
                     <Review
-                      id={comment._id}
+                      id={comment.id}
                       title={comment.title}
                       date={comment.date}
                       description={comment.review}
                       rating={comment.rating}
-                      by={comment.username}
+                      by={comment.full_name}
+                      userId={comment.userId}
                       professor={comment.professor}
                       onEdit={() => {
                         setEditingReview(comment);
                         setShowWriteForm(true);
                       }}
+                      onDelete={handleDeleteReview}
                     />
                   </div>
                 ))

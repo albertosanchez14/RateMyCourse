@@ -1,5 +1,6 @@
 import { useEffect, useLayoutEffect, useState } from "react";
 import { Link } from "react-router-dom";
+
 import { MdEdit, MdSchool, MdEmail, MdDateRange } from "react-icons/md";
 
 import { useUserCourseReviews } from "../../hooks/useReviews";
@@ -13,18 +14,19 @@ export default function ProfilePage() {
     data: reviews,
     isLoading: isLoadingRev,
     error: errorRev,
-  } = useUserCourseReviews();
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  } = useUserCourseReviews();  
   const { data: user, isLoading: isLoadingUser, error: errorUser } = useUser();
+
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [profilePic, setProfilePic] = useState<string>(() => {
-    if (!user?.userId) return "";
-    return localStorage.getItem(`profilePic_${user.userId}`) || "";
+    if (!user?.user_id) return "";
+    return localStorage.getItem(`profilePic_${user.user_id}`) || "";
   });
 
   // Set the profile picture when the user data is loaded
   useEffect(() => {
-    if (!user?.userId) return;
-    setProfilePic(localStorage.getItem(`profilePic_${user.userId}`) || "");
+    if (!user?.user_id) return;
+    setProfilePic(localStorage.getItem(`profilePic_${user.user_id}`) || "");
   }, [localStorage, user]);
 
   // Navigate when the hash changes
@@ -60,7 +62,7 @@ export default function ProfilePage() {
         Error: {errorRev?.message || errorUser?.message}
       </div>
     );
-  if (!reviews || !user) return <div className="min-h-screen">No data</div>;
+  if (!user) return <div className="min-h-screen">No data</div>;
 
   return (
     <div className="min-h-screen p-8">
@@ -71,7 +73,7 @@ export default function ProfilePage() {
             <div className="flex items-center gap-6">
               <div className="relative">
                 <img
-                  src={profilePic}
+                  src={profilePic || "/defaultProfilePic.png"}
                   alt="Profile"
                   className="w-24 h-24 rounded-full border-2 border-gray-200"
                 />
@@ -80,7 +82,7 @@ export default function ProfilePage() {
                 </button>
               </div>
               <div>
-                <h1 className="text-2xl font-bold mb-2">{user.name}</h1>
+                <h1 className="text-2xl font-bold mb-2">{user.full_name}</h1>
                 <div className="flex flex-col gap-2 text-gray-600">
                   <div className="flex items-center gap-2">
                     <MdEmail className="w-5 h-5" />
@@ -92,7 +94,7 @@ export default function ProfilePage() {
                   </div>
                   <div className="flex items-center gap-2">
                     <MdDateRange className="w-5 h-5" />
-                    {new Date(user.joinDate).toLocaleDateString("en-US", {
+                    {new Date(user.created_at).toLocaleDateString("en-US", {
                       month: "long",
                       year: "numeric",
                     })}
@@ -107,12 +109,12 @@ export default function ProfilePage() {
               Edit Profile
             </button>
 
-            <EditProfileModal
+            {/* <EditProfileModal
               user={user}
               isOpen={isEditModalOpen}
               onClose={() => setIsEditModalOpen(false)}
               onSave={handleSaveProfile}
-            />
+            /> */}
           </div>
         </div>
 
@@ -121,13 +123,13 @@ export default function ProfilePage() {
           <div className="bg-white rounded-xl shadow-sm p-6">
             <h3 className="text-lg font-semibold mb-2">Reviews Written</h3>
             <p className="text-3xl font-bold text-blue-500">
-              {user.reviewsCount}
+              {user.reviews_count}
             </p>
           </div>
           <div className="bg-white rounded-xl shadow-sm p-6">
             <h3 className="text-lg font-semibold mb-2">Academic Year</h3>
             <p className="text-3xl font-bold text-blue-500">
-              {user.yearOfStudy}rd Year
+              {user.course_year}rd Year
             </p>
           </div>
           <div className="bg-white rounded-xl shadow-sm p-6">
@@ -140,14 +142,14 @@ export default function ProfilePage() {
         <div className="bg-white rounded-xl shadow-sm p-8" id="reviews">
           <h2 className="text-xl font-bold mb-6">My Reviews</h2>
           <div className="space-y-6">
-            {reviews.map((review) => (
+            {reviews?.map((review) => (
               <div
-                key={review._id}
+                key={review.id}
                 className="border-b border-gray-100 last:border-0 pb-6 last:pb-0"
               >
                 <div className="flex justify-between items-start mb-2">
                   <div>
-                    <Link to={`/course/${review.course_id._id}#reviews`}>
+                    <Link to={`/course/${review.course_id.id}#reviews`}>
                       <h3 className="font-semibold text-lg hover:underline">
                         {review.course_id.title}
                       </h3>
@@ -176,7 +178,7 @@ export default function ProfilePage() {
         >
           <h2 className="text-xl font-bold mb-6">Liked Courses</h2>
           <div className="space-y-6">
-            {user.likedCourses.map((course) => (
+            {user.liked_courses && user.liked_courses.map((course) => (
               <div
                 key={course.id}
                 className="border-b border-gray-100 last:border-0 pb-6 last:pb-0"
@@ -196,7 +198,7 @@ export default function ProfilePage() {
                 <span className="text-gray-600">{course.degree.title}</span>
               </div>
             ))}
-            {user.likedCourses.length === 0 && (
+            {user.liked_courses && user.liked_courses.length === 0 && (
               <p className="text-gray-500 col-span-full text-center py-4">
                 You haven't liked any courses yet
               </p>

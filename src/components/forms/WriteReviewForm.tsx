@@ -1,8 +1,10 @@
 import React, { useState } from "react";
-import { useAuth } from "../../hooks/useAuth";
 import { MdClose } from "react-icons/md";
 
-import { addCourseReview, editCourseReview } from "../../hooks/useReviews";
+import {
+  useAddCourseReview,
+  useEditCourseReview,
+} from "../../hooks/useReviews";
 import {
   CourseReviewsType,
   FormCourseReviewType,
@@ -13,7 +15,7 @@ interface WriteReviewFormProps {
   courseId: string;
   professors: string[];
   onSuccess: () => void;
-  onClose: () => void; 
+  onClose: () => void;
   initialData?: CourseReviewsType | null;
 }
 
@@ -24,7 +26,6 @@ export default function WriteReviewForm({
   onClose,
   initialData,
 }: WriteReviewFormProps) {
-  const { getToken } = useAuth();
   const [rating, setRating] = useState<RatingType>(
     initialData?.rating || {
       easy: 0,
@@ -41,6 +42,10 @@ export default function WriteReviewForm({
   const [showSuccess, setShowSuccess] = useState<boolean>(false);
   const [showProfError, setShowProfError] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
+
+  // Mutations for adding and editing reviews
+  const addReviewMutation = useAddCourseReview();
+  const editReviewMutation = useEditCourseReview();
 
   const handleRating =
     (field: keyof RatingType) => (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -66,7 +71,6 @@ export default function WriteReviewForm({
       setErrorMessage("Please fill in all fields");
     } else {
       try {
-        const token = await getToken();
         const review: FormCourseReviewType = {
           professor: professor,
           rating: rating,
@@ -75,12 +79,18 @@ export default function WriteReviewForm({
           date: new Date().toISOString(),
         };
 
-        if (initialData?._id) {
-          // Update existing review
-          await editCourseReview(courseId, initialData._id, review, token);
+        if (initialData?.id) {
+          // Update existing review using the mutation
+          await editReviewMutation.mutateAsync({
+            reviewId: initialData.id,
+            review: review,
+          });
         } else {
-          // Add new review
-          await addCourseReview(courseId, review, token);
+          // Add new review using the mutation
+          await addReviewMutation.mutateAsync({
+            courseId,
+            review,
+          });
         }
 
         setShowSuccess(true);
