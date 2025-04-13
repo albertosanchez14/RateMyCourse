@@ -138,80 +138,84 @@ export default function ProfilePage() {
           </div>
         </div>
 
-        {/* Reviews Section */}
-        <div className="bg-white rounded-xl shadow-sm p-8" id="reviews">
-          <h2 className="text-xl font-bold mb-6">My Reviews</h2>
-          <div className="space-y-6">
-            {reviews?.map((review) => (
-              <div
-                key={review.id}
-                className="border-b border-gray-100 last:border-0 pb-6 last:pb-0"
-              >
-                <div className="flex justify-between items-start mb-2">
-                  <div>
-                    <Link
-                      to={`/course/${review.course_id.id}#reviews`}
-                      className="font-medium text-[#646cff] hover:text-[#535bf2] 
-                      no-underline"
-                    >
-                      <h3 className="font-semibold text-lg hover:underline">
-                        {review.course_id.code} - {review.course_id.title}
-                      </h3>
-                    </Link>
-                    <p className="text-sm text-gray-500">
-                      Posted on {new Date(review.date).toLocaleDateString()}
-                    </p>
-                  </div>
-                  <div className="bg-blue-50 text-blue-700 px-3 py-1 rounded-full font-semibold">
-                    {review.rating?.overall}/5
-                  </div>
-                </div>
-                <h4 className="font-medium text-gray-800 mt-2">
-                  {review.title}
-                </h4>
-                <p className="text-gray-600">{review.review}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Liked Courses Section */}
-        <div
-          className="bg-white rounded-xl shadow-sm p-8 mt-8"
-          id="fav-courses"
-        >
-          <h2 className="text-xl font-bold mb-6">Liked Courses</h2>
-          <div className="space-y-6">
-            {user.liked_courses &&
-              user.liked_courses.map((course) => (
+        <div className="flex flex-row gap-8">
+          {/* Reviews Section */}
+          <div
+            className="bg-white rounded-xl shadow-sm p-8 flex-1"
+            id="reviews"
+          >
+            <h2 className="text-xl font-bold mb-6">My Reviews</h2>
+            <div className="space-y-6">
+              {reviews?.map((review) => (
                 <div
-                  key={course.id}
+                  key={review.id}
                   className="border-b border-gray-100 last:border-0 pb-6 last:pb-0"
                 >
-                  <div className="flex justify-between items-start">
+                  <div className="flex justify-between items-start mb-2">
                     <div>
                       <Link
-                        to={`/course/${course.id}`}
+                        to={`/course/${review.course_id.id}#reviews`}
                         className="font-medium text-[#646cff] hover:text-[#535bf2] 
-                        no-underline"
+                      no-underline"
                       >
                         <h3 className="font-semibold text-lg hover:underline">
-                          {course.code} - {course.title}
+                          {review.course_id.code} - {review.course_id.title}
                         </h3>
                       </Link>
+                      <p className="text-sm text-gray-500">
+                        Posted on {new Date(review.date).toLocaleDateString()}
+                      </p>
                     </div>
                     <div className="bg-blue-50 text-blue-700 px-3 py-1 rounded-full font-semibold">
-                      {course.rating.overall}/5
+                      {review.rating?.overall}/5
                     </div>
                   </div>
-                  <span className="text-gray-600">{course.degree.title}</span>
+                  <h4 className="font-medium text-gray-800 mt-2">
+                    {review.title}
+                  </h4>
+                  <p className="text-gray-600">{review.review}</p>
                 </div>
               ))}
-            {user.liked_courses && user.liked_courses.length === 0 && (
-              <p className="text-gray-500 col-span-full text-center py-4">
-                You haven't liked any courses yet
-              </p>
-            )}
+            </div>
+          </div>
+
+          {/* Liked Courses Section */}
+          <div 
+          className="bg-white rounded-xl shadow-sm p-8 flex-1" 
+          id="fav-courses">
+            <h2 className="text-xl font-bold mb-6">Liked Courses</h2>
+            <div className="space-y-6">
+              {user.liked_courses &&
+                user.liked_courses.map((course) => (
+                  <div
+                    key={course.id}
+                    className="border-b border-gray-100 last:border-0 pb-6 last:pb-0"
+                  >
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <Link
+                          to={`/course/${course.id}`}
+                          className="font-medium text-[#646cff] hover:text-[#535bf2] 
+                        no-underline"
+                        >
+                          <h3 className="font-semibold text-lg hover:underline">
+                            {course.code} - {course.title}
+                          </h3>
+                        </Link>
+                      </div>
+                      <div className="bg-blue-50 text-blue-700 px-3 py-1 rounded-full font-semibold">
+                        {course.rating.overall}/5
+                      </div>
+                    </div>
+                    <span className="text-gray-600">{course.degree.title}</span>
+                  </div>
+                ))}
+              {user.liked_courses && user.liked_courses.length === 0 && (
+                <p className="text-gray-500 col-span-full text-center py-4">
+                  You haven't liked any courses yet
+                </p>
+              )}
+            </div>
           </div>
         </div>
       </div>
