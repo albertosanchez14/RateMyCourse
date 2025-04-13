@@ -22,7 +22,7 @@ export default function ReviewTypeSelector({
 
   return (
     <div className="flex flex-row gap-6">
-      <div>
+      <div> 
         <motion.h3
           className="text-lg font-semibold m-2 cursor-pointer"
           onClick={() => onTypeChange("course")}
@@ -33,7 +33,8 @@ export default function ReviewTypeSelector({
           Course Reviews
         </motion.h3>
       </div>
-      <div>
+      {/* TODO: Uncomment when proffesors reviews are available */}
+      {/* <div>
         <motion.h3
           className="text-lg font-semibold m-2 cursor-pointer"
           onClick={() => onTypeChange("professor")}
@@ -43,7 +44,7 @@ export default function ReviewTypeSelector({
         >
           Professor Reviews
         </motion.h3>
-      </div>
+      </div> */}
     </div>
   );
 }
