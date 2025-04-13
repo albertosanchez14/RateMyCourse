@@ -14,15 +14,15 @@ import ReviewTypeSelector from "../../components/reviews/ReviewTypeSelector";
 import ReviewControls from "../../components/reviews/ReviewControls";
 import LoadingSpinnerScreen from "../../components/loading/LoadingSpinnerScreen";
 
-interface CourseCommentSectionProps {
+interface CourseReviewSectionProps {
   courseId: string;
   professors: Set<{ id?: string; name?: string } | undefined>;
 }
 
-export default function CommentSection({
+export default function CourseReviewSection({
   courseId,
   professors,
-}: CourseCommentSectionProps) {
+}: CourseReviewSectionProps) {
   const { user } = useAuth();
   const [userHasReview, setUserHasReview] = useState(false);
   const [commentsType, setCommentsType] = useState<"course" | "professor">(

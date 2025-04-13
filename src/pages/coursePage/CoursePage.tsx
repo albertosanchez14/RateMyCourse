@@ -6,7 +6,7 @@ import CourseTitleSection from "./CourseTitleSection";
 import CourseDescRateSection from "./CourseDescRateSection";
 import CourseScheduleSection from "./CourseScheduleSection";
 import CourseDetailSection from "./CourseDetailSection";
-import CourseCommentSection from "./CourseReviewSection";
+import CourseReviewSection from "./CourseReviewSection";
 
 import LoadingSpinnerScreen from "../../components/loading/LoadingSpinnerScreen";
 
@@ -59,7 +59,7 @@ export default function CoursePage() {
         requirements={data.requirements}
         teacher={data.teacher}
       />
-      <CourseCommentSection courseId={data._id} professors={uniqueTeachers} />
+      <CourseReviewSection courseId={data._id} professors={uniqueTeachers} />
     </div>
   );
 }

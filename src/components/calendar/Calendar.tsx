@@ -3,11 +3,9 @@ import { MdChevronLeft, MdChevronRight } from "react-icons/md";
 
 import "./Calendar.css";
 
-import { useWeekSchedule } from "../../hooks/useWeek";
 import { FREventType } from "../../types/course";
 
 import Event from "./Event";
-import LoadingSpinnerScreen from "../loading/LoadingSpinnerScreen";
 
 type CalendarProps = {
   events: Array<FREventType>;
@@ -25,7 +23,6 @@ export default function Calendar({ events }: CalendarProps) {
     Thu: 0,
     Fri: 0,
   });
-  const { data: weekSchedule, isLoading, error } = useWeekSchedule();
 
   // Initialize with today's date
   const [minDate, setMinDate] = useState<Date>(new Date());
@@ -72,10 +69,6 @@ export default function Calendar({ events }: CalendarProps) {
     });
     setCurrentMonth(startingDate.toLocaleString("en-US", { month: "long" }));
   }, [events, startingDate]);
-
-  if (isLoading) return <LoadingSpinnerScreen />;
-  if (error) return <div>Error: {error.message}</div>;
-  if (!weekSchedule) return <div>No data</div>;
 
   const renderRows = (date: Date) => {
     const rowElements = [];
