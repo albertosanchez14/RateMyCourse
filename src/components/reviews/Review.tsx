@@ -64,7 +64,6 @@ export default function Review({
       return () => clearTimeout(timer);
     }
   }, [likeAnimating]);
-
   useEffect(() => {
     if (dislikeAnimating) {
       const timer = setTimeout(() => setDislikeAnimating(false), 300);

@@ -1,5 +1,10 @@
 import { useRef, useState, useEffect } from "react";
-import { MdDeleteOutline, MdMoreVert, MdOutlineEdit, MdFlag } from "react-icons/md";
+import {
+  MdDeleteOutline,
+  MdMoreVert,
+  MdOutlineEdit,
+  MdFlag,
+} from "react-icons/md";
 
 interface ReviewActionsMenuProps {
   onEdit?: () => void;
@@ -41,6 +46,21 @@ export default function ReviewActionsMenu({
     };
   }, [showActionsMenu]);
 
+  const handleEditClick = () => {
+    if (onEdit) onEdit();
+    setShowActionsMenu(false);
+  };
+
+  const handleDeleteClick = () => {
+    if (onDelete) onDelete();
+    setShowActionsMenu(false);
+  };
+
+  const handleReportClick = () => {
+    onReport();
+    setShowActionsMenu(false);
+  };
+
   return (
     <div className="relative" ref={actionsMenuRef}>
       <button
@@ -59,7 +79,7 @@ export default function ReviewActionsMenu({
           {isAuth ? (
             <>
               <button
-                onClick={onEdit}
+                onClick={handleEditClick}
                 className="w-full text-left px-4 py-2 text-gray-700 
                 hover:bg-gray-100 transition-colors"
               >
@@ -67,7 +87,7 @@ export default function ReviewActionsMenu({
                 Edit
               </button>
               <button
-                onClick={onDelete}
+                onClick={handleDeleteClick}
                 className="w-full text-left px-4 py-2 text-red-600 
                 hover:bg-gray-100 transition-colors"
               >
@@ -77,7 +97,7 @@ export default function ReviewActionsMenu({
             </>
           ) : (
             <button
-              onClick={onReport}
+              onClick={handleReportClick}
               className="w-full text-left px-4 py-2 text-yellow-600 
               hover:bg-gray-100 transition-colors"
             >
