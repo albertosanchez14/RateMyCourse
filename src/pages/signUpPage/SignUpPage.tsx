@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import { FcGoogle } from "react-icons/fc";
 
@@ -27,7 +27,6 @@ interface FormErrors {
 }
 
 export default function SignUpPage() {
-  const navigate = useNavigate();
   const [formData, setFormData] = useState<FormData>({
     firstName: "",
     lastName: "",
@@ -130,11 +129,6 @@ export default function SignUpPage() {
         return;
       }
 
-      // if (error) {
-      //   setErrors({ general: error.message });
-      //   return;
-      // }
-
       // Check if email confirmation is required
       if (data?.user?.identities?.length === 0) {
         setSuccessMessage(
@@ -142,7 +136,7 @@ export default function SignUpPage() {
         );
       } else if (data?.user) {
         // Save additional user data to profiles table
-        const { data: asdf, error: profileError } = await supabase.from("profiles").insert([
+        const { error: profileError } = await supabase.from("profiles").insert([
           {
             user_id: data.user.id,
             first_name: formData.firstName,
@@ -161,11 +155,6 @@ export default function SignUpPage() {
         setSuccessMessage(
           "Sign-up successful! Please check your email to verify your account."
         );
-
-        // Optionally redirect after a delay
-        setTimeout(() => {
-          navigate("/login");
-        }, 5000);
       }
     } catch (err) {
       console.error("Unexpected error during sign-up:", err);
@@ -442,7 +431,7 @@ export default function SignUpPage() {
                 }}
               >
                 <FcGoogle size={25} />
-                Google
+                Continue with Google
               </button>
             </div>
           </>
