@@ -14,7 +14,6 @@ interface HeroPopUpProps {
 
 export default function HeroPopUp({ onClose }: HeroPopUpProps) {
   const { user, signOut } = useAuth();
-  console.log(user);
   const navigate = useNavigate();
 
   const handleLogout = async () => {

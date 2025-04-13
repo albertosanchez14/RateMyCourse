@@ -7,7 +7,6 @@ import {
 } from "../types/course";
 
 export const fetchCourse = async (courseId: string): Promise<FRCourseType> => {
-  console.log("Fetching course data for course", courseId);
   // Fetch course data from the server
   const response = await fetch(`http://localhost:8000/course/${courseId}`);
   if (!response.ok) {
@@ -15,7 +14,7 @@ export const fetchCourse = async (courseId: string): Promise<FRCourseType> => {
   }
 
   const course: DBCourseType = await response.json();
-  console.log("Course data fetched successfully", course);
+  
   // Transform the course data to frontend format
   const transformedCourse = transformCourse(course);
   return transformedCourse;

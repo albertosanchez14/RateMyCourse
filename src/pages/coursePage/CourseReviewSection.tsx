@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
 
 import { useAuth } from "../../hooks/useAuth";
-import { useCourseReviews } from "../../hooks/useReviews";
+import {
+  useCourseReviews,
+  useDeleteCourseReview,
+} from "../../hooks/useReviews";
 import { CourseReviewsType } from "../../types/reviews";
 
 import WriteFormSection from "./WriteFormSection";
@@ -40,6 +43,8 @@ export default function CommentSection({
   const [editingReview, setEditingReview] = useState<CourseReviewsType | null>(
     null
   );
+
+  const deleteReviewMutation = useDeleteCourseReview();
 
   // Load the couse reviews
   useEffect(() => {
@@ -110,6 +115,20 @@ export default function CommentSection({
     });
   };
 
+  // Handle delete review
+  const handleDeleteReview = (reviewId: string) => {
+    deleteReviewMutation.mutate(reviewId, {
+      onSuccess: () => {
+        courseComments.refetch();
+        setUserHasReview(false);
+      },
+      onError: (error) => {
+        console.error("Failed to delete review:", error);
+      }
+    });
+  };
+
+
   if (courseComments.isLoading) return <LoadingSpinnerScreen />;
   if (courseComments.error)
     return <div>Error: {courseComments.error.message}</div>;
@@ -176,6 +195,7 @@ export default function CommentSection({
                         setEditingReview(comment);
                         setShowWriteForm(true);
                       }}
+                      onDelete={handleDeleteReview}
                     />
                   </div>
                 ))

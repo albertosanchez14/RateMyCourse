@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import { MdClose } from "react-icons/md";
 
-import { addCourseReview, editCourseReview } from "../../hooks/useReviews";
+import {
+  useAddCourseReview,
+  useEditCourseReview,
+} from "../../hooks/useReviews";
 import {
   CourseReviewsType,
   FormCourseReviewType,
@@ -12,7 +15,7 @@ interface WriteReviewFormProps {
   courseId: string;
   professors: string[];
   onSuccess: () => void;
-  onClose: () => void; 
+  onClose: () => void;
   initialData?: CourseReviewsType | null;
 }
 
@@ -39,6 +42,10 @@ export default function WriteReviewForm({
   const [showSuccess, setShowSuccess] = useState<boolean>(false);
   const [showProfError, setShowProfError] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
+
+  // Mutations for adding and editing reviews
+  const addReviewMutation = useAddCourseReview();
+  const editReviewMutation = useEditCourseReview();
 
   const handleRating =
     (field: keyof RatingType) => (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -73,11 +80,17 @@ export default function WriteReviewForm({
         };
 
         if (initialData?.id) {
-          // Update existing review
-          await editCourseReview(initialData.id, review);
+          // Update existing review using the mutation
+          await editReviewMutation.mutateAsync({
+            reviewId: initialData.id,
+            review: review,
+          });
         } else {
-          // Add new review
-          await addCourseReview(courseId, review);
+          // Add new review using the mutation
+          await addReviewMutation.mutateAsync({
+            courseId,
+            review,
+          });
         }
 
         setShowSuccess(true);

@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "../hooks/useAuth";
 
 import supabase from "../utils/supabaseClient";
@@ -73,10 +73,9 @@ export const addCourseReview = async (
     .select("id")
     .eq("course_id", courseId)
     .eq("user_id", user.id)
-    .single();
+    .maybeSingle();
 
-  if (checkError && checkError.code !== "PGRST116") {
-    // PGRST116 is "no rows returned"
+  if (checkError) {
     throw new Error("Failed to check existing reviews");
   }
 
@@ -116,6 +115,32 @@ export const addCourseReview = async (
     throw new Error(`Failed to add review: ${insertError.message}`);
   }
 };
+
+// Create a new hook that uses the function but also handles cache invalidation
+export const useAddCourseReview = () => {
+  const queryClient = useQueryClient();
+  const { id } = useAuth();
+
+  return useMutation({
+    mutationFn: ({
+      courseId,
+      review,
+    }: {
+      courseId: string;
+      review: FormCourseReviewType;
+    }) => addCourseReview(courseId, review),
+    onSuccess: (_, { courseId }) => {
+      // Invalidate user reviews query when a new review is added
+      queryClient.invalidateQueries({ queryKey: ["userReviews"] });
+      // Invalidate user data which includes review count
+      queryClient.invalidateQueries({ queryKey: ["user", id] });
+      // Invalidate course reviews for the specific course
+      queryClient.invalidateQueries({ queryKey: ["comments", courseId] });
+    },
+  });
+};
+
+// ****************************************************************************
 
 export const editCourseReview = async (
   reviewId: string,
@@ -161,6 +186,75 @@ export const editCourseReview = async (
   if (updateError) {
     throw new Error(`Failed to update review: ${updateError.message}`);
   }
+};
+
+export const useEditCourseReview = () => {
+  const queryClient = useQueryClient();
+  const { id } = useAuth();
+  
+  return useMutation({
+    mutationFn: ({ reviewId, review }: { reviewId: string; review: FormCourseReviewType }) => 
+      editCourseReview(reviewId, review),
+    onSuccess: () => {
+      // Invalidate user reviews query when a review is edited
+      queryClient.invalidateQueries({ queryKey: ["userReviews"] });
+      // Also invalidate the specific course's reviews
+      queryClient.invalidateQueries({ queryKey: ["user", id] });
+    }
+  });
+};
+
+// ****************************************************************************
+
+// ...existing code...
+
+export const deleteCourseReview = async (reviewId: string): Promise<void> => {
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    throw new Error("You must be logged in to delete a review");
+  }
+
+  // Check if the review exists and belongs to the user
+  const { data: review, error: checkError } = await supabase
+    .from("course_reviews")
+    .select("course_id")
+    .eq("id", reviewId)
+    .eq("user_id", user.id)
+    .single();
+    
+  if (checkError) {
+    throw new Error("Review not found or you don't have permission to delete it");
+  }
+
+  // Delete the review
+  const { error: deleteError } = await supabase
+    .from("course_reviews")
+    .delete()
+    .eq("id", reviewId)
+    .eq("user_id", user.id); // Ensure only the owner can delete
+
+  if (deleteError) {
+    throw new Error(`Failed to delete review: ${deleteError.message}`);
+  }
+  
+  return review.course_id;
+};
+
+export const useDeleteCourseReview = () => {
+  const queryClient = useQueryClient();
+  const { id } = useAuth();
+  
+  return useMutation({
+    mutationFn: (reviewId: string) => deleteCourseReview(reviewId),
+    onSuccess: (courseId) => {
+      queryClient.invalidateQueries({ queryKey: ["userReviews"] });
+      queryClient.invalidateQueries({ queryKey: ["comments", courseId] });
+      queryClient.invalidateQueries({ queryKey: ["user", id] });
+    }
+  });
 };
 
 // ****************************************************************************

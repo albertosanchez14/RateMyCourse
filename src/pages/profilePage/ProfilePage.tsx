@@ -73,7 +73,7 @@ export default function ProfilePage() {
             <div className="flex items-center gap-6">
               <div className="relative">
                 <img
-                  src={profilePic}
+                  src={profilePic || "/defaultProfilePic.png"}
                   alt="Profile"
                   className="w-24 h-24 rounded-full border-2 border-gray-200"
                 />

@@ -1,10 +1,11 @@
-import { useRef } from "react";
-import { MdOutlineEdit } from "react-icons/md";
+import { useRef, useState } from "react";
+import { MdDeleteOutline, MdOutlineEdit } from "react-icons/md";
 
 import { useAuth } from "../../hooks/useAuth";
 import { RatingType } from "../../types/reviews";
 
 import RectangleChart from "../charts/RectangleChart";
+import ConfirmationModal from "../common/ConfirmationModal";
 
 interface ReviewProps {
   id: string;
@@ -16,6 +17,7 @@ interface ReviewProps {
   userId: string;
   professor?: string;
   onEdit?: () => void;
+  onDelete?: (id: string) => void;
 }
 
 export default function Review({
@@ -28,15 +30,28 @@ export default function Review({
   userId,
   professor,
   onEdit,
+  onDelete,
 }: ReviewProps) {
   const { user } = useAuth();
   const ratingContainerRef = useRef<HTMLDivElement>(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const printableDate = new Date(date)
     .toDateString()
     .split(" ")
     .slice(1)
     .join(" ");
+  
+  const handleDeleteClick = () => {
+    setShowDeleteModal(true);
+  };
+
+  const handleConfirmDelete = () => {
+    if (onDelete) {
+      onDelete(id);
+    }
+    setShowDeleteModal(false);
+  };
 
   return (
     <div
@@ -50,7 +65,7 @@ export default function Review({
         <div className="flex items-center gap-4">
           <div className="relative">
             <img
-              src={"/blank-profile-picture.png"}
+              src={"/defaultProfilePic.png"}
               alt="profile"
               className="w-12 h-12 rounded-full border-2 border-gray-100 shadow-sm"
             />
@@ -64,12 +79,24 @@ export default function Review({
           </div>
         </div>
         {user && user.userId === userId && (
-          <button
-            onClick={onEdit}
-            className="text-blue-500 hover:text-blue-700 text-sm font-medium transition-colors"
-          >
-            <MdOutlineEdit size={25}/>
-          </button>
+          <div className="flex space-x-2">
+            <button
+              onClick={onEdit}
+              className="text-blue-500 hover:text-blue-700 transition-colors"
+              aria-label="Edit review"
+              title="Edit review"
+            >
+              <MdOutlineEdit size={25} />
+            </button>
+            <button
+              onClick={handleDeleteClick}
+              className="text-red-500 hover:text-red-700 transition-colors"
+              aria-label="Delete review"
+              title="Delete review"
+            >
+              <MdDeleteOutline size={25} />
+            </button>
+          </div>
         )}
       </div>
 
@@ -117,6 +144,17 @@ export default function Review({
           </div>
         )}
       </div>
+
+      {/* Delete Confirmation Modal */}
+      <ConfirmationModal
+        isOpen={showDeleteModal}
+        title="Delete Review"
+        message="Are you sure you want to delete your review? This action cannot be undone."
+        confirmText="Delete"
+        cancelText="Cancel"
+        onConfirm={handleConfirmDelete}
+        onCancel={() => setShowDeleteModal(false)}
+      />
     </div>
   );
 }

@@ -152,8 +152,7 @@ export default function SignUpPage() {
             course_year: formData.courseYear,
             university: formData.university,
           },
-        ]);
-        console.log("Profile data:", asdf);
+        ]); 
 
         if (profileError) {
           console.error("Error saving profile:", profileError);

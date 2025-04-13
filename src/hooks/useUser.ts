@@ -36,15 +36,16 @@ const fetchUser = async (userId: string): Promise<User> => {
     throw new Error("User not found");
   }
 
-  // TODO: Uncomment this when the database is ready
   // Then fetch the liked courses for this user
   const { data: likedCoursesData, error: likedCoursesError } = await supabase
-    .from('profile_liked_courses')
+    .from("profile_liked_courses")
     .select(`course_id`)
-    .eq('profile_id', userId);
+    .eq("profile_id", userId);
 
   if (likedCoursesError) {
-    throw new Error(`Error fetching liked courses: ${likedCoursesError.message}`);
+    throw new Error(
+      `Error fetching liked courses: ${likedCoursesError.message}`
+    );
   }
   // Fetch the course data from the API
   // TODO: Migrate to supabase
@@ -79,7 +80,7 @@ export const useUser = () => {
     queryKey: ["user", user?.userId],
     queryFn: () => fetchUser(user?.userId || ""),
     enabled: !!user?.userId,
-    staleTime: 5 * 60 * 1000,
+    staleTime:0,
   });
 };
 
@@ -195,27 +196,39 @@ export const useLikeCourse = () => {
       likeCourseForUser(user?.userId || "", courseId),
     onMutate: async (courseId) => {
       // Cancel outgoing refetches to avoid overwriting our optimistic update
-      await queryClient.cancelQueries({ queryKey: ["courseLiked", user?.userId, courseId] });
-      
+      await queryClient.cancelQueries({
+        queryKey: ["courseLiked", user?.userId, courseId],
+      });
+
       // Store previous value
-      const previousValue = queryClient.getQueryData(["courseLiked", user?.userId, courseId]);
-      
+      const previousValue = queryClient.getQueryData([
+        "courseLiked",
+        user?.userId,
+        courseId,
+      ]);
+
       // Optimistically update to the new value
       queryClient.setQueryData(["courseLiked", user?.userId, courseId], true);
-      
+
       return { previousValue };
     },
     onError: (err, courseId, context) => {
       // If the mutation fails, restore the previous value
       queryClient.setQueryData(
-        ["courseLiked", user?.userId, courseId], 
+        ["courseLiked", user?.userId, courseId],
         context?.previousValue
       );
     },
     onSuccess: (_, courseId) => {
       // Only invalidate the specific course liked status and liked courses list
-      queryClient.invalidateQueries({ queryKey: ["courseLiked", user?.userId, courseId] });
-      queryClient.invalidateQueries({ queryKey: ["likedCourses", user?.userId] });
+      queryClient.invalidateQueries({
+        queryKey: ["courseLiked", user?.userId, courseId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["likedCourses", user?.userId],
+      });
+      // Also invalidate the user profile data
+      queryClient.invalidateQueries({ queryKey: ["user", user?.userId] });
     },
   });
 };
@@ -229,27 +242,39 @@ export const useUnlikeCourse = () => {
       unlikeCourseForUser(user?.userId || "", courseId),
     onMutate: async (courseId) => {
       // Cancel outgoing refetches to avoid overwriting our optimistic update
-      await queryClient.cancelQueries({ queryKey: ["courseLiked", user?.userId, courseId] });
-      
+      await queryClient.cancelQueries({
+        queryKey: ["courseLiked", user?.userId, courseId],
+      });
+
       // Store previous value
-      const previousValue = queryClient.getQueryData(["courseLiked", user?.userId, courseId]);
-      
+      const previousValue = queryClient.getQueryData([
+        "courseLiked",
+        user?.userId,
+        courseId,
+      ]);
+
       // Optimistically update to the new value
       queryClient.setQueryData(["courseLiked", user?.userId, courseId], false);
-      
+
       return { previousValue };
     },
     onError: (err, courseId, context) => {
       // If the mutation fails, restore the previous value
       queryClient.setQueryData(
-        ["courseLiked", user?.userId, courseId], 
+        ["courseLiked", user?.userId, courseId],
         context?.previousValue
       );
     },
     onSuccess: (_, courseId) => {
       // Only invalidate the specific course liked status and liked courses list
-      queryClient.invalidateQueries({ queryKey: ["courseLiked", user?.userId, courseId] });
-      queryClient.invalidateQueries({ queryKey: ["likedCourses", user?.userId] });
+      queryClient.invalidateQueries({
+        queryKey: ["courseLiked", user?.userId, courseId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["likedCourses", user?.userId],
+      });
+      // Also invalidate the user profile data
+      queryClient.invalidateQueries({ queryKey: ["user", user?.userId] });
     },
   });
 };
