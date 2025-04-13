@@ -14,7 +14,7 @@ export default function ProfilePage() {
     data: reviews,
     isLoading: isLoadingRev,
     error: errorRev,
-  } = useUserCourseReviews();  
+  } = useUserCourseReviews();
   const { data: user, isLoading: isLoadingUser, error: errorUser } = useUser();
 
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -149,9 +149,13 @@ export default function ProfilePage() {
               >
                 <div className="flex justify-between items-start mb-2">
                   <div>
-                    <Link to={`/course/${review.course_id.id}#reviews`}>
+                    <Link
+                      to={`/course/${review.course_id.id}#reviews`}
+                      className="font-medium text-[#646cff] hover:text-[#535bf2] 
+                      no-underline"
+                    >
                       <h3 className="font-semibold text-lg hover:underline">
-                        {review.course_id.title}
+                        {review.course_id.code} - {review.course_id.title}
                       </h3>
                     </Link>
                     <p className="text-sm text-gray-500">
@@ -178,26 +182,31 @@ export default function ProfilePage() {
         >
           <h2 className="text-xl font-bold mb-6">Liked Courses</h2>
           <div className="space-y-6">
-            {user.liked_courses && user.liked_courses.map((course) => (
-              <div
-                key={course.id}
-                className="border-b border-gray-100 last:border-0 pb-6 last:pb-0"
-              >
-                <div className="flex justify-between items-start">
-                  <div>
-                    <Link to={`/course/${course.id}`}>
-                      <h3 className="font-semibold text-lg hover:underline">
-                        {course.code} - {course.title}
-                      </h3>
-                    </Link>
+            {user.liked_courses &&
+              user.liked_courses.map((course) => (
+                <div
+                  key={course.id}
+                  className="border-b border-gray-100 last:border-0 pb-6 last:pb-0"
+                >
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <Link
+                        to={`/course/${course.id}`}
+                        className="font-medium text-[#646cff] hover:text-[#535bf2] 
+                        no-underline"
+                      >
+                        <h3 className="font-semibold text-lg hover:underline">
+                          {course.code} - {course.title}
+                        </h3>
+                      </Link>
+                    </div>
+                    <div className="bg-blue-50 text-blue-700 px-3 py-1 rounded-full font-semibold">
+                      {course.rating.overall}/5
+                    </div>
                   </div>
-                  <div className="bg-blue-50 text-blue-700 px-3 py-1 rounded-full font-semibold">
-                    {course.rating.overall}/5
-                  </div>
+                  <span className="text-gray-600">{course.degree.title}</span>
                 </div>
-                <span className="text-gray-600">{course.degree.title}</span>
-              </div>
-            ))}
+              ))}
             {user.liked_courses && user.liked_courses.length === 0 && (
               <p className="text-gray-500 col-span-full text-center py-4">
                 You haven't liked any courses yet

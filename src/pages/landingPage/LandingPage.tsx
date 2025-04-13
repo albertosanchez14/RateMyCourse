@@ -116,7 +116,8 @@ export default function LandingPage() {
         </div>
         {/* Scroll Arrow */}
         <div
-          className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce cursor-pointer"
+          className="absolute bottom-8 left-1/2 transform -translate-x-1/2 
+          animate-bounce cursor-pointer"
           onClick={scrollToFeatures}
         >
           <svg
@@ -163,7 +164,8 @@ export default function LandingPage() {
         <h2 className="text-3xl font-bold text-center mb-12">How It Works</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="text-center">
-            <div className="bg-blue-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+            <div className="bg-blue-100 rounded-full w-16 h-16 flex 
+            items-center justify-center mx-auto mb-4">
               <span className="text-2xl font-bold text-blue-600">1</span>
             </div>
             <h3 className="font-semibold mb-2">Search Courses</h3>
@@ -172,7 +174,8 @@ export default function LandingPage() {
             </p>
           </div>
           <div className="text-center">
-            <div className="bg-blue-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+            <div className="bg-blue-100 rounded-full w-16 h-16 flex 
+            items-center justify-center mx-auto mb-4">
               <span className="text-2xl font-bold text-blue-600">2</span>
             </div>
             <h3 className="font-semibold mb-2">Read Reviews</h3>
@@ -181,7 +184,8 @@ export default function LandingPage() {
             </p>
           </div>
           <div className="text-center">
-            <div className="bg-blue-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+            <div className="bg-blue-100 rounded-full w-16 h-16 flex 
+            items-center justify-center mx-auto mb-4">
               <span className="text-2xl font-bold text-blue-600">3</span>
             </div>
             <h3 className="font-semibold mb-2">Share Your Experience</h3>
@@ -201,7 +205,8 @@ export default function LandingPage() {
           </p>
           <Link
             to="/signup"
-            className="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-blue-50 transition-colors"
+            className="bg-white text-blue-600 px-8 py-3 rounded-lg 
+            font-semibold hover:bg-blue-50 transition-colors"
           >
             Sign Up Now
           </Link>

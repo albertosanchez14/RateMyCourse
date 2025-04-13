@@ -7,8 +7,16 @@ interface CourseCardProps {
 
 export default function CourseCard({ course }: CourseCardProps) {
   return (
-    <Link to={`/course/${course._id}`}>
-      <div className="bg-white rounded-lg shadow-md pl-6 pt-2 pb-2 hover:shadow-lg transition-shadow border-l-4 border-blue-500">
+    <Link
+      to={`/course/${course._id}`}
+      className="font-medium text-[#646cff] 
+    hover:text-[#535bf2] no-underline"
+    >
+      <div
+        className="bg-white rounded-lg shadow-md 
+      pl-6 pt-2 pb-2 hover:shadow-lg transition-shadow 
+      border-l-4 border-blue-500"
+      >
         <div className="flex items-start mb-1">
           <div className="flex items-start gap-2">
             <h2 className="text-lg">{course.code}</h2>

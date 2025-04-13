@@ -122,7 +122,10 @@ export default function SignUpPage() {
       if (error) {
         console.error("Detailed error:", error);
         if (error.message.includes("Database error")) {
-          setErrors({ general: "Unable to create account. Please try again later or contact tech@ratemycourse.com if the problem persists." });
+          setErrors({
+            general:
+              "Unable to create account. Please try again later or contact tech@ratemycourse.com if the problem persists.",
+          });
         } else {
           setErrors({ general: error.message });
         }
@@ -146,7 +149,7 @@ export default function SignUpPage() {
             course_year: formData.courseYear,
             university: formData.university,
           },
-        ]); 
+        ]);
 
         if (profileError) {
           console.error("Error saving profile:", profileError);
@@ -167,7 +170,10 @@ export default function SignUpPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center px-4">
+    <div
+      className="min-h-screen flex flex-col items-center 
+    justify-center px-4"
+    >
       <div className="text-center mb-8">
         <h1 className="text-3xl md:text-5xl font-bold mb-4">
           Join RateMyCourse
@@ -177,15 +183,22 @@ export default function SignUpPage() {
         </p>
       </div>
 
-      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+      <div
+        className="bg-white p-8 rounded-lg shadow-md 
+      w-full max-w-md"
+      >
         {successMessage ? (
           <div className="text-center">
-            <div className="mb-4 p-4 bg-green-100 text-green-800 rounded-md">
+            <div
+              className="mb-4 p-4 bg-green-100 text-green-800 
+            rounded-md"
+            >
               {successMessage}
             </div>
             <Link
               to="/login"
-              className="mt-4 inline-block text-blue-600 hover:text-blue-800"
+              className="mt-4 inline-block 
+              text-blue-600 hover:text-blue-800"
             >
               Go to Login
             </Link>
@@ -193,7 +206,10 @@ export default function SignUpPage() {
         ) : (
           <>
             {errors.general && (
-              <div className="mb-4 p-4 bg-red-100 text-red-800 rounded-md">
+              <div
+                className="mb-4 p-4 bg-red-100 
+              text-red-800 rounded-md"
+              >
                 {errors.general}
               </div>
             )}
@@ -203,7 +219,8 @@ export default function SignUpPage() {
                 <div>
                   <label
                     htmlFor="firstName"
-                    className="block text-sm font-medium text-gray-700 mb-1"
+                    className="block text-sm font-medium 
+                    text-gray-700 mb-1"
                   >
                     First Name
                   </label>
@@ -213,9 +230,11 @@ export default function SignUpPage() {
                     name="firstName"
                     value={formData.firstName}
                     onChange={handleChange}
-                    className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                      errors.firstName ? "border-red-500" : "border-gray-300"
-                    }`}
+                    className={`w-full px-3 py-2 border rounded-md focus:outline-none 
+                      focus:ring-2 focus:ring-blue-500 
+                      ${
+                        errors.firstName ? "border-red-500" : "border-gray-300"
+                      }`}
                     required
                   />
                   {errors.firstName && (
@@ -238,9 +257,11 @@ export default function SignUpPage() {
                     name="lastName"
                     value={formData.lastName}
                     onChange={handleChange}
-                    className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                      errors.lastName ? "border-red-500" : "border-gray-300"
-                    }`}
+                    className={`w-full px-3 py-2 border rounded-md 
+                      focus:outline-none focus:ring-2 focus:ring-blue-500 
+                      ${
+                        errors.lastName ? "border-red-500" : "border-gray-300"
+                      }`}
                     required
                   />
                   {errors.lastName && (
@@ -264,9 +285,9 @@ export default function SignUpPage() {
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
-                  className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                    errors.email ? "border-red-500" : "border-gray-300"
-                  }`}
+                  className={`w-full px-3 py-2 border rounded-md 
+                    focus:outline-none focus:ring-2 focus:ring-blue-500 
+                    ${errors.email ? "border-red-500" : "border-gray-300"}`}
                   required
                 />
                 {errors.email && (
@@ -287,9 +308,11 @@ export default function SignUpPage() {
                   name="university"
                   value={formData.university}
                   onChange={handleChange}
-                  className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                    errors.university ? "border-red-500" : "border-gray-300"
-                  }`}
+                  className={`w-full px-3 py-2 border rounded-md 
+                    focus:outline-none focus:ring-2 focus:ring-blue-500 
+                    ${
+                      errors.university ? "border-red-500" : "border-gray-300"
+                    }`}
                   required
                 />
                 {errors.university && (
@@ -313,9 +336,11 @@ export default function SignUpPage() {
                   onChange={
                     handleChange as React.ChangeEventHandler<HTMLSelectElement>
                   }
-                  className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                    errors.courseYear ? "border-red-500" : "border-gray-300"
-                  }`}
+                  className={`w-full px-3 py-2 border rounded-md 
+                    focus:outline-none focus:ring-2 focus:ring-blue-500 
+                    ${
+                      errors.courseYear ? "border-red-500" : "border-gray-300"
+                    }`}
                   required
                 >
                   <option value="">Select your year</option>
@@ -346,9 +371,9 @@ export default function SignUpPage() {
                   name="password"
                   value={formData.password}
                   onChange={handleChange}
-                  className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                    errors.password ? "border-red-500" : "border-gray-300"
-                  }`}
+                  className={`w-full px-3 py-2 border rounded-md 
+                    focus:outline-none focus:ring-2 focus:ring-blue-500 
+                    ${errors.password ? "border-red-500" : "border-gray-300"}`}
                   required
                   minLength={8}
                 />
@@ -370,11 +395,13 @@ export default function SignUpPage() {
                   name="confirmPassword"
                   value={formData.confirmPassword}
                   onChange={handleChange}
-                  className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                    errors.confirmPassword
-                      ? "border-red-500"
-                      : "border-gray-300"
-                  }`}
+                  className={`w-full px-3 py-2 border rounded-md 
+                    focus:outline-none focus:ring-2 focus:ring-blue-500 
+                    ${
+                      errors.confirmPassword
+                        ? "border-red-500"
+                        : "border-gray-300"
+                    }`}
                   required
                 />
                 {errors.confirmPassword && (

@@ -8,7 +8,11 @@ import {
 export default function Footer() {
   return (
     <footer className="w-full bg-[#f8f9fa] pt-12 pb-4 mt-16">
-      <div className="max-w-[1200px] mx-auto grid grid-cols-[2fr_1fr_1fr_1fr] gap-8 px-8 sm:grid-cols-[2fr_1fr_1fr_1fr] xs:grid-cols-[2fr_1fr]">
+      <div
+        className="max-w-[1200px] mx-auto grid 
+      grid-cols-[2fr_1fr_1fr_1fr] gap-8 px-8 
+      sm:grid-cols-[2fr_1fr_1fr_1fr] xs:grid-cols-[2fr_1fr]"
+      >
         <div className="flex flex-col gap-4">
           <h3 className="text-[#333] text-2xl m-0">RateMyCourse</h3>
           <p className="text-[#666] text-sm leading-6 m-0">
@@ -19,7 +23,9 @@ export default function Footer() {
               href="https://twitter.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-[#666] text-sm no-underline hover:text-[#0077b6] transition-colors duration-200"
+              className="text-sm transition-colors duration-200 
+              font-medium text-[#646cff] hover:text-[#535bf2] 
+              no-underline"
             >
               Twitter
             </a>
@@ -27,7 +33,9 @@ export default function Footer() {
               href="https://linkedin.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-[#666] text-sm no-underline hover:text-[#0077b6] transition-colors duration-200"
+              className="text-sm transition-colors duration-200 
+              font-medium text-[#646cff] hover:text-[#535bf2] 
+              no-underline"
             >
               LinkedIn
             </a>
@@ -35,7 +43,9 @@ export default function Footer() {
               href="https://github.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-[#666] text-sm no-underline hover:text-[#0077b6] transition-colors duration-200"
+              className="text-sm transition-colors duration-200 
+              font-medium text-[#646cff] hover:text-[#535bf2] 
+              no-underline"
             >
               GitHub
             </a>
@@ -48,7 +58,9 @@ export default function Footer() {
             <li>
               <Link
                 to={EXPLORE_PAGE_ROUTE + "?q=*&limit=1000"}
-                className="text-[#666] text-sm no-underline hover:text-[#0077b6] transition-colors duration-200"
+                className="text-sm transition-colors duration-200 
+                font-medium text-[#646cff] hover:text-[#535bf2] 
+                no-underline"
               >
                 Browse Courses
               </Link>
@@ -56,7 +68,9 @@ export default function Footer() {
             <li>
               <Link
                 to="/professors"
-                className="text-[#666] text-sm no-underline hover:text-[#0077b6] transition-colors duration-200"
+                className="text-sm transition-colors duration-200 
+                font-medium text-[#646cff] hover:text-[#535bf2] 
+                no-underline"
               >
                 Find Professors
               </Link>
@@ -64,7 +78,9 @@ export default function Footer() {
             <li>
               <Link
                 to="/departments"
-                className="text-[#666] text-sm no-underline hover:text-[#0077b6] transition-colors duration-200"
+                className="text-sm transition-colors duration-200 
+                font-medium text-[#646cff] hover:text-[#535bf2] 
+                no-underline"
               >
                 Departments
               </Link>
@@ -72,7 +88,9 @@ export default function Footer() {
             <li>
               <Link
                 to="/degrees"
-                className="text-[#666] text-sm no-underline hover:text-[#0077b6] transition-colors duration-200"
+                className="text-sm transition-colors duration-200 
+                font-medium text-[#646cff] hover:text-[#535bf2] 
+                no-underline"
               >
                 Degree Programs
               </Link>
@@ -86,7 +104,9 @@ export default function Footer() {
             <li>
               <Link
                 to="/help"
-                className="text-[#666] text-sm no-underline hover:text-[#0077b6] transition-colors duration-200"
+                className="text-sm transition-colors duration-200 
+                font-medium text-[#646cff] hover:text-[#535bf2] 
+                no-underline"
               >
                 Help Center
               </Link>
@@ -94,7 +114,9 @@ export default function Footer() {
             <li>
               <Link
                 to="/contact"
-                className="text-[#666] text-sm no-underline hover:text-[#0077b6] transition-colors duration-200"
+                className="text-sm transition-colors duration-200 
+                font-medium text-[#646cff] hover:text-[#535bf2] 
+                no-underline"
               >
                 Contact Us
               </Link>
@@ -102,7 +124,9 @@ export default function Footer() {
             <li>
               <Link
                 to="/guidelines"
-                className="text-[#666] text-sm no-underline hover:text-[#0077b6] transition-colors duration-200"
+                className="text-sm transition-colors duration-200 
+                font-medium text-[#646cff] hover:text-[#535bf2] 
+                no-underline"
               >
                 Community Guidelines
               </Link>
@@ -116,7 +140,9 @@ export default function Footer() {
             <li>
               <Link
                 to={PRIVACY_PAGE_ROUTE}
-                className="text-[#666] text-sm no-underline hover:text-[#0077b6] transition-colors duration-200"
+                className="text-sm transition-colors duration-200 
+                font-medium text-[#646cff] hover:text-[#535bf2] 
+                no-underline"
               >
                 Privacy Policy
               </Link>
@@ -124,7 +150,9 @@ export default function Footer() {
             <li>
               <Link
                 to="/terms"
-                className="text-[#666] text-sm no-underline hover:text-[#0077b6] transition-colors duration-200"
+                className="text-sm transition-colors duration-200 
+                font-medium text-[#646cff] hover:text-[#535bf2] 
+                no-underline"
               >
                 Terms of Service
               </Link>
@@ -132,7 +160,9 @@ export default function Footer() {
             <li>
               <Link
                 to={ABOUT_PAGE_ROUTE}
-                className="text-[#666] text-sm no-underline hover:text-[#0077b6] transition-colors duration-200"
+                className="text-sm transition-colors duration-200 
+                font-medium text-[#646cff] hover:text-[#535bf2] 
+                no-underline"
               >
                 About Us
               </Link>
@@ -141,7 +171,10 @@ export default function Footer() {
         </div>
       </div>
 
-      <div className="max-w-[1200px] mx-auto px-8 text-center border-t border-[#eee] mt-8 pt-8">
+      <div
+        className="max-w-[1200px] mx-auto px-8 text-center border-t 
+      border-[#eee] mt-8 pt-8"
+      >
         <p className="text-[#999] text-xs m-0">
           &copy; {new Date().getFullYear()} RateMyCourse. All rights reserved.
         </p>

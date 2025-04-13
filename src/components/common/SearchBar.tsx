@@ -50,7 +50,7 @@ export default function SearchBar({
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (!isOpen || (!results.length && event.key !== 'Enter')) return;
+    if (!isOpen || (!results.length && event.key !== "Enter")) return;
 
     switch (event.key) {
       case "ArrowDown":
@@ -106,7 +106,10 @@ export default function SearchBar({
       </svg>
 
       {isOpen && searchTerm.length > 0 && (
-        <div className="absolute w-full h-fit mt-1 bg-white border rounded-lg shadow-lg  overflow-y-hidden z-50">
+        <div
+          className="absolute w-full h-fit mt-1 bg-white border 
+        rounded-lg shadow-lg  overflow-y-hidden z-50"
+        >
           {isLoading ? (
             <div className="p-4 text-center text-gray-500">Loading...</div>
           ) : results.length > 0 ? (
@@ -121,7 +124,11 @@ export default function SearchBar({
                   }`}
                   onClick={() => handleResultClick(result)}
                 >
-                  <Link to={`/course/${result._id}`} className="block">
+                  <Link
+                    to={`/course/${result._id}`}
+                    className="block font-medium text-[#646cff] 
+                    hover:text-[#535bf2] no-underline"
+                  >
                     <div className="font-medium">
                       {result.code}-{result.title}
                     </div>
@@ -145,7 +152,9 @@ export default function SearchBar({
                 }}
               >
                 <Link to={`/explore?q=${searchTerm}`} className="block">
-                  <div className="font-medium text-purple-700">Explore all results</div>
+                  <div className="font-medium text-purple-700">
+                    Explore all results
+                  </div>
                 </Link>
               </li>
             </ul>

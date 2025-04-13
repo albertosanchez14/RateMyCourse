@@ -7,7 +7,9 @@ interface SearchResultsProps {
   filteredResults: SearchResult[];
 }
 
-export default function ResultsSection({ filteredResults }: SearchResultsProps) {
+export default function ResultsSection({
+  filteredResults,
+}: SearchResultsProps) {
   const [openSections, setOpenSections] = useState<{ [key: string]: boolean }>(
     {}
   );
@@ -46,9 +48,15 @@ export default function ResultsSection({ filteredResults }: SearchResultsProps) 
           <div className="flex items-center">
             <button
               onClick={() => toggleSection(degree)}
-              className="flex items-center gap-2 hover:bg-gray-100 rounded-lg p-2 w-full transition-colors duration-200"
+              className="flex items-center gap-2 
+              hover:bg-gray-100 rounded-lg p-2 w-full 
+              transition-colors duration-200"
             >
-              <span className="w-4 h-4 flex items-center justify-center text-gray-500 transition-transform duration-200">
+              <span
+                className="w-4 h-4 flex items-center 
+              justify-center text-gray-500 transition-transform 
+              duration-200"
+              >
                 {openSections[degree] ? "−" : "+"}
               </span>
               <span className="font-medium text-gray-800">{degree}</span>
@@ -57,10 +65,14 @@ export default function ResultsSection({ filteredResults }: SearchResultsProps) 
               </span>
             </button>
           </div>
-          <div 
-            className={`ml-6 pl-4 pr-6 border-l border-gray-200 overflow-hidden transition-all duration-300 ease-in-out ${
-              openSections[degree] ? 'max-h-[1000px] opacity-100 pb-4' : 'max-h-0 opacity-0 pb-0'
-            }`}
+          <div
+            className={`ml-6 pl-4 pr-6 border-l border-gray-200 
+              overflow-hidden transition-all duration-300 
+              ease-in-out ${
+                openSections[degree]
+                  ? "max-h-[1000px] opacity-100 pb-4"
+                  : "max-h-0 opacity-0 pb-0"
+              }`}
           >
             {courses.map((course) => (
               <div key={course._id} className="py-2">
