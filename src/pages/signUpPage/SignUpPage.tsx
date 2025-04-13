@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
 
 import { FcGoogle } from "react-icons/fc";
 import { IoArrowBack, IoArrowForward } from "react-icons/io5";
@@ -25,7 +26,7 @@ interface FormErrors {
   confirmPassword?: string;
   courseYear?: string;
   university?: string;
-  degree?: string; // Added degree field error
+  degree?: string;
   general?: string;
 }
 
@@ -45,6 +46,7 @@ export default function SignUpPage() {
   const [successMessage, setSuccessMessage] = useState("");
   const [currentStep, setCurrentStep] = useState(1);
   const totalSteps = 3;
+  const [direction, setDirection] = useState(1);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -147,6 +149,7 @@ export default function SignUpPage() {
     return newErrors;
   };
 
+  // Modify handleNextStep
   const handleNextStep = () => {
     const validationErrors = validateStep(currentStep);
 
@@ -156,19 +159,25 @@ export default function SignUpPage() {
     }
 
     if (currentStep < totalSteps) {
+      setDirection(1); // Going forward
       setCurrentStep(currentStep + 1);
       setErrors({});
     }
   };
 
+  // Modify handlePrevStep
   const handlePrevStep = () => {
     if (currentStep > 1) {
+      setDirection(-1); // Going backward
       setCurrentStep(currentStep - 1);
       setErrors({});
     }
   };
 
   const handleStepClick = (step: number) => {
+    // Set direction based on which way we're moving
+    setDirection(step > currentStep ? 1 : -1);
+
     // Allow going to previous steps freely
     if (step < currentStep) {
       setCurrentStep(step);
@@ -265,230 +274,279 @@ export default function SignUpPage() {
   };
 
   const renderStepContent = () => {
-    switch (currentStep) {
-      case 1:
-        return (
-          <div className="space-y-4">
-            <h2 className="text-xl font-semibold mb-4">Personal Information</h2>
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label
-                  htmlFor="firstName"
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                >
-                  First Name
-                </label>
-                <input
-                  type="text"
-                  id="firstName"
-                  name="firstName"
-                  value={formData.firstName}
-                  onChange={handleChange}
-                  className={`w-full px-3 py-2 border rounded-md focus:outline-none 
+    const slideVariants = {
+      initial: {
+        x: direction > 0 ? 300 : -300,
+        opacity: 0,
+      },
+      animate: {
+        x: 0,
+        opacity: 1,
+        transition: { type: "spring", stiffness: 300, damping: 30 },
+      },
+      exit: {
+        x: direction > 0 ? -300 : 300,
+        opacity: 0,
+        transition: { type: "spring", stiffness: 300, damping: 30 },
+      },
+    };
+
+    return (
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={currentStep}
+          initial="initial"
+          animate="animate"
+          exit="exit"
+          variants={slideVariants}
+        >
+          {(() => {
+            switch (currentStep) {
+              case 1:
+                return (
+                  <div className="space-y-4">
+                    <h2 className="text-xl font-semibold mb-4">
+                      Personal Information
+                    </h2>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label
+                          htmlFor="firstName"
+                          className="block text-sm font-medium text-gray-700 mb-1"
+                        >
+                          First Name
+                        </label>
+                        <input
+                          type="text"
+                          id="firstName"
+                          name="firstName"
+                          value={formData.firstName}
+                          onChange={handleChange}
+                          className={`w-full px-3 py-2 border rounded-md focus:outline-none 
                     focus:ring-2 focus:ring-blue-500 
                     ${errors.firstName ? "border-red-500" : "border-gray-300"}`}
-                  required
-                />
-                {errors.firstName && (
-                  <p className="text-red-500 text-xs mt-1">
-                    {errors.firstName}
-                  </p>
-                )}
-              </div>
+                          required
+                        />
+                        {errors.firstName && (
+                          <p className="text-red-500 text-xs mt-1">
+                            {errors.firstName}
+                          </p>
+                        )}
+                      </div>
 
-              <div>
-                <label
-                  htmlFor="lastName"
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                >
-                  Last Name
-                </label>
-                <input
-                  type="text"
-                  id="lastName"
-                  name="lastName"
-                  value={formData.lastName}
-                  onChange={handleChange}
-                  className={`w-full px-3 py-2 border rounded-md focus:outline-none 
+                      <div>
+                        <label
+                          htmlFor="lastName"
+                          className="block text-sm font-medium text-gray-700 mb-1"
+                        >
+                          Last Name
+                        </label>
+                        <input
+                          type="text"
+                          id="lastName"
+                          name="lastName"
+                          value={formData.lastName}
+                          onChange={handleChange}
+                          className={`w-full px-3 py-2 border rounded-md focus:outline-none 
                     focus:ring-2 focus:ring-blue-500 
                     ${errors.lastName ? "border-red-500" : "border-gray-300"}`}
-                  required
-                />
-                {errors.lastName && (
-                  <p className="text-red-500 text-xs mt-1">{errors.lastName}</p>
-                )}
-              </div>
-            </div>
+                          required
+                        />
+                        {errors.lastName && (
+                          <p className="text-red-500 text-xs mt-1">
+                            {errors.lastName}
+                          </p>
+                        )}
+                      </div>
+                    </div>
 
-            <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium text-gray-700 mb-1"
-              >
-                Email
-              </label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                className={`w-full px-3 py-2 border rounded-md focus:outline-none 
+                    <div>
+                      <label
+                        htmlFor="email"
+                        className="block text-sm font-medium text-gray-700 mb-1"
+                      >
+                        Email
+                      </label>
+                      <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        value={formData.email}
+                        onChange={handleChange}
+                        className={`w-full px-3 py-2 border rounded-md focus:outline-none 
                   focus:ring-2 focus:ring-blue-500 
                   ${errors.email ? "border-red-500" : "border-gray-300"}`}
-                required
-              />
-              {errors.email && (
-                <p className="text-red-500 text-xs mt-1">{errors.email}</p>
-              )}
-            </div>
-          </div>
-        );
-      case 2:
-        return (
-          <div className="space-y-4">
-            <h2 className="text-xl font-semibold mb-4">Academic Information</h2>
-            <div>
-              <label
-                htmlFor="university"
-                className="block text-sm font-medium text-gray-700 mb-1"
-              >
-                University
-              </label>
-              <input
-                type="text"
-                id="university"
-                name="university"
-                value={formData.university}
-                onChange={handleChange}
-                className={`w-full px-3 py-2 border rounded-md focus:outline-none 
+                        required
+                      />
+                      {errors.email && (
+                        <p className="text-red-500 text-xs mt-1">
+                          {errors.email}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                );
+              case 2:
+                return (
+                  <div className="space-y-4">
+                    <h2 className="text-xl font-semibold mb-4">
+                      Academic Information
+                    </h2>
+                    <div>
+                      <label
+                        htmlFor="university"
+                        className="block text-sm font-medium text-gray-700 mb-1"
+                      >
+                        University
+                      </label>
+                      <input
+                        type="text"
+                        id="university"
+                        name="university"
+                        value={formData.university}
+                        onChange={handleChange}
+                        className={`w-full px-3 py-2 border rounded-md focus:outline-none 
                   focus:ring-2 focus:ring-blue-500 
                   ${errors.university ? "border-red-500" : "border-gray-300"}`}
-                required
-              />
-              {errors.university && (
-                <p className="text-red-500 text-xs mt-1">{errors.university}</p>
-              )}
-            </div>
+                        required
+                      />
+                      {errors.university && (
+                        <p className="text-red-500 text-xs mt-1">
+                          {errors.university}
+                        </p>
+                      )}
+                    </div>
 
-            <div>
-              <label
-                htmlFor="degree"
-                className="block text-sm font-medium text-gray-700 mb-1"
-              >
-                Degree
-              </label>
-              <input
-                type="text"
-                id="degree"
-                name="degree"
-                value={formData.degree}
-                onChange={handleChange}
-                placeholder="e.g., Computer Science, Business Administration"
-                className={`w-full px-3 py-2 border rounded-md focus:outline-none 
+                    <div>
+                      <label
+                        htmlFor="degree"
+                        className="block text-sm font-medium text-gray-700 mb-1"
+                      >
+                        Degree
+                      </label>
+                      <input
+                        type="text"
+                        id="degree"
+                        name="degree"
+                        value={formData.degree}
+                        onChange={handleChange}
+                        placeholder="e.g., Computer Science, Business Administration"
+                        className={`w-full px-3 py-2 border rounded-md focus:outline-none 
                   focus:ring-2 focus:ring-blue-500 
                   ${errors.degree ? "border-red-500" : "border-gray-300"}`}
-                required
-              />
-              {errors.degree && (
-                <p className="text-red-500 text-xs mt-1">{errors.degree}</p>
-              )}
-            </div>
+                        required
+                      />
+                      {errors.degree && (
+                        <p className="text-red-500 text-xs mt-1">
+                          {errors.degree}
+                        </p>
+                      )}
+                    </div>
 
-            <div>
-              <label
-                htmlFor="courseYear"
-                className="block text-sm font-medium text-gray-700 mb-1"
-              >
-                Course Year
-              </label>
-              <select
-                id="courseYear"
-                name="courseYear"
-                value={formData.courseYear}
-                onChange={
-                  handleChange as React.ChangeEventHandler<HTMLSelectElement>
-                }
-                className={`w-full px-3 py-2 border rounded-md focus:outline-none 
+                    <div>
+                      <label
+                        htmlFor="courseYear"
+                        className="block text-sm font-medium text-gray-700 mb-1"
+                      >
+                        Course Year
+                      </label>
+                      <select
+                        id="courseYear"
+                        name="courseYear"
+                        value={formData.courseYear}
+                        onChange={
+                          handleChange as React.ChangeEventHandler<HTMLSelectElement>
+                        }
+                        className={`w-full px-3 py-2 border rounded-md focus:outline-none 
                   focus:ring-2 focus:ring-blue-500 
                   ${errors.courseYear ? "border-red-500" : "border-gray-300"}`}
-                required
-              >
-                <option value="">Select your year</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="Graduate">Graduate</option>
-              </select>
-              {errors.courseYear && (
-                <p className="text-red-500 text-xs mt-1">{errors.courseYear}</p>
-              )}
-            </div>
-          </div>
-        );
-      case 3:
-        return (
-          <div className="space-y-4">
-            <h2 className="text-xl font-semibold mb-4">Set Your Password</h2>
-            <div>
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium text-gray-700 mb-1"
-              >
-                Password
-              </label>
-              <input
-                type="password"
-                id="password"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                className={`w-full px-3 py-2 border rounded-md focus:outline-none 
+                        required
+                      >
+                        <option value="">Select your year</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="Graduate">Graduate</option>
+                      </select>
+                      {errors.courseYear && (
+                        <p className="text-red-500 text-xs mt-1">
+                          {errors.courseYear}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                );
+              case 3:
+                return (
+                  <div className="space-y-4">
+                    <h2 className="text-xl font-semibold mb-4">
+                      Set Your Password
+                    </h2>
+                    <div>
+                      <label
+                        htmlFor="password"
+                        className="block text-sm font-medium text-gray-700 mb-1"
+                      >
+                        Password
+                      </label>
+                      <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        value={formData.password}
+                        onChange={handleChange}
+                        className={`w-full px-3 py-2 border rounded-md focus:outline-none 
                   focus:ring-2 focus:ring-blue-500 
                   ${errors.password ? "border-red-500" : "border-gray-300"}`}
-                required
-                minLength={8}
-              />
-              {errors.password && (
-                <p className="text-red-500 text-xs mt-1">{errors.password}</p>
-              )}
-            </div>
+                        required
+                        minLength={8}
+                      />
+                      {errors.password && (
+                        <p className="text-red-500 text-xs mt-1">
+                          {errors.password}
+                        </p>
+                      )}
+                    </div>
 
-            <div>
-              <label
-                htmlFor="confirmPassword"
-                className="block text-sm font-medium text-gray-700 mb-1"
-              >
-                Confirm Password
-              </label>
-              <input
-                type="password"
-                id="confirmPassword"
-                name="confirmPassword"
-                value={formData.confirmPassword}
-                onChange={handleChange}
-                className={`w-full px-3 py-2 border rounded-md focus:outline-none 
+                    <div>
+                      <label
+                        htmlFor="confirmPassword"
+                        className="block text-sm font-medium text-gray-700 mb-1"
+                      >
+                        Confirm Password
+                      </label>
+                      <input
+                        type="password"
+                        id="confirmPassword"
+                        name="confirmPassword"
+                        value={formData.confirmPassword}
+                        onChange={handleChange}
+                        className={`w-full px-3 py-2 border rounded-md focus:outline-none 
                   focus:ring-2 focus:ring-blue-500 
                   ${
                     errors.confirmPassword
                       ? "border-red-500"
                       : "border-gray-300"
                   }`}
-                required
-              />
-              {errors.confirmPassword && (
-                <p className="text-red-500 text-xs mt-1">
-                  {errors.confirmPassword}
-                </p>
-              )}
-            </div>
-          </div>
-        );
-      default:
-        return null;
-    }
+                        required
+                      />
+                      {errors.confirmPassword && (
+                        <p className="text-red-500 text-xs mt-1">
+                          {errors.confirmPassword}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                );
+              default:
+                return null;
+            }
+          })()}
+        </motion.div>
+      </AnimatePresence>
+    );
   };
 
   return (
@@ -547,7 +605,11 @@ export default function SignUpPage() {
               </div>
             </div>
 
-            <form onSubmit={handleSubmit} noValidate className="flex flex-col h-full gap-4">
+            <form
+              onSubmit={handleSubmit}
+              noValidate
+              className="flex flex-col h-full gap-4"
+            >
               {renderStepContent()}
 
               {currentStep > 1 ? (
