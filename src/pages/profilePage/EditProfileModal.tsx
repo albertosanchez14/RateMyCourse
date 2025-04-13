@@ -1,140 +1,192 @@
-import { useState } from "react";
-import { MdClose } from "react-icons/md";
+import React, { useState } from "react";
+
+import { MdClose, MdExpandMore } from "react-icons/md";
+
+import useDegrees from "../../hooks/useDegrees";
 
 interface EditProfileModalProps {
   user: {
-    name: string;
-    email: string;
-    university: string;
+    full_name: string;
     yearOfStudy: number;
     degree: string;
+    university: string;
   };
   isOpen: boolean;
   onClose: () => void;
   onSave: (userData: {
-    name: string;
     yearOfStudy: number;
     degree: string;
     university: string;
   }) => void;
+  isLoading?: boolean;
+  error?: string | null;
 }
 
-export function EditProfileModal({
+export const EditProfileModal: React.FC<EditProfileModalProps> = ({
   user,
   isOpen,
   onClose,
   onSave,
-}: EditProfileModalProps) {
+  isLoading = false,
+  error = null,
+}) => {
   const [formData, setFormData] = useState({
-    name: user.name,
     yearOfStudy: user.yearOfStudy,
     degree: user.degree,
     university: user.university,
   });
+  const { data: degrees, isLoading: isLoadingDegrees } = useDegrees(
+    formData.university
+  );
 
-  if (!isOpen) return null;
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSave(formData);
   };
 
+  if (!isOpen) return null;
+
   return (
-    <>
-      {/* Backdrop with blur effect */}
-      <div
-        className="fixed inset-0 bg-black/30 backdrop-blur-sm z-40"
-        onClick={onClose}
-      />
-
-      {/* Modal */}
-      <div className="fixed inset-0 flex items-center justify-center z-50 p-4">
-        <div
-          className="bg-white rounded-xl p-8 w-full max-w-md relative shadow-xl"
-          onClick={(e) => e.stopPropagation()}
-        >
-          <button
-            onClick={onClose}
-            className="absolute right-4 top-4 text-gray-500 hover:text-gray-700"
-          >
-            <MdClose className="w-6 h-6" />
-          </button>
-
-          <h2 className="text-2xl font-bold mb-6">Edit Profile</h2>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Name
-              </label>
-              <input
-                type="text"
-                value={formData.name}
-                onChange={(e) =>
-                  setFormData({ ...formData, name: e.target.value })
-                }
-                className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
-              />
+    <div
+      className="fixed inset-0 backdrop-blur-sm bg-black/30 z-50 
+    flex items-center justify-center p-4"
+    >
+      <div className="bg-white rounded-lg shadow-xl w-full max-w-md">
+        <div className="p-6">
+          <div className="flex justify-between items-center">
+            <h2 className="text-xl font-bold text-gray-800">Edit Profile</h2>
+            <button
+              onClick={onClose}
+              className="p-1 hover:bg-gray-100 rounded-full transition-colors"
+              aria-label="Close form"
+              disabled={isLoading}
+            >
+              <MdClose className="text-gray-600 text-xl" />
+            </button>
+          </div>
+          {/* Display error message if present */}
+          {error && (
+            <div
+              className="mt-4 p-3 bg-red-50 border border-red-200 
+            text-red-700 rounded-md"
+            >
+              {error}
             </div>
+          )}
+          <form onSubmit={handleSubmit} className="space-y-4 mt-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium mb-1">
                 University
               </label>
-              <input
-                type="text"
-                value={formData.university}
-                onChange={(e) =>
-                  setFormData({ ...formData, university: e.target.value })
-                }
-                className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
-              />
+              <div className="relative">
+                <select
+                  name="university"
+                  value={formData.university}
+                  onChange={handleChange}
+                  className="w-full border rounded-lg px-3 py-2 appearance-none"
+                  required
+                >
+                  <option value="">Select your university</option>
+                  <option value="University Carlos III of Madrid">
+                    University Carlos III of Madrid
+                  </option>
+                </select>
+                <div
+                  className="absolute inset-y-0 right-0 flex items-center 
+                pr-2 pointer-events-none"
+                >
+                  <MdExpandMore className="text-gray-400" />
+                </div>
+              </div>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium mb-1">Degree</label>
+              <div className="relative">
+                <select
+                  name="degree"
+                  value={formData.degree}
+                  onChange={handleChange}
+                  className="w-full border rounded-lg px-3 py-2 appearance-none"
+                  required
+                >
+                  <option value="">Select your degree</option>
+                  {isLoadingDegrees ? (
+                    <option>Loading degrees...</option>
+                  ) : (
+                    degrees?.map((degree, index) => (
+                      <option key={index} value={degree}>
+                        {degree}
+                      </option>
+                    ))
+                  )}
+                </select>
+                <div
+                  className="absolute inset-y-0 right-0 flex items-center 
+                pr-2 pointer-events-none"
+                >
+                  <MdExpandMore className="text-gray-400" />
+                </div>
+              </div>
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">
                 Year of Study
               </label>
-              <input
-                type="number"
-                value={formData.yearOfStudy}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    yearOfStudy: Number(e.target.value),
-                  })
-                }
-                className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
-              />
+              <div className="relative">
+                <select
+                  name="yearOfStudy"
+                  value={formData.yearOfStudy}
+                  onChange={handleChange}
+                  className="w-full border rounded-lg px-3 py-2 appearance-none"
+                  required
+                >
+                  <option value="">Select your year</option>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                  <option value="Graduate">Graduate</option>
+                </select>
+                <div
+                  className="absolute inset-y-0 right-0 flex items-center 
+                pr-2 pointer-events-none"
+                >
+                  <MdExpandMore className="text-gray-400" />
+                </div>
+              </div>
             </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Degree Program
-              </label>
-              <input
-                type="text"
-                value={formData.degree}
-                onChange={(e) =>
-                  setFormData({ ...formData, degree: e.target.value })
-                }
-                className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
-              />
-            </div>
-            <div className="flex justify-end gap-4 mt-6">
+            <div className="flex justify-end gap-4">
               <button
                 type="button"
                 onClick={onClose}
-                className="px-4 py-2 text-gray-600 hover:text-gray-800"
+                className="bg-gray-300 px-4 py-2 rounded-lg"
+                disabled={isLoading}
               >
                 Cancel
               </button>
               <button
                 type="submit"
-                className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+                className={`bg-blue-500 text-white px-4 py-2 rounded-lg ${
+                  isLoading
+                    ? "opacity-70 cursor-not-allowed"
+                    : "hover:bg-blue-600"
+                }`}
+                disabled={isLoading}
               >
-                Save Changes
+                {isLoading ? "Saving..." : "Save"}
               </button>
             </div>
           </form>
         </div>
       </div>
-    </>
+    </div>
   );
-}
+};

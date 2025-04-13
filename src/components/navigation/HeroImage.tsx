@@ -52,7 +52,7 @@ export default function HeroImage() {
   }, []);
 
   return (
-    <div className="relative z-[9999]" ref={popupRef}>
+    <div className="relative z-[19]" ref={popupRef}>
       <button
         onClick={() => setIsPopupOpen(!isPopupOpen)}
         className="flex justify-center items-center focus:outline-none"

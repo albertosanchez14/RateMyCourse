@@ -85,6 +85,52 @@ export const useUser = () => {
 };
 
 // ****************************************************************************
+interface UserProfileUpdateData {
+  course_year: number;
+  degree: string;
+  university: string;
+}
+
+const updateUserProfile = async (userId: string, userData: UserProfileUpdateData) => {
+  const { error } = await supabase
+    .from("profiles")
+    .update({
+      course_year: userData.course_year,
+      degree: userData.degree,
+      university: userData.university,
+    })
+    .eq("user_id", userId);
+
+  if (error) {
+    throw new Error(`Failed to update profile: ${error.message}`);
+  }
+
+  return true;
+};
+
+export const useUpdateProfile = () => {
+  const { user } = useAuth();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (userData: {
+      yearOfStudy: number;
+      degree: string;
+      university: string;
+    }) =>
+      updateUserProfile(user?.userId || "", {
+        course_year: userData.yearOfStudy,
+        degree: userData.degree,
+        university: userData.university,
+      }),
+    onSuccess: () => {
+      // Invalidate and refetch the user data
+      queryClient.invalidateQueries({ queryKey: ["user", user?.userId] });
+    },
+  });
+};
+
+// ****************************************************************************
 // Fixed functions that don't use hooks directly
 
 // Helper functions that don't use React hooks

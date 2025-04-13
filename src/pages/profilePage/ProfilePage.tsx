@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { MdEdit, MdSchool, MdEmail, MdDateRange } from "react-icons/md";
 
 import { useUserCourseReviews } from "../../hooks/useReviews";
-import { useUser } from "../../hooks/useUser";
+import { useUpdateProfile, useUser } from "../../hooks/useUser";
 
 import LoadingSpinnerScreen from "../../components/loading/LoadingSpinnerScreen";
 import { EditProfileModal } from "./EditProfileModal";
@@ -16,8 +16,10 @@ export default function ProfilePage() {
     error: errorRev,
   } = useUserCourseReviews();
   const { data: user, isLoading: isLoadingUser, error: errorUser } = useUser();
+  const { mutate: updateProfile, isPending: isUpdatingProfile } = useUpdateProfile();
 
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [profilePic, setProfilePic] = useState<string>(() => {
     if (!user?.user_id) return "";
     return localStorage.getItem(`profilePic_${user.user_id}`) || "";
@@ -45,14 +47,19 @@ export default function ProfilePage() {
   }, [location.hash, document]);
 
   const handleSaveProfile = async (userData: {
-    name: string;
     yearOfStudy: number;
     degree: string;
     university: string;
   }) => {
-    // TODO: Implement API call to update user data
-    console.log("Saving user data:", userData);
-    setIsEditModalOpen(false);
+    updateProfile(userData, {
+      onSuccess: () => {
+        setIsEditModalOpen(false);
+      },
+      onError: (error) => {
+        const errorMsg = error instanceof Error ? error.message : "Failed to update profile";
+        setErrorMessage(errorMsg);
+      }
+    });
   };
 
   if (isLoadingRev || isLoadingUser) return <LoadingSpinnerScreen />;
@@ -109,12 +116,22 @@ export default function ProfilePage() {
               Edit Profile
             </button>
 
-            {/* <EditProfileModal
-              user={user}
+            <EditProfileModal
+              user={{
+                full_name: user.full_name,
+                yearOfStudy: user.course_year ? Number(user.course_year) : 0,
+                degree: user.degree ?? '',
+                university: user.university ?? '',
+              }}
               isOpen={isEditModalOpen}
-              onClose={() => setIsEditModalOpen(false)}
+              onClose={() => {
+                setErrorMessage(null);
+                setIsEditModalOpen(false);
+              }}
               onSave={handleSaveProfile}
-            /> */}
+              isLoading={isUpdatingProfile}
+              error={errorMessage}
+            />
           </div>
         </div>
 
@@ -180,9 +197,10 @@ export default function ProfilePage() {
           </div>
 
           {/* Liked Courses Section */}
-          <div 
-          className="bg-white rounded-xl shadow-sm p-8 flex-1" 
-          id="fav-courses">
+          <div
+            className="bg-white rounded-xl shadow-sm p-8 flex-1"
+            id="fav-courses"
+          >
             <h2 className="text-xl font-bold mb-6">Liked Courses</h2>
             <div className="space-y-6">
               {user.liked_courses &&
