@@ -19,7 +19,7 @@ export default function Header() {
             <img
               src="/rmc_logo_transparentbg.png"
               alt="RateMyCouse Logo"
-              className="h-[50px] w-[50px] object-contain"
+              className="h-[55px] w-[60px]"
             />
           </div>
         </Link>

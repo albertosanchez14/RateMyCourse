@@ -102,10 +102,18 @@ export default function LandingPage() {
       {/* Hero Section */}
       <section className="min-h-screen flex items-center pb-30">
         <div className="container mx-auto px-4">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4">
-            Rate My Course
-          </h1>
-          <p className="text-lg mb-8">
+          <div className="flex flex-row items-center gap-2 mb-2">
+            <img
+              src="/rmc_logo_transparentbg.png"
+              alt="RateMyCourse Logo"
+              className="h-[85px] w-[90px]"
+            />
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold">
+              Rate My Course
+            </h1>
+          </div>
+
+          <p className="text-lg mb-2">
             Find detailed information about university courses, share your
             experience, and help others make informed decisions.
           </p>
@@ -164,8 +172,10 @@ export default function LandingPage() {
         <h2 className="text-3xl font-bold text-center mb-12">How It Works</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="text-center">
-            <div className="bg-blue-100 rounded-full w-16 h-16 flex 
-            items-center justify-center mx-auto mb-4">
+            <div
+              className="bg-blue-100 rounded-full w-16 h-16 flex 
+            items-center justify-center mx-auto mb-4"
+            >
               <span className="text-2xl font-bold text-blue-600">1</span>
             </div>
             <h3 className="font-semibold mb-2">Search Courses</h3>
@@ -174,8 +184,10 @@ export default function LandingPage() {
             </p>
           </div>
           <div className="text-center">
-            <div className="bg-blue-100 rounded-full w-16 h-16 flex 
-            items-center justify-center mx-auto mb-4">
+            <div
+              className="bg-blue-100 rounded-full w-16 h-16 flex 
+            items-center justify-center mx-auto mb-4"
+            >
               <span className="text-2xl font-bold text-blue-600">2</span>
             </div>
             <h3 className="font-semibold mb-2">Read Reviews</h3>
@@ -184,8 +196,10 @@ export default function LandingPage() {
             </p>
           </div>
           <div className="text-center">
-            <div className="bg-blue-100 rounded-full w-16 h-16 flex 
-            items-center justify-center mx-auto mb-4">
+            <div
+              className="bg-blue-100 rounded-full w-16 h-16 flex 
+            items-center justify-center mx-auto mb-4"
+            >
               <span className="text-2xl font-bold text-blue-600">3</span>
             </div>
             <h3 className="font-semibold mb-2">Share Your Experience</h3>
@@ -199,6 +213,11 @@ export default function LandingPage() {
       {/* CTA Section */}
       <section>
         <div className="container mx-auto px-4 py-12 text-center">
+          <img
+            src="/rmc_logo_transparentbg.png"
+            alt="RateMyCourse Logo"
+            className="h-[100px] w-[100px] mx-auto mb-4"
+          />
           <h2 className="text-3xl font-bold mb-4">Ready to Get Started?</h2>
           <p className="mb-6">
             Join our community and start exploring courses today!
