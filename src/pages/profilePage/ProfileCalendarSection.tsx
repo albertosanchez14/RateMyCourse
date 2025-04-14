@@ -1,4 +1,5 @@
 import { useState, useMemo } from "react";
+import { MdDelete } from "react-icons/md";
 
 import { useUser } from "../../hooks/useUser";
 import { useEnrolled } from "../../hooks/useEnrolled";
@@ -9,7 +10,6 @@ import Calendar from "../../components/calendar/Calendar";
 import PickScheduleModal from "./PickScheduleModal";
 
 import { FREventType } from "../../types/course";
-import { FiMinus } from "react-icons/fi";
 
 export default function ProfileCalendarSection() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -117,7 +117,7 @@ export default function ProfileCalendarSection() {
                                 onClick={() => handleUnenroll(course.course_id)}
                                 className="flex text-red-500 hover:text-red-700 text-sm ml-auto"
                               >
-                                <FiMinus /> <span>Unenroll</span>
+                                <MdDelete size={20}/>
                               </button>
                             </div>
                           </div>

@@ -18,7 +18,6 @@ type WeekType = "Mon" | "Tue" | "Wed" | "Thu" | "Fri";
 export default function Calendar({
   events,
   showTitle,
-  hasConflicts,
   conflictDate,
 }: CalendarProps) {
   const weekDays: WeekType[] = ["Mon", "Tue", "Wed", "Thu", "Fri"];
