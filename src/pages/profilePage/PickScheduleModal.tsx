@@ -34,6 +34,16 @@ export default function PickScheduleModal({
   // For each selected course, fetch its details
   const { courseData } = useCourseData(selectedCourses);
 
+  // Disable body scroll when modal is open
+  useEffect(() => {
+    if (isOpen) {
+      const originalStyle = window.getComputedStyle(document.body).overflow;
+      document.body.style.overflow = "hidden";
+      return () => {
+        document.body.style.overflow = originalStyle;
+      };
+    }
+  }, [isOpen]);
   // Update calendar events when selected courses or groups change
   useEffect(() => {
     // Only update events when we have course data and selections
@@ -113,11 +123,11 @@ export default function PickScheduleModal({
   return (
     <div
       className="fixed inset-0 bg-black bg-opacity-50 
-    flex items-center justify-center z-50 overflow-y-auto"
+        flex items-center justify-center z-50 overflow-y-auto p-4"
     >
       <div
         className="bg-white rounded-xl shadow-xl w-full 
-      max-w-7xl max-h-[90vh] flex flex-col"
+          max-w-7xl max-h-[90vh] flex flex-col"
       >
         {/* Modal Header */}
         <div
@@ -137,11 +147,11 @@ export default function PickScheduleModal({
         </div>
 
         {/* Modal Content */}
-        <div className="flex flex-1 overflow-hidden">
+        <div className="flex flex-col md:flex-row flex-1 overflow-hidden">
           {/* Left Section: Course Selection */}
           <div
-            className="w-1/3 p-4 border-r border-gray-200 
-          overflow-y-auto"
+            className="w-full md:w-1/3 p-4 border-b md:border-b-0 md:border-r border-gray-200 
+            overflow-y-auto max-h-[60vh] md:max-h-none"
           >
             <FacultySelector
               selectedFaculty={selectedFaculty}
@@ -172,8 +182,8 @@ export default function PickScheduleModal({
           </div>
 
           {/* Right Section: Calendar */}
-          <div className="w-2/3 p-4 flex flex-col">
-            <div className="flex-1 overflow-y-auto">
+          <div className="w-full md:w-2/3 p-4 flex flex-col flex-grow overflow-hidden">
+            <div className="flex-grow overflow-auto h-[50vh] md:h-auto">
               <Calendar events={calendarEvents} />
             </div>
           </div>

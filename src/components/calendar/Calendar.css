@@ -1,10 +1,10 @@
 .weekly-calendar {
   display: flex;
   flex-direction: column;
-  min-width: 980px;
-  max-width: 980px;
+  width: 100%;
+  height: 100%; /* Add height: 100% */
+  overflow: hidden; /* Change from overflow-x: auto to overflow: hidden */
   --header-height: 3em;
-  flex-grow: 1;
 }
 
 
@@ -13,12 +13,16 @@
   justify-content: space-between;
   align-items: center;
   padding: 0.5em 0.5em 0.5em 2.5em;
+  flex-shrink: 0;
 }
 
 .calendar_body {
   display: grid;
   grid-template-columns: auto repeat(5, 1fr);
+  /* min-width: 650px; */
+  width: 100%;
   height: 100%;
+  overflow: auto;
 }
 
 .calendar_hours_label {
@@ -112,4 +116,19 @@
   color: #64748b;
   font-size: 0.875rem;
   font-weight: 600;
+}
+
+/* Add responsive styles for smaller screens */
+@media (max-width: 768px) {
+  .calendar_day_header_title {
+    font-size: 0.75rem;
+  }
+  
+  #hours_label_column span {
+    font-size: 0.65rem;
+  }
+  
+  .calendar_hour {
+    min-height: 80px;
+  }
 }
