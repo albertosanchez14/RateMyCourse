@@ -1,13 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-
 import { FcGoogle } from "react-icons/fc";
 import { IoArrowBack, IoArrowForward } from "react-icons/io5";
 import { MdExpandMore } from "react-icons/md";
 
 import useDegrees from "../../hooks/useDegrees";
 import supabase from "../../utils/supabaseClient";
+import { SIGN_IN_PAGE_ROUTE } from "../../Routes";
 
 interface FormData {
   firstName: string;
@@ -17,7 +17,7 @@ interface FormData {
   confirmPassword: string;
   courseYear: string;
   university: string;
-  degree: string; // Added degree field
+  degree: string;
 }
 
 interface FormErrors {
@@ -48,6 +48,7 @@ export default function SignUpPage() {
   );
   const [errors, setErrors] = useState<FormErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isGoogleAuth, setIsGoogleAuth] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
   const [currentStep, setCurrentStep] = useState(1);
   const totalSteps = 3;
@@ -56,17 +57,11 @@ export default function SignUpPage() {
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+    setFormData({ ...formData, [name]: value });
 
     // Clear error when user starts typing
     if (errors[name as keyof FormErrors]) {
-      setErrors({
-        ...errors,
-        [name]: undefined,
-      });
+      setErrors({ ...errors, [name]: undefined });
     }
   };
 
@@ -86,15 +81,11 @@ export default function SignUpPage() {
       }
     } else if (step === 2) {
       // Academic information validation
-      if (!formData.university.trim()) {
+      if (!formData.university.trim())
         newErrors.university = "University is required";
-      }
-      if (!formData.degree.trim()) {
-        newErrors.degree = "Degree is required";
-      }
-      if (!formData.courseYear.trim()) {
+      if (!formData.degree.trim()) newErrors.degree = "Degree is required";
+      if (!formData.courseYear.trim())
         newErrors.courseYear = "Course year is required";
-      }
     } else if (step === 3) {
       // Password validation
       if (!formData.password) {
@@ -119,44 +110,67 @@ export default function SignUpPage() {
     if (!formData.firstName.trim())
       newErrors.firstName = "First name is required";
     if (!formData.lastName.trim()) newErrors.lastName = "Last name is required";
-
     if (!formData.email.trim()) {
       newErrors.email = "Email is required";
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
       newErrors.email = "Email is invalid";
     }
-
     if (!formData.password) {
       newErrors.password = "Password is required";
     } else if (formData.password.length < 8) {
       newErrors.password = "Password must be at least 8 characters";
     }
-
     if (!formData.confirmPassword) {
       newErrors.confirmPassword = "Please confirm your password";
     } else if (formData.password !== formData.confirmPassword) {
       newErrors.confirmPassword = "Passwords do not match";
     }
-
-    if (!formData.university.trim()) {
+    if (!formData.university.trim())
       newErrors.university = "University is required";
-    }
-
-    if (!formData.degree.trim()) {
-      newErrors.degree = "Degree is required";
-    }
-
-    if (!formData.courseYear.trim()) {
+    if (!formData.degree.trim()) newErrors.degree = "Degree is required";
+    if (!formData.courseYear.trim())
       newErrors.courseYear = "Course year is required";
-    }
 
     return newErrors;
   };
 
-  // Modify handleNextStep
+  const validateAcademicInfo = (): FormErrors => {
+    const newErrors: FormErrors = {};
+    if (!formData.university.trim())
+      newErrors.university = "University is required";
+    if (!formData.degree.trim()) newErrors.degree = "Degree is required";
+    if (!formData.courseYear.trim())
+      newErrors.courseYear = "Course year is required";
+    return newErrors;
+  };
+
+  const handleGoogleSignUp = async () => {
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+          redirectTo: `${window.location.origin}/signup`,
+          queryParams: {
+            access_type: "offline",
+            prompt: "consent",
+          },
+        },
+      });
+
+      if (error) {
+        console.error("Google auth error:", error);
+        setErrors({
+          general: "Failed to authenticate with Google. Please try again.",
+        });
+      }
+    } catch (err) {
+      console.error("Unexpected error during Google sign-up:", err);
+      setErrors({ general: "An unexpected error occurred. Please try again." });
+    }
+  };
+
   const handleNextStep = () => {
     const validationErrors = validateStep(currentStep);
-
     if (Object.keys(validationErrors).length !== 0) {
       setErrors(validationErrors);
       return;
@@ -168,7 +182,6 @@ export default function SignUpPage() {
     }
   };
 
-  // Modify handlePrevStep
   const handlePrevStep = () => {
     if (currentStep > 1) {
       setCurrentStep(currentStep - 1);
@@ -194,12 +207,14 @@ export default function SignUpPage() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (currentStep !== totalSteps) {
+
+    if (currentStep !== totalSteps && !isGoogleAuth) {
       handleNextStep();
       return;
     }
 
-    const validationErrors = validate();
+    // For Google auth, we only need to validate academic information
+    const validationErrors = isGoogleAuth ? validateAcademicInfo() : validate();
 
     if (Object.keys(validationErrors).length !== 0) {
       setErrors(validationErrors);
@@ -210,57 +225,99 @@ export default function SignUpPage() {
       setIsSubmitting(true);
       setErrors({});
 
-      // Sign up with Supabase
-      const { data, error } = await supabase.auth.signUp({
-        email: formData.email,
-        password: formData.password,
-        options: {
-          data: {
-            first_name: formData.firstName,
-            last_name: formData.lastName,
-          },
-        },
-      });
-      if (error) {
-        console.error("Detailed error:", error);
-        if (error.message.includes("Database error")) {
-          setErrors({
-            general:
-              "Unable to create account. Please try again later or contact tech@ratemycourse.com if the problem persists.",
-          });
+      if (isGoogleAuth) {
+        // For Google auth, we just need to save profile info
+        const {
+          data: { session },
+        } = await supabase.auth.getSession();
+
+        if (session?.user) {
+          // Save additional user data to profiles table
+          const { error: profileError } = await supabase
+            .from("profiles")
+            .insert([
+              {
+                user_id: session.user.id,
+                first_name: formData.firstName,
+                last_name: formData.lastName,
+                full_name: `${formData.firstName} ${formData.lastName}`,
+                email: formData.email,
+                course_year: formData.courseYear,
+                university: formData.university,
+                degree: formData.degree,
+              },
+            ]);
+
+          if (profileError) {
+            console.error("Error saving profile:", profileError);
+            setErrors({ general: "Failed to save your profile information." });
+            return;
+          }
+
+          setSuccessMessage(
+            "Sign-up successful! You can now use RateMyCourse."
+          );
         } else {
-          setErrors({ general: error.message });
+          setErrors({
+            general: "Session expired. Please try signing up again.",
+          });
         }
-        return;
-      }
-
-      // Check if email confirmation is required
-      if (data?.user?.identities?.length === 0) {
-        setSuccessMessage(
-          "This email is already registered. Please check your inbox for the confirmation link or try logging in."
-        );
-      } else if (data?.user) {
-        // Save additional user data to profiles table
-        const { error: profileError } = await supabase.from("profiles").insert([
-          {
-            user_id: data.user.id,
-            first_name: formData.firstName,
-            last_name: formData.lastName,
-            full_name: `${formData.firstName} ${formData.lastName}`,
-            email: formData.email,
-            course_year: formData.courseYear,
-            university: formData.university,
-            degree: formData.degree, // Add degree to the profile data
+      } else {
+        // Regular email/password sign-up flow
+        const { data, error } = await supabase.auth.signUp({
+          email: formData.email,
+          password: formData.password,
+          options: {
+            data: {
+              first_name: formData.firstName,
+              last_name: formData.lastName,
+            },
           },
-        ]);
+        });
 
-        if (profileError) {
-          console.error("Error saving profile:", profileError);
+        if (error) {
+          console.error("Detailed error:", error);
+          if (error.message.includes("Database error")) {
+            setErrors({
+              general:
+                "Unable to create account. Please try again later or contact tech@ratemycourse.com if the problem persists.",
+            });
+          } else {
+            setErrors({ general: error.message });
+          }
+          return;
         }
 
-        setSuccessMessage(
-          "Sign-up successful! Please check your email to verify your account."
-        );
+        // Check if email confirmation is required
+        if (data?.user?.identities?.length === 0) {
+          setSuccessMessage(
+            "This email is already registered. Please check your inbox for the confirmation link or try logging in."
+          );
+        } else if (data?.user) {
+          // Save additional user data to profiles table
+          const { error: profileError } = await supabase
+            .from("profiles")
+            .insert([
+              {
+                user_id: data.user.id,
+                first_name: formData.firstName,
+                last_name: formData.lastName,
+                full_name: `${formData.firstName} ${formData.lastName}`,
+                email: formData.email,
+                course_year: formData.courseYear,
+                university: formData.university,
+                degree: formData.degree,
+              },
+            ]);
+
+          if (profileError) {
+            console.error("Error saving profile:", profileError);
+          }
+
+          setSuccessMessage(
+            "Sign-up successful! Please check your email to verify your account."
+          );
+        }
       }
     } catch (err) {
       console.error("Unexpected error during sign-up:", err);
@@ -272,6 +329,39 @@ export default function SignUpPage() {
     }
   };
 
+  useEffect(() => {
+    const checkUserSession = async () => {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+
+      // If we have a session and it's from Google auth
+      if (
+        session?.provider_token &&
+        session?.user?.app_metadata?.provider === "google"
+      ) {
+        setIsGoogleAuth(true);
+
+        // Pre-fill form with data from Google account
+        setFormData((prevData) => ({
+          ...prevData,
+          firstName:
+            session.user.user_metadata.full_name?.split(" ")?.[0] || "",
+          lastName: session.user.user_metadata.full_name?.split(" ")?.[1] || "",
+          email: session.user.email || "",
+          // Password fields not needed for Google auth
+          password: "google-auth-not-required",
+          confirmPassword: "google-auth-not-required",
+        }));
+
+        // Move to step 2 to collect academic information
+        setCurrentStep(2);
+      }
+    };
+
+    checkUserSession();
+  }, []);
+
   const renderStepContent = () => {
     const slideDirection = {
       initial: { x: 300, opacity: 0 },
@@ -281,15 +371,7 @@ export default function SignUpPage() {
     };
 
     return (
-      <div
-        className="relative overflow-hidden"
-        style={{
-          width: "100%",
-          height: "100%",
-          paddingRight: "0.5rem",
-          paddingLeft: "0.5rem",
-        }}
-      >
+      <div className="relative overflow-hidden w-full h-full px-2">
         <AnimatePresence mode="wait">
           <motion.div
             key={currentStep}
@@ -400,7 +482,9 @@ export default function SignUpPage() {
                   return (
                     <div className="space-y-4">
                       <h2 className="text-xl font-semibold mb-4">
-                        Academic Information
+                        {isGoogleAuth
+                          ? "Complete Your Profile"
+                          : "Academic Information"}
                       </h2>
                       <div className="relative">
                         <label
@@ -483,9 +567,7 @@ export default function SignUpPage() {
                           id="courseYear"
                           name="courseYear"
                           value={formData.courseYear}
-                          onChange={
-                            handleChange as React.ChangeEventHandler<HTMLSelectElement>
-                          }
+                          onChange={handleChange}
                           className="appearance-none w-full px-4 py-2 pr-10 h-10 text-sm font-medium text-gray-700 bg-white border 
                             border-gray-200 rounded-md hover:bg-gray-50 hover:border-gray-300 
                             transition-all duration-200 cursor-pointer 
@@ -597,17 +679,14 @@ export default function SignUpPage() {
         </p>
       </div>
 
-      <div
-        className="flex flex-col bg-white py-8 px-6 rounded-lg shadow-md 
-        w-full max-w-md min-h-[500px]"
-      >
+      <div className="flex flex-col bg-white py-8 px-6 rounded-lg shadow-md w-full max-w-md min-h-[500px]">
         {successMessage ? (
-          <div className="text-center">
+          <div className="text-center mt-auto mb-auto">
             <div className="mb-4 p-4 bg-green-100 text-green-800 rounded-md">
               {successMessage}
             </div>
             <Link
-              to="/login"
+              to={SIGN_IN_PAGE_ROUTE}
               className="mt-4 inline-block text-blue-600 hover:text-blue-800"
             >
               Go to Login
@@ -621,26 +700,29 @@ export default function SignUpPage() {
               </div>
             )}
 
-            <div className="mb-2 px-2">
-              <div className="flex justify-between items-center mb-4">
-                <div className="text-sm text-gray-500">
-                  Step {currentStep} of {totalSteps}
-                </div>
-                <div className="flex space-x-1">
-                  {Array.from({ length: totalSteps }, (_, i) => (
-                    <div
-                      key={i}
-                      className={`h-2 w-6 rounded-full ${
-                        i + 1 <= currentStep ? "bg-blue-600" : "bg-gray-200"
-                      } cursor-pointer`}
-                      onClick={() => handleStepClick(i + 1)}
-                      role="button"
-                      aria-label={`Go to step ${i + 1}`}
-                    ></div>
-                  ))}
+            {/* Step indicators - hide when using Google auth */}
+            {!isGoogleAuth && (
+              <div className="mb-2 px-2">
+                <div className="flex justify-between items-center mb-4">
+                  <div className="text-sm text-gray-500">
+                    Step {currentStep} of {totalSteps}
+                  </div>
+                  <div className="flex space-x-1">
+                    {Array.from({ length: totalSteps }, (_, i) => (
+                      <div
+                        key={i}
+                        className={`h-2 w-6 rounded-full ${
+                          i + 1 <= currentStep ? "bg-blue-600" : "bg-gray-200"
+                        } cursor-pointer`}
+                        onClick={() => handleStepClick(i + 1)}
+                        role="button"
+                        aria-label={`Go to step ${i + 1}`}
+                      ></div>
+                    ))}
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
 
             <form
               onSubmit={handleSubmit}
@@ -649,25 +731,35 @@ export default function SignUpPage() {
             >
               {renderStepContent()}
 
-              {currentStep > 1 ? (
+              {/* Different button layouts based on auth type and step */}
+              {isGoogleAuth ? (
+                <div className="flex justify-end mt-auto">
+                  <button
+                    type="submit"
+                    className="flex items-center justify-center bg-blue-600 
+                      text-white py-2 px-6 rounded-md hover:bg-blue-700
+                      focus:outline-none focus:ring-2 focus:ring-blue-500 
+                      focus:ring-offset-2 transition-colors disabled:opacity-70"
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting ? "Saving..." : "Save Profile"}
+                  </button>
+                </div>
+              ) : currentStep > 1 ? (
                 <div className="flex justify-between mt-auto">
-                  {currentStep > 1 ? (
-                    <button
-                      type="button"
-                      onClick={handlePrevStep}
-                      className="flex items-center px-4 py-2 text-sm text-blue-600 
+                  <button
+                    type="button"
+                    onClick={handlePrevStep}
+                    className="flex items-center px-4 py-2 text-sm text-blue-600 
                       hover:text-blue-800 focus:outline-none"
-                    >
-                      <IoArrowBack className="mr-1" /> Back
-                    </button>
-                  ) : (
-                    <div></div> // Empty div to maintain the flex spacing
-                  )}
+                  >
+                    <IoArrowBack className="mr-1" /> Back
+                  </button>
 
                   <button
                     type="submit"
                     className="flex items-center justify-center bg-blue-600 
-                    text-white py-2 px-4 rounded-md hover:bg-blue-700
+                      text-white py-2 px-4 rounded-md hover:bg-blue-700
                       focus:outline-none focus:ring-2 focus:ring-blue-500 
                       focus:ring-offset-2 transition-colors disabled:opacity-70 w-32"
                     disabled={isSubmitting}
@@ -689,9 +781,9 @@ export default function SignUpPage() {
                     <button
                       type="submit"
                       className="flex items-center justify-center bg-blue-600 
-                      text-white py-2 px-4 rounded-md hover:bg-blue-700
+                        text-white py-2 px-4 rounded-md hover:bg-blue-700
                         focus:outline-none focus:ring-2 focus:ring-blue-500 
-                        focus:ring-offset-2 transition-colors disabled:opacity-70 w-30"
+                        focus:ring-offset-2 transition-colors disabled:opacity-70"
                       disabled={isSubmitting}
                     >
                       Next <IoArrowForward className="ml-1" />
@@ -707,6 +799,7 @@ export default function SignUpPage() {
                   <div className="mt-6 w-full flex justify-center">
                     <button
                       type="button"
+                      onClick={handleGoogleSignUp}
                       className="flex justify-center items-center w-full py-2 px-4 
                         border border-gray-300 rounded-md shadow-sm bg-white 
                         text-sm font-medium text-gray-700 hover:bg-gray-50 gap-2"

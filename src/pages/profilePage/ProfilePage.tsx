@@ -1,22 +1,29 @@
 import { useEffect, useLayoutEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { MdEdit, MdSchool, MdEmail, MdDateRange } from "react-icons/md";
 
 import { useUserCourseReviews } from "../../hooks/useReviews";
 import { useUpdateProfile, useUser } from "../../hooks/useUser";
 
+import { SIGN_UP_PAGE_ROUTE } from "../../Routes";
+
 import LoadingSpinnerScreen from "../../components/loading/LoadingSpinnerScreen";
 import EditProfileModal from "./EditProfileModal";
 import ProfileCalendarSection from "./ProfileCalendarSection";
 
 export default function ProfilePage() {
+  const navigate = useNavigate();
   const {
     data: reviews,
     isLoading: isLoadingRev,
     error: errorRev,
   } = useUserCourseReviews();
-  const { data: user, isLoading: isLoadingUser, error: errorUser } = useUser();
+  const { 
+    data: user, 
+    isLoading: isLoadingUser, 
+    error: errorUser,
+  } = useUser();
   const { mutate: updateProfile, isPending: isUpdatingProfile } =
     useUpdateProfile();
 
@@ -26,6 +33,21 @@ export default function ProfilePage() {
     if (!user?.user_id) return "";
     return localStorage.getItem(`profilePic_${user.user_id}`) || "";
   });
+
+  useEffect(() => {
+    if (isLoadingUser) return;
+
+    if (!user) {
+      // User is not authenticated
+      navigate(SIGN_UP_PAGE_ROUTE, {
+        replace: true,
+        state: {
+          from: location.pathname,
+          error: "Please log in to view your profile",
+        },
+      });
+    }
+  }, [user, isLoadingUser, navigate]);
 
   // Set the profile picture when the user data is loaded
   useEffect(() => {

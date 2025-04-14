@@ -163,6 +163,34 @@ export default function LoginForm({
     }
   };
 
+  const handleGoogleSignIn = async () => {
+    try {
+      // Change the redirectTo URL to a dedicated callback route
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+          redirectTo: window.location.origin + "/auth/callback",
+          // You can store an intent to identify it's a login attempt
+          queryParams: {
+            intent: "login"
+          }
+        },
+      });
+      
+      if (error) {
+        console.error("Google sign-in error:", error);
+        setErrors({ general: "Failed to sign in with Google" });
+      } else {
+        // Show loading message while user completes OAuth flow
+        setIsSubmitting(true);
+        setSuccessMessage("Redirecting to Google for authentication...");
+      }
+    } catch (err) {
+      console.error("Unexpected error during Google sign-in:", err);
+      setErrors({ general: "An unexpected error occurred" });
+    }
+  };
+
   return (
     <div className={`bg-white rounded-lg ${className}`}>
       {successMessage ? (
@@ -265,28 +293,9 @@ export default function LoginForm({
               className="flex justify-center items-center w-full py-2 px-4 
               border border-gray-300 rounded-md shadow-sm bg-white 
               text-sm font-medium text-gray-700 hover:bg-gray-50 gap-2"
-              onClick={async () => {
-                try {
-                  const { error } = await supabase.auth.signInWithOAuth({
-                    provider: "google",
-                    options: {
-                      redirectTo: window.location.origin + "/dashboard",
-                    },
-                  });
-                  if (error) {
-                    console.error("Google sign-in error:", error);
-                    setErrors({ general: "Failed to sign in with Google" });
-                  }
-                } catch (err) {
-                  console.error(
-                    "Unexpected error during Google sign-in:",
-                    err
-                  );
-                  setErrors({ general: "An unexpected error occurred" });
-                }
-              }}
+              onClick={handleGoogleSignIn}
             >
-              <FcGoogle size={25}/>
+              <FcGoogle size={25} />
               Continue with Google
             </button>
           </div>

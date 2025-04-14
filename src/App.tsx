@@ -14,6 +14,7 @@ import ExplorePage from "./pages/explorePage";
 import LandingPage from "./pages/landingPage";
 import LoginPage from "./pages/loginPage";
 import SignUpPage from "./pages/signUpPage";
+import AuthCallbackPage from "./pages/authCallBackPage";
 import ProfilePage from "./pages/profilePage";
 import GuidelinesPage from "./pages/guidelinesPage";
 import PrivacyPage from "./pages/privacyPage";
@@ -42,6 +43,7 @@ import {
   HELP_PAGE_ROUTE,
   CONTACT_PAGE_ROUTE,
   TERMS_PAGE_ROUTE,
+  AUTH_CALLBACK_PAGE_ROUTE,
   // SETTINGS_PAGE_ROUTE,
 } from "./Routes";
 
@@ -71,6 +73,7 @@ function App() {
         <Routes>
           <Route path={LANDING_PAGE_ROUTE} element={<LandingPage />} />
           <Route path={SIGN_IN_PAGE_ROUTE} element={<LoginPage />} />
+          <Route path={AUTH_CALLBACK_PAGE_ROUTE} element={<AuthCallbackPage />} />
           <Route path={SIGN_UP_PAGE_ROUTE} element={<SignUpPage />} />
           <Route path={PROFILE_PAGE_ROUTE} element={<ProfilePage />} />
           {/* <Route
