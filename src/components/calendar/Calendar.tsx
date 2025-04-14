@@ -37,7 +37,7 @@ export default function Calendar({ events }: CalendarProps) {
   // Update startingDate when events are available
   useEffect(() => {
     if (events.length === 0) return;
-
+  
     // Find earliest event date
     let minDate = new Date(events[0].date);
     let maxDate = new Date(events[0].date);
@@ -48,12 +48,12 @@ export default function Calendar({ events }: CalendarProps) {
     });
     setMinDate(minDate);
     setMaxDate(maxDate);
-
+  
     // Adjust to Monday of that week
     const day = minDate.getDay();
     const diff = minDate.getDate() - day + (day === 0 ? -6 : 1);
     minDate.setDate(diff);
-
+  
     setStartingDate(minDate);
   }, [events]); // Only run when events change
 
@@ -68,7 +68,7 @@ export default function Calendar({ events }: CalendarProps) {
       Fri: startingDate.getDate() + 4,
     });
     setCurrentMonth(startingDate.toLocaleString("en-US", { month: "long" }));
-  }, [events, startingDate]);
+  }, [startingDate]);
 
   const renderRows = (date: Date) => {
     const rowElements = [];

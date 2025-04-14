@@ -22,14 +22,14 @@ interface EditProfileModalProps {
   error?: string | null;
 }
 
-export const EditProfileModal: React.FC<EditProfileModalProps> = ({
+export default function EditProfileModal({
   user,
   isOpen,
   onClose,
   onSave,
   isLoading = false,
   error = null,
-}) => {
+}: EditProfileModalProps) {
   const [formData, setFormData] = useState({
     yearOfStudy: user.yearOfStudy,
     degree: user.degree,
@@ -189,4 +189,4 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({
       </div>
     </div>
   );
-};
+}

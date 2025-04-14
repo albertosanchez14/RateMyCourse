@@ -28,55 +28,70 @@ export interface SearchResult {
 //   });
 // };
 
-export const useSearch = (initialTerm?: string, limit?: number) => {
+export const useSearch = (
+  initialTerm?: string,
+  limit?: number,
+  degree?: string | null
+) => {
   const [results, setResults] = useState<SearchResult[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState(initialTerm);
 
-  const searchItems = useCallback(async (term: string, limit:number) => {
-    setSearchTerm(term);
-    if (!term.trim()) {
-      setResults([]);
-      return;
-    }
-    if (!limit) {
-      limit = 10;
-    }
-
-    setIsLoading(true);
-    setError(null);
-
-    try {
-      const response = await fetch(
-        `http://localhost:8000/course/search?q=${encodeURIComponent(term)}&limit=${limit}`
-      );
-      
-      if (!response.ok) {
-        throw new Error(`Search failed: ${response.statusText}`);
+  const searchItems = useCallback(
+    async (term: string, limit: number, degree?: string | null) => {
+      setSearchTerm(term);
+      if (!term.trim()) {
+        setResults([]);
+        return;
+      }
+      if (!limit) {
+        limit = 10;
       }
 
-      const data: SearchResult[] = await response.json();
-      setResults(data);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred while searching');
-      setResults([]);
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
+      setIsLoading(true);
+      setError(null);
+
+      try {
+        // Construct URL with query parameters
+        let url = `http://localhost:8000/course/search?q=${encodeURIComponent(
+          term
+        )}&limit=${limit}`;
+        // Add degree filter if provided
+        if (degree) {
+          url += `&degree=${encodeURIComponent(degree)}`;
+        }
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error(`Search failed: ${response.statusText}`);
+        }
+        const data: SearchResult[] = await response.json();
+        setResults(data);
+      } catch (err) {
+        setError(
+          err instanceof Error
+            ? err.message
+            : "An error occurred while searching"
+        );
+        setResults([]);
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    []
+  );
 
   useEffect(() => {
     if (initialTerm && limit) {
-      searchItems(initialTerm, limit);
+      searchItems(initialTerm, limit, degree);
     }
-  }, [initialTerm, searchItems]);
+  }, [initialTerm, limit, degree, searchItems]);
 
   return {
     data: results,
     isLoading,
     error,
     searchItems,
-    searchTerm
+    searchTerm,
   };
 };

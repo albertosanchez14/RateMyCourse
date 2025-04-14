@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import {
   DBCourseType,
   DBEventType,
@@ -14,7 +14,7 @@ export const fetchCourse = async (courseId: string): Promise<FRCourseType> => {
   }
 
   const course: DBCourseType = await response.json();
-  
+
   // Transform the course data to frontend format
   const transformedCourse = transformCourse(course);
   return transformedCourse;
@@ -27,6 +27,50 @@ export const useCourse = (courseId: string) => {
     enabled: !!courseId,
   });
 };
+
+// ************************************************************************************************
+
+export const useCourseData = (
+  selectedCourses: Array<{ id: string; title: string }>
+) => {
+  // Stable reference to selectedCourseIds
+  const selectedCourseIds = selectedCourses.map((course) => course.id);
+  const coursesQueries = useQuery({
+    queryKey: ["courses", selectedCourseIds],
+    queryFn: async () => {
+      // If no courses selected, return empty object
+      if (selectedCourseIds.length === 0) return {};
+
+      // Create an object to store course data by ID
+      const courseData: Record<string, FRCourseType> = {};
+
+      // Fetch all courses in parallel
+      await Promise.all(
+        selectedCourses.map(async (course) => {
+          try {
+            const data = await fetchCourse(course.id);
+            courseData[course.id] = data;
+          } catch (error) {
+            console.error(`Error fetching course ${course.id}:`, error);
+          }
+        })
+      );
+
+      return courseData;
+    },
+    placeholderData: keepPreviousData,
+    enabled: selectedCourseIds.length > 0,
+  });
+
+  return {
+    courseData: coursesQueries.data || {},
+    isLoading: coursesQueries.isLoading,
+    isError: coursesQueries.isError,
+    error: coursesQueries.error,
+  };
+};
+
+// ************************************************************************************************
 
 /**
  * Transforms a course object by mapping its schedule to a new format.
