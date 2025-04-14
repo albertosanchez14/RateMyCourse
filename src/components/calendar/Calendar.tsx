@@ -9,10 +9,11 @@ import Event from "./Event";
 
 type CalendarProps = {
   events: Array<FREventType>;
+  showTitle?: boolean;
 };
 type WeekType = "Mon" | "Tue" | "Wed" | "Thu" | "Fri";
 
-export default function Calendar({ events }: CalendarProps) {
+export default function Calendar({ events, showTitle }: CalendarProps) {
   const weekDays: WeekType[] = ["Mon", "Tue", "Wed", "Thu", "Fri"];
   const [rows] = useState(6);
   const [currentMonth, setCurrentMonth] = useState("");
@@ -37,7 +38,7 @@ export default function Calendar({ events }: CalendarProps) {
   // Update startingDate when events are available
   useEffect(() => {
     if (events.length === 0) return;
-  
+
     // Find earliest event date
     let minDate = new Date(events[0].date);
     let maxDate = new Date(events[0].date);
@@ -48,12 +49,12 @@ export default function Calendar({ events }: CalendarProps) {
     });
     setMinDate(minDate);
     setMaxDate(maxDate);
-  
+
     // Adjust to Monday of that week
     const day = minDate.getDay();
     const diff = minDate.getDate() - day + (day === 0 ? -6 : 1);
     minDate.setDate(diff);
-  
+
     setStartingDate(minDate);
   }, [events]); // Only run when events change
 
@@ -95,14 +96,24 @@ export default function Calendar({ events }: CalendarProps) {
       } else {
         rowElements.push(
           <div key={j} className="calendar_hour">
-            {class_events.map((event, index) => (
-              <Event
-                key={index}
-                type={event.type}
-                groups={event.groups}
-                classroom={event.classroom}
-              />
-            ))}
+            {class_events.map((event, index) =>
+              showTitle ? (
+                <Event
+                  key={index}
+                  title={event.title}
+                  type={event.type}
+                  groups={event.groups}
+                  classroom={event.classroom}
+                />
+              ) : (
+                <Event
+                  key={index}
+                  type={event.type}
+                  groups={event.groups}
+                  classroom={event.classroom}
+                />
+              )
+            )}
           </div>
         );
       }
@@ -125,7 +136,8 @@ export default function Calendar({ events }: CalendarProps) {
       <div className="calendar_header">
         <button
           onClick={handlePrevWeek}
-          className="p-1 rounded-full hover:bg-gray-200 transition-colors"
+          className="p-1 rounded-full hover:bg-gray-200 
+          transition-colors"
           aria-label="Previous week"
         >
           <MdChevronLeft size={24} />
@@ -133,7 +145,8 @@ export default function Calendar({ events }: CalendarProps) {
         <h3 className="text-lg font-semibold">{currentMonth}</h3>
         <button
           onClick={handleNextWeek}
-          className="p-1 rounded-full hover:bg-gray-200 transition-colors"
+          className="p-1 rounded-full hover:bg-gray-200 
+          transition-colors"
           aria-label="Next week"
         >
           <MdChevronRight size={24} />

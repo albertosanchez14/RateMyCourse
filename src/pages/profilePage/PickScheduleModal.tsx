@@ -248,7 +248,7 @@ export default function PickScheduleModal({
           {/* Right Section: Calendar */}
           <div className="w-full md:w-2/3 p-4 flex flex-col flex-grow overflow-hidden">
             <div className="flex-grow overflow-auto h-[50vh] md:h-auto">
-              <Calendar events={calendarEvents} />
+              <Calendar events={calendarEvents} showTitle={true}/>
             </div>
           </div>
         </div>

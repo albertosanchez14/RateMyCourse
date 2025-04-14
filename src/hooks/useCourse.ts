@@ -83,7 +83,7 @@ const transformCourse = (course: DBCourseType): FRCourseType => {
   const transformedSchedule = course.schedule.map((schFaculty) => {
     return {
       faculty: schFaculty.faculty,
-      schedule: transformSchedule(schFaculty.schedule),
+      schedule: transformSchedule(schFaculty.schedule, course.title),
     };
   });
   const transformedCourse = { ...course, schedule: transformedSchedule };
@@ -96,7 +96,7 @@ const transformCourse = (course: DBCourseType): FRCourseType => {
  * @param schedule - An array of events from the database.
  * @returns An array of transformed events suitable for the frontend.
  */
-const transformSchedule = (schedule: DBEventType[]): FREventType[] => {
+const transformSchedule = (schedule: DBEventType[], title: string): FREventType[] => {
   const newEvents = schedule
     .map((event) => {
       const { sessions, ...rest } = event;
@@ -106,6 +106,7 @@ const transformSchedule = (schedule: DBEventType[]): FREventType[] => {
           week: session.weeks[index],
           date: date,
           classroom: session.classroom,
+          title: title,
         }));
       });
     })

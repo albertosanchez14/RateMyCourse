@@ -137,7 +137,7 @@ export default function ProfileCalendarSection() {
 
               {/* Calendar */}
               <div className="w-full md:w-3/4">
-                <Calendar events={calendarEvents} />
+                <Calendar events={calendarEvents} showTitle={true} />
               </div>
             </div>
           </div>

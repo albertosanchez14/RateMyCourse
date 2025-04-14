@@ -1,16 +1,13 @@
 import "./Event.css";
 
 type EventProps = {
+  title?: string;
   type: "Magistral" | "Practice" | "Laboratory";
   groups: Array<number>;
   classroom: string;
 };
 
-export default function Event({
-  type,
-  groups,
-  classroom,
-}: EventProps) {
+export default function Event({ title, type, groups, classroom }: EventProps) {
   const eventTypeClass = `event-type-${type.toLowerCase()}`;
 
   let backgroundColor = "white";
@@ -21,7 +18,7 @@ export default function Event({
   } else if (type == "Laboratory") {
     backgroundColor = "lightgreen";
   }
-  
+
   // Handle classroom display
   const defaultClassroom = "N/A";
   let displayAula = defaultClassroom;
@@ -36,7 +33,14 @@ export default function Event({
 
   return (
     <div className={`calendar-event ${eventTypeClass}`}>
-      <h4 className="font-semibold">{type}</h4>
+      {title ? (
+        <div className="mb-4">
+          <h4 className="font-semibold">{title}</h4>
+          <small>{type}</small>
+        </div>
+      ) : (
+        <h4 className="font-semibold">{type}</h4>
+      )}
       <div>
         <span id="calendar-event-groups">{groups.join(", ")}</span>
         <span id="calendar-event-classroom">{displayAula}</span>

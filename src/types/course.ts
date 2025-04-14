@@ -68,6 +68,7 @@ export type DBEventType = {
 
 // Add type definition for transformed event
 export type FREventType = {
+  title: string;
   type: "Magistral" | "Practice" | "Laboratory";
   groups: number[];
   week: number;

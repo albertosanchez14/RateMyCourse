@@ -11,6 +11,7 @@ import { SIGN_UP_PAGE_ROUTE } from "../../Routes";
 import LoadingSpinnerScreen from "../../components/loading/LoadingSpinnerScreen";
 import EditProfileModal from "./EditProfileModal";
 import ProfileCalendarSection from "./ProfileCalendarSection";
+import { useAuth } from "../../hooks/useAuth";
 
 export default function ProfilePage() {
   const navigate = useNavigate();
@@ -24,6 +25,7 @@ export default function ProfilePage() {
     isLoading: isLoadingUser, 
     error: errorUser,
   } = useUser();
+  const { isLoading: isLoadingAuth, isAuthenticated } = useAuth();
   const { mutate: updateProfile, isPending: isUpdatingProfile } =
     useUpdateProfile();
 
@@ -35,9 +37,9 @@ export default function ProfilePage() {
   });
 
   useEffect(() => {
-    if (isLoadingUser) return;
+    if (isLoadingAuth) return;
 
-    if (!user) {
+    if (!isAuthenticated) { //TODO: CHeck flow when logged out dont go to sign up page
       // User is not authenticated
       navigate(SIGN_UP_PAGE_ROUTE, {
         replace: true,
@@ -47,7 +49,7 @@ export default function ProfilePage() {
         },
       });
     }
-  }, [user, isLoadingUser, navigate]);
+  }, [isAuthenticated, isLoadingUser, navigate]);
 
   // Set the profile picture when the user data is loaded
   useEffect(() => {
