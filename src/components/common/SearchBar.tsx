@@ -5,10 +5,12 @@ import { useSearch, SearchResult } from "../../hooks/useSearch";
 
 interface SearchBarProps {
   placeholder?: string;
+  onResultClick?: (id: string, title: string) => void;
 }
 
 export default function SearchBar({
   placeholder = "Search courses...",
+  onResultClick,
 }: SearchBarProps) {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [isOpen, setIsOpen] = useState(false);
@@ -46,7 +48,13 @@ export default function SearchBar({
   const handleResultClick = (result: SearchResult) => {
     setSearchTerm(result.title);
     setIsOpen(false);
-    navigate(`/course/${result._id}`);
+    // If onResultClick is provided, call it with the result id and title
+    if (onResultClick) {
+      onResultClick(result._id, result.title);
+    } else {
+      // Default behavior - navigate to course page
+      navigate(`/course/${result._id}`);
+    }
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -124,20 +132,38 @@ export default function SearchBar({
                   }`}
                   onClick={() => handleResultClick(result)}
                 >
-                  <Link
-                    to={`/course/${result._id}`}
-                    className="block font-medium text-[#646cff] 
+                  {onResultClick ? (
+                    // Custom click handler version - just display content
+                    <div
+                      className="block font-medium text-[#646cff] 
                     hover:text-[#535bf2] no-underline"
-                  >
-                    <div className="font-medium">
-                      {result.code}-{result.title}
-                    </div>
-                    {result.degree_name && (
-                      <div className="text-sm text-gray-500">
-                        {result.degree_name}
+                    >
+                      <div className="font-medium">
+                        {result.code}-{result.title}
                       </div>
-                    )}
-                  </Link>
+                      {result.degree_name && (
+                        <div className="text-sm text-gray-500">
+                          {result.degree_name}
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    // Default version with router link
+                    <Link
+                      to={`/course/${result._id}`}
+                      className="block font-medium text-[#646cff] 
+                      hover:text-[#535bf2] no-underline"
+                    >
+                      <div className="font-medium">
+                        {result.code}-{result.title}
+                      </div>
+                      {result.degree_name && (
+                        <div className="text-sm text-gray-500">
+                          {result.degree_name}
+                        </div>
+                      )}
+                    </Link>
+                  )}
                 </li>
               ))}
               <li

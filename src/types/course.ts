@@ -76,3 +76,9 @@ export type FREventType = {
   date: string;
   classroom: string;
 };
+
+export interface EnrolledCourse {
+  profile_id: string;
+  course_id: string;
+  enrolled_at: string;
+}

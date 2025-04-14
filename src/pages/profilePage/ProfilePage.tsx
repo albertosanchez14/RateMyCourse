@@ -7,7 +7,8 @@ import { useUserCourseReviews } from "../../hooks/useReviews";
 import { useUpdateProfile, useUser } from "../../hooks/useUser";
 
 import LoadingSpinnerScreen from "../../components/loading/LoadingSpinnerScreen";
-import { EditProfileModal } from "./EditProfileModal";
+import EditProfileModal from "./EditProfileModal";
+import ProfileCalendarSection from "./ProfileCalendarSection";
 
 export default function ProfilePage() {
   const {
@@ -16,7 +17,8 @@ export default function ProfilePage() {
     error: errorRev,
   } = useUserCourseReviews();
   const { data: user, isLoading: isLoadingUser, error: errorUser } = useUser();
-  const { mutate: updateProfile, isPending: isUpdatingProfile } = useUpdateProfile();
+  const { mutate: updateProfile, isPending: isUpdatingProfile } =
+    useUpdateProfile();
 
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -56,9 +58,10 @@ export default function ProfilePage() {
         setIsEditModalOpen(false);
       },
       onError: (error) => {
-        const errorMsg = error instanceof Error ? error.message : "Failed to update profile";
+        const errorMsg =
+          error instanceof Error ? error.message : "Failed to update profile";
         setErrorMessage(errorMsg);
-      }
+      },
     });
   };
 
@@ -120,8 +123,8 @@ export default function ProfilePage() {
               user={{
                 full_name: user.full_name,
                 yearOfStudy: user.course_year ? Number(user.course_year) : 0,
-                degree: user.degree ?? '',
-                university: user.university ?? '',
+                degree: user.degree ?? "",
+                university: user.university ?? "",
               }}
               isOpen={isEditModalOpen}
               onClose={() => {
@@ -154,6 +157,11 @@ export default function ProfilePage() {
             <p className="text-base text-gray-600">{user.degree}</p>
           </div>
         </div>
+
+        {/* Calendar Section */}
+        {/* <div className="bg-white rounded-xl shadow-sm p-8 mb-8"> */}
+          <ProfileCalendarSection />
+        {/* </div> */}
 
         <div className="flex flex-row gap-8">
           {/* Reviews Section */}
