@@ -9,10 +9,20 @@ export default function Header() {
   const { isAuthenticated } = useAuth();
 
   return (
-    <div className="min-h-[80px] h-[80px] flex justify-between items-center 
-    border border-transparent">
+    <div
+      className="min-h-[80px] h-[80px] flex justify-between items-center 
+    border border-transparent"
+    >
       <div className="w-[90px] flex justify-center">
-        <Link to="/">Logo</Link>
+        <Link to="/">
+          <div className="w-full h-full relative">
+            <img
+              src="/rmc_logo_transparentbg.png"
+              alt="RateMyCouse Logo"
+              className="h-[50px] w-[50px] object-contain"
+            />
+          </div>
+        </Link>
       </div>
 
       <SearchBar />

@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useSearch, SearchResult } from "../../hooks/useSearch";
 
 interface SearchBarProps {
-  placeholder: string;
+  placeholder?: string;
   onResultClick?: (id: string, title: string) => void;
   filterByDegree?: string | null;
 }

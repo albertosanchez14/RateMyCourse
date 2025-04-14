@@ -59,7 +59,7 @@ export default function HeroImage() {
       >
         {profilePic ? (
           <img
-          src={profilePic}
+            src={profilePic}
             alt="Profile"
             className="h-[40px] w-[40px] rounded-full 
             hover:ring-2 hover:ring-blue-500 transition-all"
