@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, SetStateAction } from "react";
 import { MdClose, MdOutlineWarningAmber } from "react-icons/md";
 
 import { useEnrolled } from "../../hooks/useEnrolled";
@@ -31,6 +31,8 @@ export default function PickScheduleModal({
     Record<string, number[]>
   >({});
   const [calendarEvents, setCalendarEvents] = useState<FREventType[]>([]);
+  const [hasConflicts, setHasConflicts] = useState(false);
+  const [conflictDate, setConflictDate] = useState<Date | null>(null);
   const { enrolledCourses, enrollInCourse, unenrollFromCourse } = useEnrolled();
   // For each selected course, fetch its details
   const { courseData } = useCourseData(selectedCourses);
@@ -93,7 +95,44 @@ export default function PickScheduleModal({
       }
     });
     setCalendarEvents(allEvents);
+
+    // Check for time conflicts
+    checkForTimeConflicts(allEvents);
   }, [selectedCourses, selectedGroups, selectedFaculty, courseData]);
+
+  const checkForTimeConflicts = (events: FREventType[]) => {
+    let conflicts = false;
+    let firstConflictDate: SetStateAction<Date | null> = null;
+
+    // Create a hash map to detect conflicts
+    const timeSlots: Record<string, FREventType[]> = {};
+
+    events.forEach((event) => {
+      // Create a key based on date and time
+      const dateObj = new Date(event.date);
+      const key = `${dateObj.toISOString().split("T")[0]}_${event.start_time}`;
+
+      if (!timeSlots[key]) {
+        timeSlots[key] = [];
+      }
+
+      // If there's already an event with a different title, we have a conflict
+      if (
+        timeSlots[key].length > 0 &&
+        timeSlots[key].some((existing) => existing.title !== event.title)
+      ) {
+        conflicts = true;
+        if (!firstConflictDate) {
+          firstConflictDate = dateObj;
+        }
+      }
+
+      timeSlots[key].push(event);
+    });
+
+    setHasConflicts(conflicts);
+    setConflictDate(firstConflictDate);
+  };
 
   const handleCourseSelect = (courseId: string, courseTitle: string) => {
     // Check if course is already selected
@@ -185,11 +224,22 @@ export default function PickScheduleModal({
         {/* Modal Header */}
         <div
           className="p-4 border-b border-gray-200 flex 
-      justify-between items-center"
+            justify-between items-center"
         >
-          <h2 className="text-lg font-semibold text-gray-800">
-            Pick Your Schedule
-          </h2>
+          <div className="flex items-center gap-3">
+            <h2 className="text-lg font-semibold text-gray-800">
+              Pick Your Schedule
+            </h2>
+            {hasConflicts && (
+              <div
+                className="bg-red-100 text-red-700 px-3 
+              py-1 rounded-full text-sm flex items-center gap-1"
+              >
+                <MdOutlineWarningAmber size={16} />
+                <span>Schedule conflicts detected</span>
+              </div>
+            )}
+          </div>
           <button
             onClick={onClose}
             className="text-gray-400 hover:text-gray-600 
@@ -248,7 +298,12 @@ export default function PickScheduleModal({
           {/* Right Section: Calendar */}
           <div className="w-full md:w-2/3 p-4 flex flex-col flex-grow overflow-hidden">
             <div className="flex-grow overflow-auto h-[50vh] md:h-auto">
-              <Calendar events={calendarEvents} showTitle={true}/>
+              <Calendar
+                events={calendarEvents}
+                showTitle={true}
+                hasConflicts={hasConflicts}
+                conflictDate={conflictDate}
+              />
             </div>
           </div>
         </div>

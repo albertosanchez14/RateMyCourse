@@ -10,10 +10,17 @@ import Event from "./Event";
 type CalendarProps = {
   events: Array<FREventType>;
   showTitle?: boolean;
+  hasConflicts?: boolean;
+  conflictDate?: Date | null;
 };
 type WeekType = "Mon" | "Tue" | "Wed" | "Thu" | "Fri";
 
-export default function Calendar({ events, showTitle }: CalendarProps) {
+export default function Calendar({
+  events,
+  showTitle,
+  hasConflicts,
+  conflictDate,
+}: CalendarProps) {
   const weekDays: WeekType[] = ["Mon", "Tue", "Wed", "Thu", "Fri"];
   const [rows] = useState(6);
   const [currentMonth, setCurrentMonth] = useState("");
@@ -71,6 +78,18 @@ export default function Calendar({ events, showTitle }: CalendarProps) {
     setCurrentMonth(startingDate.toLocaleString("en-US", { month: "long" }));
   }, [startingDate]);
 
+  // Only run when conflictDate is provided and changes
+  useEffect(() => {
+    // When conflict date changes, navigate the calendar to that week
+    if (conflictDate) {
+      const day = conflictDate.getDay();
+      const diff = conflictDate.getDate() - day + (day === 0 ? -6 : 1);
+      const startOfWeek = new Date(conflictDate);
+      startOfWeek.setDate(diff);
+      setStartingDate(startOfWeek); // This will trigger calendar to navigate to that week
+    }
+  }, [conflictDate]);
+
   const renderRows = (date: Date) => {
     const rowElements = [];
     for (let j = 0; j < rows; j++) {
@@ -91,11 +110,22 @@ export default function Calendar({ events, showTitle }: CalendarProps) {
           class_events.push(event);
         }
       });
+
+      // Check if this cell has a conflict (multiple events with different titles)
+      const hasConflictInCell =
+        class_events.length > 1 &&
+        new Set(class_events.map((event) => event.title)).size > 1;
+
       if (class_events.length === 0) {
         rowElements.push(<div key={j} className="calendar_hour"></div>);
       } else {
         rowElements.push(
-          <div key={j} className="calendar_hour">
+          <div
+            key={j}
+            className={`calendar_hour ${
+              hasConflictInCell ? "conflict_cell" : ""
+            }`}
+          >
             {class_events.map((event, index) =>
               showTitle ? (
                 <Event
@@ -120,11 +150,13 @@ export default function Calendar({ events, showTitle }: CalendarProps) {
     }
     return rowElements;
   };
+
   const handlePrevWeek = () => {
     if (startingDate.getTime() - 7 * 24 * 60 * 60 * 1000 < minDate.getTime())
       return;
     setStartingDate(new Date(startingDate.getTime() - 7 * 24 * 60 * 60 * 1000));
   };
+
   const handleNextWeek = () => {
     if (startingDate.getTime() + 7 * 24 * 60 * 60 * 1000 > maxDate.getTime())
       return;

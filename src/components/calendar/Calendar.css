@@ -132,3 +132,9 @@
     min-height: 80px;
   }
 }
+
+.conflict_cell {
+  border: 2px solid #ef4444;
+  border-radius: 0.375rem;
+  background-color: rgba(254, 226, 226, 0.5);
+}
