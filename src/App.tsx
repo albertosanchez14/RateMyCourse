@@ -23,6 +23,7 @@ import HelpPage from "./pages/helpPage";
 import ContactPage from "./pages/contactPage";
 import NotFoundPage from "./pages/notFoundPage";
 import TermsOfServicePage from "./pages/termsPage";
+import ResetPasswordPage from "./pages/resetPasswordPage";
 // import SettingsPage from "./pages/settingsPage";
 
 import ScrollToTop from "./utils/ScrollToTop";
@@ -44,6 +45,7 @@ import {
   CONTACT_PAGE_ROUTE,
   TERMS_PAGE_ROUTE,
   AUTH_CALLBACK_PAGE_ROUTE,
+  RESET_PASSWORD_PAGE_ROUTE,
   // SETTINGS_PAGE_ROUTE,
 } from "./Routes";
 
@@ -51,7 +53,8 @@ const HeaderWrapper = () => {
   const location = useLocation();
   return location.pathname !== LANDING_PAGE_ROUTE &&
     location.pathname !== SIGN_IN_PAGE_ROUTE &&
-    location.pathname !== SIGN_UP_PAGE_ROUTE ? (
+    location.pathname !== SIGN_UP_PAGE_ROUTE &&
+    location.pathname !== RESET_PASSWORD_PAGE_ROUTE ? (
     <Header />
   ) : null;
 };
@@ -59,7 +62,8 @@ const HeaderWrapper = () => {
 const FooterWrapper = () => {
   const location = useLocation();
   return location.pathname !== SIGN_IN_PAGE_ROUTE &&
-    location.pathname !== SIGN_UP_PAGE_ROUTE ? (
+    location.pathname !== SIGN_UP_PAGE_ROUTE &&
+    location.pathname !== RESET_PASSWORD_PAGE_ROUTE ? (
     <Footer />
   ) : null;
 };
@@ -73,8 +77,15 @@ function App() {
         <Routes>
           <Route path={LANDING_PAGE_ROUTE} element={<LandingPage />} />
           <Route path={SIGN_IN_PAGE_ROUTE} element={<LoginPage />} />
-          <Route path={AUTH_CALLBACK_PAGE_ROUTE} element={<AuthCallbackPage />} />
+          <Route
+            path={AUTH_CALLBACK_PAGE_ROUTE}
+            element={<AuthCallbackPage />}
+          />
           <Route path={SIGN_UP_PAGE_ROUTE} element={<SignUpPage />} />
+          <Route
+            path={RESET_PASSWORD_PAGE_ROUTE}
+            element={<ResetPasswordPage />}
+          />
           <Route path={PROFILE_PAGE_ROUTE} element={<ProfilePage />} />
           {/* <Route
             path={PROFILE_PAGE_ROUTE + SETTINGS_PAGE_ROUTE}

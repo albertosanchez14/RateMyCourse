@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
 import { FcGoogle } from "react-icons/fc";
 
 import supabase from "../../utils/supabaseClient";
+
+import ForgotPasswordModal from "./ForgotPasswordModal";
 
 interface LoginFormData {
   email: string;
@@ -36,6 +37,8 @@ export default function LoginForm({
   const [errors, setErrors] = useState<LoginFormErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
+  const [isForgotPasswordModalOpen, setIsForgotPasswordModalOpen] =
+    useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -129,38 +132,8 @@ export default function LoginForm({
     }
   };
 
-  const handleForgotPassword = async () => {
-    if (!formData.email) {
-      setErrors({ email: "Please enter your email to reset your password" });
-      return;
-    }
-
-    try {
-      setIsSubmitting(true);
-
-      const { error } = await supabase.auth.resetPasswordForEmail(
-        formData.email,
-        {
-          redirectTo: window.location.origin + "/reset-password",
-        }
-      );
-
-      if (error) {
-        setErrors({ general: error.message });
-        return;
-      }
-
-      setSuccessMessage(
-        "Password reset instructions have been sent to your email."
-      );
-    } catch (err) {
-      console.error("Failed to send reset email:", err);
-      setErrors({
-        general: "Failed to send reset email. Please try again later.",
-      });
-    } finally {
-      setIsSubmitting(false);
-    }
+  const handleForgotPassword = () => {
+    setIsForgotPasswordModalOpen(true);
   };
 
   const handleGoogleSignIn = async () => {
@@ -172,11 +145,11 @@ export default function LoginForm({
           redirectTo: window.location.origin + "/auth/callback",
           // You can store an intent to identify it's a login attempt
           queryParams: {
-            intent: "login"
-          }
+            intent: "login",
+          },
         },
       });
-      
+
       if (error) {
         console.error("Google sign-in error:", error);
         setErrors({ general: "Failed to sign in with Google" });
@@ -193,6 +166,11 @@ export default function LoginForm({
 
   return (
     <div className={`bg-white rounded-lg ${className}`}>
+      <ForgotPasswordModal
+        isOpen={isForgotPasswordModalOpen}
+        onClose={() => setIsForgotPasswordModalOpen(false)}
+        initialEmail={formData.email}
+      />
       {successMessage ? (
         <div className="text-center">
           <div className="mb-4 p-4 bg-green-100 text-green-800 rounded-md">

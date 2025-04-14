@@ -6,7 +6,7 @@ import { MdEdit, MdSchool, MdEmail, MdDateRange } from "react-icons/md";
 import { useUserCourseReviews } from "../../hooks/useReviews";
 import { useUpdateProfile, useUser } from "../../hooks/useUser";
 
-import { SIGN_UP_PAGE_ROUTE } from "../../Routes";
+import { SIGN_IN_PAGE_ROUTE } from "../../Routes";
 
 import LoadingSpinnerScreen from "../../components/loading/LoadingSpinnerScreen";
 import EditProfileModal from "./EditProfileModal";
@@ -41,7 +41,7 @@ export default function ProfilePage() {
 
     if (!isAuthenticated) { //TODO: CHeck flow when logged out dont go to sign up page
       // User is not authenticated
-      navigate(SIGN_UP_PAGE_ROUTE, {
+      navigate(SIGN_IN_PAGE_ROUTE, {
         replace: true,
         state: {
           from: location.pathname,
