@@ -9,10 +9,12 @@ import Calendar from "../../components/calendar/Calendar";
 import PickScheduleModal from "./PickScheduleModal";
 
 import { FREventType } from "../../types/course";
+import { FiMinus } from "react-icons/fi";
 
 export default function ProfileCalendarSection() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { enrolledCourses, isLoading, error } = useEnrolled();
+  const { enrolledCourses, isLoading, error, unenrollFromCourse } =
+    useEnrolled();
   const { data: user } = useUser();
   // Transform enrolled courses into a format usable by useCourseData
   const enrolledCoursesFormatted = useMemo(
@@ -33,16 +35,30 @@ export default function ProfileCalendarSection() {
     let allEvents: FREventType[] = [];
     enrolledCoursesFormatted.forEach((course) => {
       const courseDetails = courseData[course.id];
-      if (courseDetails) {
-        // Get events from all faculties and schedules
-        const courseEvents = courseDetails.schedule.flatMap(
-          (schedFaculty: { schedule: FREventType[] }) => schedFaculty.schedule
+      if (courseDetails && enrolledCourses) {
+        // Find the faculty and group for this course
+        const enrollment = enrolledCourses.find(
+          (e) => e.course_id === course.id
         );
-        allEvents = [...allEvents, ...courseEvents];
+        if (enrollment) {
+          // Get events from the specific faculty and group
+          const facultySchedule = courseDetails.schedule.find(
+            (schedFaculty: { faculty: string }) =>
+              schedFaculty.faculty === enrollment.faculty
+          );
+
+          if (facultySchedule) {
+            const courseEvents = facultySchedule.schedule.filter(
+              (event: { groups: number[] }) =>
+                event.groups.includes(enrollment.group_number)
+            );
+            allEvents = [...allEvents, ...courseEvents];
+          }
+        }
       }
     });
     return allEvents;
-  }, [courseData, enrolledCoursesFormatted]);
+  }, [courseData, enrolledCoursesFormatted, enrolledCourses]);
 
   if (isLoading) return <LoadingSpinnerScreen />;
   if (error) return <p>Error loading calendar: {error.message}</p>;
@@ -55,6 +71,12 @@ export default function ProfileCalendarSection() {
     setIsModalOpen(false);
   };
 
+  const handleUnenroll = (courseId: string) => {
+    if (window.confirm("Are you sure you want to unenroll from this course?")) {
+      unenrollFromCourse(courseId);
+    }
+  };
+
   return (
     <>
       {enrolledCourses && enrolledCourses.length > 0 ? (
@@ -62,8 +84,63 @@ export default function ProfileCalendarSection() {
           className="flex flex-col items-center justify-center h-full 
         bg-white rounded-xl shadow-sm p-8 mb-8"
         >
-          <h3 className="text-xl font-bold ml-10 mb-2">Your Calendar</h3>
-          <Calendar events={calendarEvents} />
+          <div className="w-full flex flex-col items-center">
+            <h3 className="text-xl font-bold mb-4">Your Schedule</h3>
+            <div className="w-full flex flex-col md:flex-row gap-4">
+              {/* Enrolled Courses List */}
+              <div className="w-full md:w-1/4 md:mt-15">
+                <ul className="space-y-3">
+                  {enrolledCourses.map((course) => {
+                    const courseInfo = courseData[course.course_id];
+                    return (
+                      <li
+                        key={course.course_id}
+                        className="bg-white p-3 rounded-md shadow-sm"
+                      >
+                        <div className="flex flex-col justify-between items-start">
+                          <div>
+                            <h5 className="font-medium">
+                              {courseInfo?.code} -{" "}
+                              {courseInfo?.title || course.course_id}
+                            </h5>
+
+                            <p className="text-sm text-gray-600">
+                              {course.faculty}
+                            </p>
+                            <div className="flex flex-row">
+                              {course.group_number && (
+                                <p className="text-sm text-gray-600">
+                                  Group: {course.group_number}
+                                </p>
+                              )}
+                              <button
+                                onClick={() => handleUnenroll(course.course_id)}
+                                className="flex text-red-500 hover:text-red-700 text-sm ml-auto"
+                              >
+                                <FiMinus /> <span>Unenroll</span>
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+                    );
+                  })}
+                </ul>
+                <button
+                  className="w-full mt-3 bg-blue-500 text-white py-2 px-4 rounded-md 
+                    hover:bg-blue-600 transition-colors text-sm"
+                  onClick={handleOpenModal}
+                >
+                  Edit Schedule
+                </button>
+              </div>
+
+              {/* Calendar */}
+              <div className="w-full md:w-3/4">
+                <Calendar events={calendarEvents} />
+              </div>
+            </div>
+          </div>
         </div>
       ) : (
         <div className="flex flex-col items-center justify-center h-full p-8 mb-8">
@@ -81,13 +158,11 @@ export default function ProfileCalendarSection() {
               Click here to pick a schedule.
             </span>
           </button>
-          {isModalOpen && (
-            <PickScheduleModal
-              isOpen={isModalOpen}
-              onClose={handleCloseModal}
-            />
-          )}
         </div>
+      )}
+      {/* Render the modal only once, outside of the conditional rendering */}
+      {isModalOpen && (
+        <PickScheduleModal isOpen={isModalOpen} onClose={handleCloseModal} />
       )}
     </>
   );

@@ -38,14 +38,28 @@ export const useEnrolled = () => {
 
   // Enroll in a course
   const enrollInCourse = useMutation({
-    mutationFn: async (courseId: string) => {
+    mutationFn: async ({
+      courseId,
+      faculty,
+      groupNumber,
+    }: {
+      courseId: string;
+      faculty: string;
+      groupNumber?: number;
+    }) => {
       if (!user) throw new Error("User not authenticated");
-
-      const { error } = await supabase.from("profile_enrolled_courses").insert({
-        profile_id: user.userId,
-        course_id: courseId,
-      });
-
+      const { error } = await supabase.from("profile_enrolled_courses").upsert(
+        {
+          profile_id: user.userId,
+          course_id: courseId,
+          faculty: faculty,
+          group_number: groupNumber,
+        },
+        {
+          onConflict: "profile_id,course_id",
+          ignoreDuplicates: false,
+        }
+      );
       if (error) throw error;
       return courseId;
     },
@@ -84,7 +98,8 @@ export const useEnrolled = () => {
     isLoading,
     error,
     isEnrolled,
-    enrollInCourse: enrollInCourse.mutate,
+    enrollInCourse: (courseId: string, faculty: string, groupNumber: number) =>
+      enrollInCourse.mutate({ courseId, faculty, groupNumber }),
     unenrollFromCourse: unenrollFromCourse.mutate,
     enrollInCourseStatus: enrollInCourse.status,
     unenrollFromCourseStatus: unenrollFromCourse.status,

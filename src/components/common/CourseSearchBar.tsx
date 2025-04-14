@@ -1,3 +1,7 @@
+import { useEffect, useState } from "react";
+
+import { useUser } from "../../hooks/useUser";
+
 import SearchBar from "./SearchBar";
 
 interface CourseSearchBarProps {
@@ -7,6 +11,15 @@ interface CourseSearchBarProps {
 export default function CourseSearchBar({
   onCourseSelect,
 }: CourseSearchBarProps) {
+  const { data: user } = useUser();
+  const [userDegree, setUserDegree] = useState<string | null>(null);
+  
+  useEffect(() => {
+    if (user?.degree) {
+      setUserDegree(user.degree);
+    }
+  }, [user]);
+
   const handleCustomResultClick = (id: string, title: string) => {
     onCourseSelect(id, title);
   };
@@ -19,6 +32,7 @@ export default function CourseSearchBar({
       <SearchBar
         placeholder="Search for courses..."
         onResultClick={handleCustomResultClick}
+        filterByDegree={userDegree}
       />
     </div>
   );

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { MdClose } from "react-icons/md";
+import { MdClose, MdOutlineWarningAmber } from "react-icons/md";
 
 import { useEnrolled } from "../../hooks/useEnrolled";
 import { useCourseData } from "../../hooks/useCourse";
@@ -20,6 +20,7 @@ export default function PickScheduleModal({
   isOpen,
   onClose,
 }: PickScheduleModalProps) {
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [selectedFaculty, setSelectedFaculty] = useState<string>(
     "Escuela Politécnica Superior (Leganés)"
   );
@@ -30,19 +31,42 @@ export default function PickScheduleModal({
     Record<string, number[]>
   >({});
   const [calendarEvents, setCalendarEvents] = useState<FREventType[]>([]);
-  const { enrollInCourse } = useEnrolled();
+  const { enrolledCourses, enrollInCourse, unenrollFromCourse } = useEnrolled();
   // For each selected course, fetch its details
   const { courseData } = useCourseData(selectedCourses);
 
+  // Load existing enrolled courses when modal opens
+  useEffect(() => {
+    if (isOpen && enrolledCourses) {
+      // Map enrolled courses to the format expected by the component
+      const mappedCourses = enrolledCourses.map((course) => ({
+        id: course.course_id,
+        title: course.course_id,
+      }));
+      setSelectedCourses(mappedCourses);
+      // Set selected faculty to the first enrolled course's faculty if available
+      if (enrolledCourses.length > 0) {
+        setSelectedFaculty(enrolledCourses[0].faculty);
+      }
+      // Set selected groups
+      const groupsMap: Record<string, number[]> = {};
+      enrolledCourses.forEach((course) => {
+        groupsMap[course.course_id] = [course.group_number];
+      });
+      setSelectedGroups(groupsMap);
+    }
+  }, [isOpen, enrolledCourses]);
   // Disable body scroll when modal is open
   useEffect(() => {
+    const originalStyle = window.getComputedStyle(document.body).overflow;
     if (isOpen) {
-      const originalStyle = window.getComputedStyle(document.body).overflow;
       document.body.style.overflow = "hidden";
-      return () => {
-        document.body.style.overflow = originalStyle;
-      };
+    } else {
+      document.body.style.overflow = originalStyle;
     }
+    return () => {
+      document.body.style.overflow = originalStyle;
+    };
   }, [isOpen]);
   // Update calendar events when selected courses or groups change
   useEffect(() => {
@@ -110,19 +134,48 @@ export default function PickScheduleModal({
     });
   };
 
-  const handleSaveSchedule = () => {
-    // Enroll in each selected course
-    selectedCourses.forEach((course) => {
-      enrollInCourse(course.id);
+  const handleSaveSchedule = async () => {
+    // Check if any course has multiple groups selected
+    const hasMultipleGroupsSelected = selectedCourses.some((course) => {
+      const groups = selectedGroups[course.id] || [];
+      return groups.length > 1;
     });
+    if (hasMultipleGroupsSelected) {
+      setErrorMessage("Please select only one group for each course.");
+      return;
+    }
+    // Clear any previous errors
+    setErrorMessage(null);
+
+    // Get list of currently enrolled courses
+    const currentlyEnrolled =
+      enrolledCourses?.map((course) => course.course_id) || [];
+    // Find courses to unenroll (courses that were enrolled but are not in selectedCourses)
+    const coursesToUnenroll = currentlyEnrolled.filter(
+      (courseId) => !selectedCourses.some((course) => course.id === courseId)
+    );
+
+    // Unenroll from courses not in the selection
+    for (const courseId of coursesToUnenroll) {
+      unenrollFromCourse(courseId);
+    }
+    // Enroll/update each selected course with faculty and group info
+    for (const course of selectedCourses) {
+      const groups = selectedGroups[course.id] || [];
+      enrollInCourse(course.id, selectedFaculty, groups[0]);
+    }
     onClose();
+  };
+
+  const hasMultipleGroups = (courseId: string): boolean => {
+    return (selectedGroups[courseId]?.length || 0) > 1;
   };
 
   if (!isOpen) return null;
 
   return (
     <div
-      className="fixed inset-0 bg-black bg-opacity-50 
+      className="fixed inset-0 backdrop-blur-sm  bg-opacity-30 
         flex items-center justify-center z-50 overflow-y-auto p-4"
     >
       <div
@@ -167,15 +220,26 @@ export default function PickScheduleModal({
                 <p className="text-gray-500 text-sm">No courses selected yet</p>
               ) : (
                 selectedCourses.map((course, index) => (
-                  <CourseCard
-                    key={course.id}
-                    course={course}
-                    index={index}
-                    selectedFaculty={selectedFaculty}
-                    selectedGroups={selectedGroups}
-                    onCourseRemove={handleCourseRemove}
-                    onGroupToggle={handleGroupToggle}
-                  />
+                  <div key={course.id} className="mb-3">
+                    {hasMultipleGroups(course.id) && (
+                      <div
+                        className="bg-yellow-100 border border-yellow-400 
+                      text-yellow-700 px-3 py-1 rounded text-sm mb-1
+                      flex items-center gap-2"
+                      >
+                        <MdOutlineWarningAmber />{" "}
+                        <span>Can only be enrolled in one group.</span>
+                      </div>
+                    )}
+                    <CourseCard
+                      course={course}
+                      index={index}
+                      selectedFaculty={selectedFaculty}
+                      selectedGroups={selectedGroups}
+                      onCourseRemove={handleCourseRemove}
+                      onGroupToggle={handleGroupToggle}
+                    />
+                  </div>
                 ))
               )}
             </div>
@@ -190,25 +254,29 @@ export default function PickScheduleModal({
         </div>
 
         {/* Modal Footer */}
-        <div
-          className="p-4 border-t border-gray-200 flex 
-        justify-end gap-2"
-        >
-          <button
-            onClick={onClose}
-            className="px-4 py-2 bg-gray-200 text-gray-800 
-            rounded-md hover:bg-gray-300 transition-colors"
-          >
-            Cancel
-          </button>
-          <button
-            onClick={handleSaveSchedule}
-            className="px-4 py-2 bg-blue-600 text-white rounded-md 
-            hover:bg-blue-700 transition-colors"
-            disabled={selectedCourses.length === 0}
-          >
-            Save Schedule
-          </button>
+        <div className="p-4 border-t border-gray-200 flex flex-col">
+          {errorMessage && (
+            <div className="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-2 rounded mb-3">
+              {errorMessage}
+            </div>
+          )}
+          <div className="flex justify-end gap-2">
+            <button
+              onClick={onClose}
+              className="px-4 py-2 bg-gray-200 text-gray-800 
+                rounded-md hover:bg-gray-300 transition-colors"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={handleSaveSchedule}
+              className="px-4 py-2 bg-blue-600 text-white rounded-md 
+              hover:bg-blue-700 transition-colors"
+              disabled={selectedCourses.length === 0}
+            >
+              Save Schedule
+            </button>
+          </div>
         </div>
       </div>
     </div>

@@ -4,18 +4,24 @@ import { Link, useNavigate } from "react-router-dom";
 import { useSearch, SearchResult } from "../../hooks/useSearch";
 
 interface SearchBarProps {
-  placeholder?: string;
+  placeholder: string;
   onResultClick?: (id: string, title: string) => void;
+  filterByDegree?: string | null;
 }
 
 export default function SearchBar({
   placeholder = "Search courses...",
   onResultClick,
+  filterByDegree = null,
 }: SearchBarProps) {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [isOpen, setIsOpen] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState<number>(-1);
-  const { data: results, isLoading, searchItems } = useSearch("", 4);
+  const {
+    data: results,
+    isLoading,
+    searchItems,
+  } = useSearch("", 4, filterByDegree);
   const navigate = useNavigate();
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -41,7 +47,7 @@ export default function SearchBar({
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
     setSearchTerm(value);
-    searchItems(value, 4);
+    searchItems(value, 4, filterByDegree);
     setIsOpen(true);
   };
 
@@ -95,7 +101,8 @@ export default function SearchBar({
         onChange={handleInputChange}
         onKeyDown={handleKeyDown}
         placeholder={placeholder}
-        className="w-full px-4 py-2 text-gray-700 bg-white border rounded-lg focus:outline-none focus:border-blue-500"
+        className="w-full px-4 py-2 text-gray-700 bg-white 
+        border rounded-lg focus:outline-none focus:border-blue-500"
         aria-label="Search"
       />
       <svg
