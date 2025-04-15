@@ -1,7 +1,7 @@
 import "./ProfessorCommentCard.css";
 
 import RectangleChart from "../charts/RectangleChart";
-import Comment from "./Review";
+import Review from "./Review";
 
 import { CommentProfessorType, Professor } from "../../types/reviews";
 
@@ -28,14 +28,15 @@ export default function ProfessorCommentCard({
       </div>
       <div className="professor-comment-list-container">
         {comments.map((comment) => (
-          <Comment
+          <Review
             key={comment.id}
-            id={comment.id}
+            id={comment.id.toString()}
             title={comment.title}
             date={comment.date}
             description={comment.description}
             rating={comment.rating}
             by={comment.by}
+            userId={""}
           />
         ))}
       </div>

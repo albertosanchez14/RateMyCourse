@@ -258,7 +258,7 @@ export const useLikeCourse = () => {
 
       return { previousValue };
     },
-    onError: (err, courseId, context) => {
+    onError: (_, courseId, context) => {
       // If the mutation fails, restore the previous value
       queryClient.setQueryData(
         ["courseLiked", user?.userId, courseId],
@@ -304,7 +304,7 @@ export const useUnlikeCourse = () => {
 
       return { previousValue };
     },
-    onError: (err, courseId, context) => {
+    onError: (_, courseId, context) => {
       // If the mutation fails, restore the previous value
       queryClient.setQueryData(
         ["courseLiked", user?.userId, courseId],

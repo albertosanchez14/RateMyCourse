@@ -10,15 +10,6 @@ type EventProps = {
 export default function Event({ title, type, groups, classroom }: EventProps) {
   const eventTypeClass = `event-type-${type.toLowerCase()}`;
 
-  let backgroundColor = "white";
-  if (type == "Magistral") {
-    backgroundColor = "#ffcccc";
-  } else if (type == "Practice") {
-    backgroundColor = "lightblue";
-  } else if (type == "Laboratory") {
-    backgroundColor = "lightgreen";
-  }
-
   // Handle classroom display
   const defaultClassroom = "N/A";
   let displayAula = defaultClassroom;
