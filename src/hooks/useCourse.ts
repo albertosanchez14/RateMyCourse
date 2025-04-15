@@ -8,7 +8,7 @@ import {
 
 export const fetchCourse = async (courseId: string): Promise<FRCourseType> => {
   // Fetch course data from the server
-  const response = await fetch(`https://rate-my-course-node-cuexa.ondigitalocean.app/${courseId}`);
+  const response = await fetch(`https://rate-my-course-node-cuexa.ondigitalocean.app/course/${courseId}`);
   if (!response.ok) {
     throw new Error(`Course with code ${courseId} not found`);
   }
