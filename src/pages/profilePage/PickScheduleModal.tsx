@@ -319,14 +319,16 @@ export default function PickScheduleModal({
             <button
               onClick={onClose}
               className="px-4 py-2 bg-gray-200 text-gray-800 
-                rounded-md hover:bg-gray-300 transition-colors"
+                rounded-md hover:bg-gray-300 transition-colors
+                text-base font-medium"
             >
               Cancel
             </button>
             <button
               onClick={handleSaveSchedule}
               className="px-4 py-2 bg-blue-600 text-white rounded-md 
-              hover:bg-blue-700 transition-colors"
+              hover:bg-blue-700 transition-colors
+              text-base font-medium"
               disabled={selectedCourses.length === 0}
             >
               Save Schedule

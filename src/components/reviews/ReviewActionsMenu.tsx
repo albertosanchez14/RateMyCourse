@@ -81,7 +81,8 @@ export default function ReviewActionsMenu({
               <button
                 onClick={handleEditClick}
                 className="w-full text-left px-4 py-2 text-gray-700 
-                hover:bg-gray-100 transition-colors"
+                hover:bg-gray-100 transition-colors
+                border border-transparent text-base font-medium"
               >
                 <MdOutlineEdit className="inline-block mr-2" size={20} />
                 Edit
@@ -89,7 +90,8 @@ export default function ReviewActionsMenu({
               <button
                 onClick={handleDeleteClick}
                 className="w-full text-left px-4 py-2 text-red-600 
-                hover:bg-gray-100 transition-colors"
+                hover:bg-gray-100 transition-colors
+                border border-transparent text-base font-medium"
               >
                 <MdDeleteOutline className="inline-block mr-2" size={20} />
                 Delete

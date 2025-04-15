@@ -28,7 +28,8 @@ export default function ReviewControls({
       <button
         onClick={() => onSort("date")}
         className="flex items-center gap-1 p-0 text-gray-700 hover:text-blue-500
-                   transition-all duration-200 text-sm font-medium"
+                   transition-all duration-200 text-sm font-medium
+                   border border-transparent px-2 py-2"
       >
         Date
         {sortDirection.date ? (
@@ -41,7 +42,8 @@ export default function ReviewControls({
       <button
         onClick={() => onSort("rating")}
         className="flex items-center gap-1 p-0 text-gray-700 hover:text-blue-500
-                    transition-all duration-200 text-sm font-medium"
+                    transition-all duration-200 text-sm font-medium
+                    border border-transparent px-2 py-2"
       >
         <span>Rating</span>
         {sortDirection.rating === undefined ? (

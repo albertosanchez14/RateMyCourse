@@ -5,13 +5,13 @@ import { MdEdit, MdSchool, MdEmail, MdDateRange } from "react-icons/md";
 
 import { useUserCourseReviews } from "../../hooks/useReviews";
 import { useUpdateProfile, useUser } from "../../hooks/useUser";
+import { useAuth } from "../../hooks/useAuth";
 
 import { SIGN_IN_PAGE_ROUTE } from "../../Routes";
 
 import LoadingSpinnerScreen from "../../components/loading/LoadingSpinnerScreen";
 import EditProfileModal from "./EditProfileModal";
 import ProfileCalendarSection from "./ProfileCalendarSection";
-import { useAuth } from "../../hooks/useAuth";
 
 export default function ProfilePage() {
   const navigate = useNavigate();
@@ -20,11 +20,7 @@ export default function ProfilePage() {
     isLoading: isLoadingRev,
     error: errorRev,
   } = useUserCourseReviews();
-  const { 
-    data: user, 
-    isLoading: isLoadingUser, 
-    error: errorUser,
-  } = useUser();
+  const { data: user, isLoading: isLoadingUser, error: errorUser } = useUser();
   const { isLoading: isLoadingAuth, isAuthenticated } = useAuth();
   const { mutate: updateProfile, isPending: isUpdatingProfile } =
     useUpdateProfile();
@@ -39,7 +35,8 @@ export default function ProfilePage() {
   useEffect(() => {
     if (isLoadingAuth) return;
 
-    if (!isAuthenticated) { //TODO: CHeck flow when logged out dont go to sign up page
+    if (!isAuthenticated) {
+      //TODO: CHeck flow when logged out dont go to sign up page
       // User is not authenticated
       navigate(SIGN_IN_PAGE_ROUTE, {
         replace: true,
@@ -111,7 +108,10 @@ export default function ProfilePage() {
                   alt="Profile"
                   className="w-24 h-24 rounded-full border-2 border-gray-200"
                 />
-                <button className="absolute bottom-0 right-0 bg-blue-500 text-white p-2 rounded-full hover:bg-blue-600 transition-colors">
+                <button
+                  className="absolute bottom-0 right-0 bg-blue-500 
+                text-white p-2 rounded-full hover:bg-blue-600 transition-colors"
+                >
                   <MdEdit className="w-4 h-4" />
                 </button>
               </div>
@@ -138,7 +138,9 @@ export default function ProfilePage() {
             </div>
             <button
               onClick={() => setIsEditModalOpen(true)}
-              className="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition-colors"
+              className="bg-blue-500 text-white px-4 py-2 rounded-lg 
+              hover:bg-blue-600 transition-colors
+              border border-transparent text-base font-medium"
             >
               Edit Profile
             </button>
@@ -193,36 +195,45 @@ export default function ProfilePage() {
           >
             <h2 className="text-xl font-bold mb-6">My Reviews</h2>
             <div className="space-y-6">
-              {reviews?.map((review) => (
-                <div
-                  key={review.id}
-                  className="border-b border-gray-100 last:border-0 pb-6 last:pb-0"
-                >
-                  <div className="flex justify-between items-start mb-2">
-                    <div>
-                      <Link
-                        to={`/course/${review.course_id.id}#reviews`}
-                        className="font-medium text-[#646cff] hover:text-[#535bf2] 
-                      no-underline"
+              {reviews && reviews.length > 0 ? (
+                reviews.map((review) => (
+                  <div
+                    key={review.id}
+                    className="border-b border-gray-100 last:border-0 pb-6 last:pb-0"
+                  >
+                    <div className="flex justify-between items-start mb-2">
+                      <div>
+                        <Link
+                          to={`/course/${review.course_id.id}#reviews`}
+                          className="font-medium text-[#646cff] hover:text-[#535bf2] 
+                          no-underline"
+                        >
+                          <h3 className="font-semibold text-lg hover:underline">
+                            {review.course_id.code} - {review.course_id.title}
+                          </h3>
+                        </Link>
+                        <p className="text-sm text-gray-500">
+                          Posted on {new Date(review.date).toLocaleDateString()}
+                        </p>
+                      </div>
+                      <div
+                        className="bg-blue-50 text-blue-700 px-3 py-1 rounded-full 
+                      font-semibold"
                       >
-                        <h3 className="font-semibold text-lg hover:underline">
-                          {review.course_id.code} - {review.course_id.title}
-                        </h3>
-                      </Link>
-                      <p className="text-sm text-gray-500">
-                        Posted on {new Date(review.date).toLocaleDateString()}
-                      </p>
+                        {review.rating?.overall}/5
+                      </div>
                     </div>
-                    <div className="bg-blue-50 text-blue-700 px-3 py-1 rounded-full font-semibold">
-                      {review.rating?.overall}/5
-                    </div>
+                    <h4 className="font-medium text-gray-800 mt-2">
+                      {review.title}
+                    </h4>
+                    <p className="text-gray-600">{review.review}</p>
                   </div>
-                  <h4 className="font-medium text-gray-800 mt-2">
-                    {review.title}
-                  </h4>
-                  <p className="text-gray-600">{review.review}</p>
-                </div>
-              ))}
+                ))
+              ) : (
+                <p className="text-gray-500 col-span-full text-center py-4">
+                  You haven't written any reviews yet
+                </p>
+              )}
             </div>
           </div>
 

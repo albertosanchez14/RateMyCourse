@@ -218,7 +218,10 @@ export default function CourseDescRateSection({
               {isContentTruncated && (
                 <button
                   onClick={() => setIsExpanded(!isExpanded)}
-                  className="w-fit text-blue-600 hover:text-blue-800 mt-2 flex items-center gap-1"
+                  className="w-fit text-blue-600 hover:text-blue-800 
+                  mt-2 flex items-center gap-1
+                  border border-transparent px-2 py-2
+                  text-base font-medium"
                 >
                   {isExpanded ? (
                     <>

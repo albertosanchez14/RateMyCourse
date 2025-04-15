@@ -144,20 +144,19 @@ export default function ProfileCalendarSection() {
         </div>
       ) : (
         <div className="flex flex-col items-center justify-center h-full p-8 mb-8">
-          <button
-            className="bg-blue-500 text-white py-2 px-6 rounded-md 
-                  hover:bg-blue-700 focus:outline-none focus:ring-2 
-                  focus:ring-blue-500 focus:ring-offset-2 
-                  transition-colors flex flex-col items-center gap-1"
+            <button
+            className="bg-gradient-to-r from-blue-500 to-blue-600 text-white py-3 px-8 rounded-full 
+                hover:from-blue-600 hover:to-blue-800 shadow-lg transform 
+                transition-transform hover:scale-105 flex flex-col items-center gap-2"
             onClick={handleOpenModal}
-          >
-            <span className="text-lg font-semibold">
-              {user?.first_name}, you have no enrolled courses.{" "}
+            >
+            <span className="text-lg font-bold">
+              {user?.first_name}, you have no enrolled courses.
             </span>
             <span className="text-sm font-medium">
               Click here to pick a schedule.
             </span>
-          </button>
+            </button>
         </div>
       )}
       {/* Render the modal only once, outside of the conditional rendering */}

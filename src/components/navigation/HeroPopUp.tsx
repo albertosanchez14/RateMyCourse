@@ -27,7 +27,8 @@ export default function HeroPopUp({ onClose }: HeroPopUpProps) {
   };
 
   return (
-    <div className="absolute right-0 w-72 bg-white rounded-lg shadow-lg border 
+    <div
+      className="absolute top-0 right-0 w-72 bg-white rounded-lg shadow-lg border 
     border-gray-200 transform transition-all duration-200 ease-out 
     opacity-100 scale-100 z-[9999]"
     >
@@ -45,7 +46,10 @@ export default function HeroPopUp({ onClose }: HeroPopUpProps) {
       <div className="">
         <button
           onClick={() => goToProfile("")}
-          className="w-full text-left text-gray-700 hover:bg-gray-100 flex items-center"
+          className="w-full text-left text-gray-700 
+          hover:bg-gray-100 flex items-center
+          border border-transparent px-2 py-2
+          text-base font-medium"
         >
           <CgProfile className="w-5 h-5 ml-2 mr-3" />
           Your Profile
@@ -53,7 +57,10 @@ export default function HeroPopUp({ onClose }: HeroPopUpProps) {
 
         <button
           onClick={() => goToProfile("#reviews")}
-          className="w-full text-left text-gray-700 hover:bg-gray-100 flex items-center"
+          className="w-full text-left text-gray-700 
+          hover:bg-gray-100 flex items-center
+          border border-transparent px-2 py-2
+          text-base font-medium"
         >
           <MdOutlineRateReview className="w-5 h-5 ml-2 mr-3" />
           Your Reviews
@@ -61,15 +68,21 @@ export default function HeroPopUp({ onClose }: HeroPopUpProps) {
 
         <button
           onClick={() => goToProfile("#fav-courses")}
-          className="w-full text-left text-gray-700 hover:bg-gray-100 flex items-center"
+          className="w-full text-left text-gray-700 
+          hover:bg-gray-100 flex items-center
+          border border-transparent px-2 py-2
+          text-base font-medium"
         >
-          <IoMdHeart className="w-5 h-5 ml-2 mr-3"/>
+          <IoMdHeart className="w-5 h-5 ml-2 mr-3" />
           Favourite Courses
         </button>
 
         <button
           onClick={() => goToProfile("/settings")}
-          className="w-full text-left text-gray-700 hover:bg-gray-100 flex items-center"
+          className="w-full text-left text-gray-700 
+          hover:bg-gray-100 flex items-center
+          border border-transparent px-2 py-2
+          text-base font-medium"
         >
           <GrConfigure className="w-5 h-5 ml-2 mr-3" />
           Settings
@@ -78,7 +91,10 @@ export default function HeroPopUp({ onClose }: HeroPopUpProps) {
         <div className="border-t border-gray-200">
           <button
             onClick={handleLogout}
-            className="w-full text-left text-red-600 hover:bg-red-50 flex items-center"
+            className="w-full text-left text-red-600 
+            hover:bg-red-50 flex items-center
+            border border-transparent px-2 py-2
+          text-base font-medium"
           >
             <MdLogout className="w-5 h-5 ml-2 mr-3" />
             Log Out
