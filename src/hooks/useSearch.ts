@@ -54,7 +54,7 @@ export const useSearch = (
 
       try {
         // Construct URL with query parameters
-        let url = `http://localhost:8000/course/search?q=${encodeURIComponent(
+        let url = `https://rate-my-course-node-cuexa.ondigitalocean.app/course/search?q=${encodeURIComponent(
           term
         )}&limit=${limit}`;
         // Add degree filter if provided
