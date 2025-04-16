@@ -148,8 +148,8 @@ export default function SignUpPage() {
     try {
       const redirectBaseUrl =
         import.meta.env.VITE_ENV === "production"
-          ? import.meta.env.VITE_NODE_API_URL_PROD
-          : import.meta.env.VITE_NODE_API_URL_DEV;
+          ? import.meta.env.VITE_URL_PROD
+          : import.meta.env.VITE_URL_DEV;
       const { error } = await supabase.auth.signInWithOAuth({
         provider: "google", 
         options: {
