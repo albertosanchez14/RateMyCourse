@@ -146,10 +146,14 @@ export default function SignUpPage() {
 
   const handleGoogleSignUp = async () => {
     try {
+      const redirectBaseUrl =
+        import.meta.env.VITE_ENV === "production"
+          ? import.meta.env.VITE_NODE_API_URL_PROD
+          : import.meta.env.VITE_NODE_API_URL_DEV;
       const { error } = await supabase.auth.signInWithOAuth({
-        provider: "google",
+        provider: "google", 
         options: {
-          redirectTo: `${window.location.origin}/signup`,
+          redirectTo: `${redirectBaseUrl}/auth/callback`,
           queryParams: {
             access_type: "offline",
             prompt: "consent",

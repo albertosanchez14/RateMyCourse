@@ -138,12 +138,14 @@ export default function LoginForm({
 
   const handleGoogleSignIn = async () => {
     try {
-      // Change the redirectTo URL to a dedicated callback route
+      const redirectBaseUrl = 
+        import.meta.env.VITE_ENV === "production"
+          ? import.meta.env.VITE_NODE_API_URL_PROD
+          : import.meta.env.VITE_NODE_API_URL_DEV;
       const { error } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {
-          redirectTo: window.location.origin + "/auth/callback",
-          // You can store an intent to identify it's a login attempt
+          redirectTo: `${redirectBaseUrl}/auth/callback`,
           queryParams: {
             intent: "login",
           },
