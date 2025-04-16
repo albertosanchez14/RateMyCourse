@@ -6,9 +6,14 @@ import {
   FREventType,
 } from "../types/course";
 
+const API_URL =
+  import.meta.env.VITE_ENV === "production"
+    ? import.meta.env.VITE_NODE_API_URL_PROD
+    : import.meta.env.VITE_NODE_API_URL_DEV;
+
 export const fetchCourse = async (courseId: string): Promise<FRCourseType> => {
   // Fetch course data from the server
-  const response = await fetch(`https://rate-my-course-node-cuexa.ondigitalocean.app/course/${courseId}`);
+  const response = await fetch(`${API_URL}/course/${courseId}`);
   if (!response.ok) {
     throw new Error(`Course with code ${courseId} not found`);
   }
@@ -96,7 +101,10 @@ const transformCourse = (course: DBCourseType): FRCourseType => {
  * @param schedule - An array of events from the database.
  * @returns An array of transformed events suitable for the frontend.
  */
-const transformSchedule = (schedule: DBEventType[], title: string): FREventType[] => {
+const transformSchedule = (
+  schedule: DBEventType[],
+  title: string
+): FREventType[] => {
   const newEvents = schedule
     .map((event) => {
       const { sessions, ...rest } = event;

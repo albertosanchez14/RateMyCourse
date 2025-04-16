@@ -28,6 +28,11 @@ export interface SearchResult {
 //   });
 // };
 
+const API_URL =
+  import.meta.env.VITE_ENV === "production"
+    ? import.meta.env.VITE_NODE_API_URL_PROD
+    : import.meta.env.VITE_NODE_API_URL_DEV;
+
 export const useSearch = (
   initialTerm?: string,
   limit?: number,
@@ -54,7 +59,7 @@ export const useSearch = (
 
       try {
         // Construct URL with query parameters
-        let url = `https://rate-my-course-node-cuexa.ondigitalocean.app/course/search?q=${encodeURIComponent(
+        let url = `${API_URL}/course/search?q=${encodeURIComponent(
           term
         )}&limit=${limit}`;
         // Add degree filter if provided
