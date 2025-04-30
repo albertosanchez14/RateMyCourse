@@ -151,7 +151,7 @@ export default function SignUpPage() {
           ? import.meta.env.VITE_URL_PROD
           : import.meta.env.VITE_URL_DEV;
       const { error } = await supabase.auth.signInWithOAuth({
-        provider: "google", 
+        provider: "google",
         options: {
           redirectTo: `${redirectBaseUrl}/auth/callback`,
           queryParams: {
@@ -267,6 +267,11 @@ export default function SignUpPage() {
           });
         }
       } else {
+        // Get redirectUrl based on environment
+        const redirectBaseUrl =
+          import.meta.env.VITE_ENV === "production"
+            ? import.meta.env.VITE_URL_PROD
+            : import.meta.env.VITE_URL_DEV;
         // Regular email/password sign-up flow
         const { data, error } = await supabase.auth.signUp({
           email: formData.email,
@@ -275,7 +280,12 @@ export default function SignUpPage() {
             data: {
               first_name: formData.firstName,
               last_name: formData.lastName,
+              full_name: `${formData.firstName} ${formData.lastName}`,
+              course_year: formData.courseYear,
+              university: formData.university,
+              degree: formData.degree,
             },
+            emailRedirectTo: `${redirectBaseUrl}/auth/callback`,
           },
         });
 
@@ -297,31 +307,42 @@ export default function SignUpPage() {
           setSuccessMessage(
             "This email is already registered. Please check your inbox for the confirmation link or try logging in."
           );
-        } else if (data?.user) {
-          // Save additional user data to profiles table
-          const { error: profileError } = await supabase
-            .from("profiles")
-            .insert([
-              {
-                user_id: data.user.id,
-                first_name: formData.firstName,
-                last_name: formData.lastName,
-                full_name: `${formData.firstName} ${formData.lastName}`,
-                email: formData.email,
-                course_year: formData.courseYear,
-                university: formData.university,
-                degree: formData.degree,
-              },
-            ]);
-
-          if (profileError) {
-            console.error("Error saving profile:", profileError);
-          }
-
-          setSuccessMessage(
-            "Sign-up successful! Please check your email to verify your account."
-          );
+          return;
         }
+
+        setSuccessMessage(
+          "Sign-up successful! Please check your email to verify your account."
+        );
+
+        // if (data?.user) {
+        //   // The trigger will have created a profile row, now update it with academic info
+        //   const { data: updatedProfile, error: profileError } = await supabase
+        //     .from("profiles")
+        //     .update({
+        //       first_name: formData.firstName,
+        //       last_name: formData.lastName,
+        //       full_name: `${formData.firstName} ${formData.lastName}`,
+        //       course_year: formData.courseYear,
+        //       university: formData.university,
+        //       degree: formData.degree,
+        //     })
+        //     .eq("user_id", data.user.id)
+        //     .select();
+
+        //   console.log("Update result:", { updatedProfile, profileError }); // Detailed logging
+
+        //   if (profileError) {
+        //     console.error("Error updating profile:", profileError);
+        //     setErrors({
+        //       general:
+        //         "Account created but we couldn't save your academic information. Please update your profile after login.",
+        //     });
+        //   }
+
+        //   setSuccessMessage(
+        //     "Sign-up successful! Please check your email to verify your account."
+        //   );
+        // }
       }
     } catch (err) {
       console.error("Unexpected error during sign-up:", err);
