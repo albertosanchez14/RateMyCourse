@@ -17,3 +17,4 @@ export const HELP_PAGE_ROUTE = '/help';
 export const CONTACT_PAGE_ROUTE = '/contact';
 export const TERMS_PAGE_ROUTE = '/terms';
 export const SETTINGS_PAGE_ROUTE = '/settings';
+export const PROFILE_SETUP_PAGE_ROUTE = '/profile-setup';

@@ -24,6 +24,7 @@ import ContactPage from "./pages/contactPage";
 import NotFoundPage from "./pages/notFoundPage";
 import TermsOfServicePage from "./pages/termsPage";
 import ResetPasswordPage from "./pages/resetPasswordPage";
+import ProfileSetUpPage from "./pages/profileSetUpPage";
 // import SettingsPage from "./pages/settingsPage";
 
 import ScrollToTop from "./utils/ScrollToTop";
@@ -46,6 +47,7 @@ import {
   TERMS_PAGE_ROUTE,
   AUTH_CALLBACK_PAGE_ROUTE,
   RESET_PASSWORD_PAGE_ROUTE,
+  PROFILE_SETUP_PAGE_ROUTE,
   // SETTINGS_PAGE_ROUTE,
 } from "./Routes";
 
@@ -54,7 +56,9 @@ const HeaderWrapper = () => {
   return location.pathname !== LANDING_PAGE_ROUTE &&
     location.pathname !== SIGN_IN_PAGE_ROUTE &&
     location.pathname !== SIGN_UP_PAGE_ROUTE &&
-    location.pathname !== RESET_PASSWORD_PAGE_ROUTE ? (
+    location.pathname !== RESET_PASSWORD_PAGE_ROUTE &&
+    location.pathname !== AUTH_CALLBACK_PAGE_ROUTE &&
+    location.pathname !== PROFILE_SETUP_PAGE_ROUTE ? (
     <Header />
   ) : null;
 };
@@ -63,7 +67,9 @@ const FooterWrapper = () => {
   const location = useLocation();
   return location.pathname !== SIGN_IN_PAGE_ROUTE &&
     location.pathname !== SIGN_UP_PAGE_ROUTE &&
-    location.pathname !== RESET_PASSWORD_PAGE_ROUTE ? (
+    location.pathname !== RESET_PASSWORD_PAGE_ROUTE &&
+    location.pathname !== AUTH_CALLBACK_PAGE_ROUTE &&
+    location.pathname !== PROFILE_SETUP_PAGE_ROUTE ? (
     <Footer />
   ) : null;
 };
@@ -82,6 +88,10 @@ function App() {
             element={<AuthCallbackPage />}
           />
           <Route path={SIGN_UP_PAGE_ROUTE} element={<SignUpPage />} />
+          <Route
+            path={PROFILE_SETUP_PAGE_ROUTE}
+            element={<ProfileSetUpPage />}
+          />
           <Route
             path={RESET_PASSWORD_PAGE_ROUTE}
             element={<ResetPasswordPage />}
