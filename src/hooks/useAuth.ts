@@ -47,7 +47,7 @@ export function useAuth(): AuthType {
           emailAddresses: [{ emailAddress: user.email || '' }],
           userId: user.id,
           imageUrl: user.user_metadata?.avatar_url || '',
-          displayName: user.user_metadata?.first_name + ' ' + user.user_metadata?.last_name || 'User',
+          displayName: user.user_metadata?.full_name || 'User',
         }
       : null,
     id: user?.id,

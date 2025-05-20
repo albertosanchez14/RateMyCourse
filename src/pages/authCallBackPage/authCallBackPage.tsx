@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import {
   SIGN_IN_PAGE_ROUTE,
-  SIGN_UP_PAGE_ROUTE,
+  PROFILE_SETUP_PAGE_ROUTE,
   LANDING_PAGE_ROUTE,
 } from "../../Routes";
 import supabase from "../../utils/supabaseClient";
@@ -20,19 +20,25 @@ export default function AuthCallbackPage() {
       } = await supabase.auth.getSession();
 
       if (session?.user) {
-        // Check if user has a profile
+        const user = session.user;
+        console.log("User authenticated:", user.user_metadata);
+        // Check if user has a profile data in the database
         const { data: profileData, error: profileError } = await supabase
           .from("profiles")
-          .select("*")
+          .select("university, course_year, degree")
           .eq("user_id", session.user.id)
           .single();
-        if (profileError || !profileData) {
+        if (profileError ||
+          !profileData ||
+          !profileData.university ||
+          !profileData.course_year ||
+          !profileData.degree) {
           // No profile, redirect to signup to complete registration
           setMessage("Redirecting to complete your profile...");
-          setTimeout(() => navigate(SIGN_UP_PAGE_ROUTE), 1000);
+          setTimeout(() => navigate(PROFILE_SETUP_PAGE_ROUTE), 1000);
         } else {
           // Profile exists, go to home page
-          setMessage("Authentication successful! Redirecting...");
+          setMessage("Redirecting to your dashboard...");
           setTimeout(() => navigate(LANDING_PAGE_ROUTE), 1000);
         }
       } else {
@@ -47,7 +53,7 @@ export default function AuthCallbackPage() {
 
   return (
     <div className="flex min-h-screen items-center justify-center">
-      <div className="text-center p-8 bg-white rounded-lg shadow-md mb-50">
+      <div className="text-center p-8 bg-white rounded-lg shadow-md">
         <div
           className="animate-spin mb-4 h-12 w-12 border-4 
         border-blue-500 border-t-transparent rounded-full mx-auto"
