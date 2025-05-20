@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { IoArrowBack, IoArrowForward } from "react-icons/io5";
 import { MdExpandMore } from "react-icons/md";
@@ -57,7 +57,6 @@ export default function SignUpForm({
   totalSteps,
   onChange,
   onPrevStep,
-  onNextStep,
   onStepClick,
   onSubmit,
   onGoogleSignUp,

@@ -1,9 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
-import { FcGoogle } from "react-icons/fc";
-import { IoArrowBack, IoArrowForward } from "react-icons/io5";
-import { MdExpandMore } from "react-icons/md";
 
 import useDegrees from "../../hooks/useDegrees";
 import supabase from "../../utils/supabaseClient";
