@@ -138,7 +138,7 @@ export default function LoginForm({
 
   const handleGoogleSignIn = async () => {
     try {
-      // alert('ENV: ' + import.meta.env.VITE_ENV);
+      alert('ENV: ' + import.meta.env.VITE_ENV);
       const redirectBaseUrl = 
         import.meta.env.VITE_ENV === "production"
           ? import.meta.env.VITE_URL_PROD
