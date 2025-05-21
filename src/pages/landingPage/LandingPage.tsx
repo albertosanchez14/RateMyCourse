@@ -109,13 +109,13 @@ export default function LandingPage() {
               className="h-[85px] w-[90px]"
             />
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold">
-              Rate My Course
+              CourseWise
             </h1>
           </div>
 
           <p className="text-lg mb-2">
             Find detailed information about university courses, share your
-            experience, and help others make informed decisions.
+            experience and build your schedule.
           </p>
           <SearchBar placeholder="Search for courses..." />
           <span className="block mt-1 ml-1 opacity-50">

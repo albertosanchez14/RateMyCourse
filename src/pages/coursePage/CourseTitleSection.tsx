@@ -1,9 +1,13 @@
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { useUser } from "../../hooks/useUser";
+import {
+  useIsCourseLiked,
+  useLikeCourse,
+  useUnlikeCourse,
+} from "../../hooks/useUser";
 import { IoMdHeart } from "react-icons/io";
 import { IoMdHeartEmpty } from "react-icons/io";
-
-import { useUser } from "../../hooks/useUser";
-import { useIsCourseLiked, useLikeCourse, useUnlikeCourse } from "../../hooks/useUser";
+import LoginModal from "../../components/auth/LoginModal";
 
 import { DegreeType } from "../../types/course";
 
@@ -21,24 +25,23 @@ export default function CourseTitleSection({
   degree,
 }: CourseTitleSectionProps) {
   const { data: user } = useUser();
-  const navigate = useNavigate();
   const { data: isLiked = false } = useIsCourseLiked(id);
-  
+
   // Get the mutation functions from hooks
   const likeMutation = useLikeCourse();
   const unlikeMutation = useUnlikeCourse();
   const isLoading = likeMutation.isPending || unlikeMutation.isPending;
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+
+  const handleLoginSuccess = () => {
+    setIsLoginModalOpen(false);
+  };
 
   const handleLikeCourse = async () => {
     if (isLoading) return;
 
     if (!user) {
-      const wantsToLogin = window.confirm(
-        "Please log in to like this course. Would you like to log in now?"
-      );
-      if (wantsToLogin) {
-        navigate("/login");
-      }
+      setIsLoginModalOpen(true);
       return;
     }
     if (!isLiked) {
@@ -65,6 +68,11 @@ export default function CourseTitleSection({
         </div>
       </div>
       <span className="mt-2">{degree.title}</span>
+      <LoginModal
+        isOpen={isLoginModalOpen}
+        onClose={() => setIsLoginModalOpen(false)}
+        onLoginSuccess={handleLoginSuccess}
+      />
     </div>
   );
 }
