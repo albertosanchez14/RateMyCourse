@@ -2,7 +2,7 @@
 
 _Last Updated: March 9, 2025_  
 
-Welcome to RateMyCourse ("we," "our," or "us"). Your privacy is important to us, and this Privacy Policy explains how we collect, use, and protect your personal information when you use our website and services.  
+Welcome to CourseWise. Your privacy is important to us, and this Privacy Policy explains how we collect, use, and protect your personal information when you use our website and services.  
 
 ## **1. Information We Collect**  
 We collect the following types of information when you use our platform:  

@@ -1,6 +1,6 @@
-# RateMyCourse
+# CourseWise
 
-RateMyCourse is a web application that allows students to discover, review, and rate university courses based on real student experiences.
+CourseWise is a web application that allows students to discover, review, and rate university courses based on real student experiences.
 
 ## Features
 
@@ -45,7 +45,7 @@ RateMyCourse is a web application that allows students to discover, review, and 
 ## Getting Started
 
 1. Clone the repository
-2. Install dependencies:# RateMyCourse
+2. Install dependencies:
     npm install
 3. Start the development server:
     npm run dev

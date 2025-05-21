@@ -20,10 +20,10 @@ export default function ContactPage() {
               For general inquiries and support requests.
             </p>
             <a
-              href="mailto:support@ratemycourse.com"
+              href="mailto:support@coursewise.com"
               className="text-blue-600 hover:text-blue-800 font-medium"
             >
-              support@ratemycourse.com
+              support@coursewise.com
             </a>
           </div>
 
@@ -37,10 +37,10 @@ export default function ContactPage() {
               Having technical issues with the platform?
             </p>
             <a
-              href="mailto:tech@ratemycourse.com"
+              href="mailto:tech@coursewise.com"
               className="text-blue-600 hover:text-blue-800 font-medium"
             >
-              tech@ratemycourse.com
+              tech@coursewise.com
             </a>
           </div>
         </div>
@@ -60,7 +60,7 @@ export default function ContactPage() {
               },
               {
                 question: "Can I suggest a new feature?",
-                answer: "Yes! We welcome feature suggestions. Please email them to support@ratemycourse.com."
+                answer: "Yes! We welcome feature suggestions. Please email them to support@coursewise.com."
               }
             ].map((item, index) => (
               <div key={index} className="border-b border-gray-200 last:border-0 pb-4 last:pb-0">

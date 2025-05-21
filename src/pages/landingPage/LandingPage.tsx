@@ -105,7 +105,7 @@ export default function LandingPage() {
           <div className="flex flex-row items-center gap-2 mb-2">
             <img
               src="/rmc_logo_transparentbg.png"
-              alt="RateMyCourse Logo"
+              alt="CourseWise Logo"
               className="h-[85px] w-[90px]"
             />
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold">
@@ -215,7 +215,7 @@ export default function LandingPage() {
         <div className="container mx-auto px-4 py-12 text-center">
           <img
             src="/rmc_logo_transparentbg.png"
-            alt="RateMyCourse Logo"
+            alt="CourseWise Logo"
             className="h-[100px] w-[100px] mx-auto mb-4"
           />
           <h2 className="text-3xl font-bold mb-4">Ready to Get Started?</h2>

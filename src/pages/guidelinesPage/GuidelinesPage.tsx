@@ -79,7 +79,7 @@ export default function GuidelinesPage() {
       <div className="max-w-3xl mx-auto">
         <h1 className="text-4xl font-bold mb-6">Community Guidelines</h1>
         <p className="text-gray-600 mb-8">
-          Welcome to RateMyCourse! These guidelines help ensure our platform
+          Welcome to CourseWise! These guidelines help ensure our platform
           remains helpful and respectful for everyone.
         </p>
 

@@ -3,7 +3,7 @@ export default function TermsOfServicePage() {
     {
       title: "1. Acceptance of Terms",
       content: [
-        "By accessing and using RateMyCourse, you agree to be bound by these Terms of Service. If you disagree with any part of these terms, you may not access the service.",
+        "By accessing and using CourseWise, you agree to be bound by these Terms of Service. If you disagree with any part of these terms, you may not access the service.",
         "We reserve the right to update these terms at any time without notice. Your continued use of the platform following any changes constitutes acceptance of those changes."
       ]
     },
@@ -29,7 +29,7 @@ export default function TermsOfServicePage() {
     {
       title: "4. Privacy",
       content: [
-        "Your use of RateMyCourse is also governed by our Privacy Policy.",
+        "Your use of CourseWise is also governed by our Privacy Policy.",
         "We collect and use information as described in our Privacy Policy.",
         "We do not sell personal information to third parties."
       ]
@@ -47,7 +47,7 @@ export default function TermsOfServicePage() {
     {
       title: "6. Intellectual Property",
       content: [
-        "RateMyCourse and its original content are protected by copyright and other laws.",
+        "CourseWise and its original content are protected by copyright and other laws.",
         "Our name, logo, and trademarks may not be used without written permission."
       ]
     },
@@ -104,7 +104,7 @@ export default function TermsOfServicePage() {
         <div className="mt-8 mb-12 text-gray-600 text-sm">
           <p>
             If you have any questions about these Terms of Service, please contact
-            us at legal@ratemycourse.com
+            us at legal@coursewise.com
           </p>
         </div>
       </div>

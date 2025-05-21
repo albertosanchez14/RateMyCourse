@@ -7,7 +7,7 @@ export default function LoginPage() {
       <div className="text-center mb-8">
         <h1 className="text-3xl md:text-5xl font-bold mb-4">Welcome Back</h1>
         <p className="text-lg text-gray-600">
-          Sign in to access your RateMyCourse account
+          Sign in to access your CourseWise account
         </p>
       </div>
 

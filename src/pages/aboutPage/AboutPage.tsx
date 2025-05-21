@@ -6,7 +6,7 @@ export default function AboutPage() {
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">About Us</h1>
           <p className="text-xl text-gray-600">
-            Welcome to RateMyCourse! We believe that finding the right course
+            Welcome to CourseWise! We believe that finding the right course
             should be easy, transparent, and based on real student experiences.
           </p>
         </div>
@@ -150,19 +150,19 @@ export default function AboutPage() {
               <p className="flex items-center">
                 <span className="mr-2">📧</span>
                 <a
-                  href="mailto:contact@ratemycourse.com"
+                  href="mailto:contact@coursewise.com"
                   className="text-blue-600 hover:text-blue-800"
                 >
-                  contact@ratemycourse.com
+                  contact@coursewise.com
                 </a>
               </p>
               <p className="flex items-center">
                 <span className="mr-2">🌐</span>
                 <a
-                  href="https://ratemycourse.com"
+                  href="https://coursewise.com"
                   className="text-blue-600 hover:text-blue-800"
                 >
-                  www.ratemycourse.com
+                  www.coursewise.com
                 </a>
               </p>
             </div>

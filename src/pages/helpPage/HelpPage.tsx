@@ -118,7 +118,7 @@ export default function HelpPage() {
           <ul className="list-disc ml-6 mt-2 text-gray-600 space-y-1">
             <li>Check our FAQ section</li>
             <li>Review our Community Guidelines</li>
-            <li>Contact support at support@ratemycourse.com</li>
+            <li>Contact support at support@coursewise.com</li>
           </ul>
         </div>
       </section>

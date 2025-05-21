@@ -254,7 +254,7 @@ export default function SignUpPage() {
           }
 
           setSuccessMessage(
-            "Sign-up successful! You can now use RateMyCourse."
+            "Sign-up successful! You can now use CourseWise."
           );
         } else {
           setErrors({
@@ -289,7 +289,7 @@ export default function SignUpPage() {
           if (error.message.includes("Database error")) {
             setErrors({
               general:
-                "Unable to create account. Please try again later or contact tech@ratemycourse.com if the problem persists.",
+                "Unable to create account. Please try again later or contact tech@coursewise.com if the problem persists.",
             });
           } else {
             setErrors({ general: error.message });
@@ -386,7 +386,7 @@ export default function SignUpPage() {
     <div className="min-h-screen flex flex-col items-center justify-center px-4">
       <div className="text-center mb-8">
         <h1 className="text-3xl md:text-5xl font-bold mb-4">
-          Join RateMyCourse
+          Join CourseWise
         </h1>
         <p className="text-lg text-gray-600">
           Create an account to rate courses and share your experiences

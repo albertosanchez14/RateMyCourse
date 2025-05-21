@@ -14,7 +14,7 @@ export default function Footer() {
       sm:grid-cols-[2fr_1fr_1fr_1fr] xs:grid-cols-[2fr_1fr]"
       >
         <div className="flex flex-col gap-4">
-          <h3 className="text-[#333] text-2xl m-0">RateMyCourse</h3>
+          <h3 className="text-[#333] text-2xl m-0">CourseWise</h3>
           <p className="text-[#666] text-sm leading-6 m-0">
             Help students make informed decisions about their education journey.
           </p>
@@ -176,7 +176,7 @@ export default function Footer() {
       border-[#eee] mt-8 pt-8"
       >
         <p className="text-[#999] text-xs m-0">
-          &copy; {new Date().getFullYear()} RateMyCourse. All rights reserved.
+          &copy; {new Date().getFullYear()} CourseWise. All rights reserved.
         </p>
       </div>
     </footer>
