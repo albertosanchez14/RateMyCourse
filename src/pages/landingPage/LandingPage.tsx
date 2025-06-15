@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import SearchBar from "../../components/common/SearchBar";
 import UniversitySelector from "../../components/common/UniversitySelector";
 import { FaArrowLeft } from "react-icons/fa";
+import { GENERATE_SCHEDULE_PAGE_ROUTE } from "../../Routes";
 
 export default function LandingPage() {
   const [lastScrollY, setLastScrollY] = useState(0);
@@ -169,17 +170,21 @@ export default function LandingPage() {
             </p>
           </div>
           {/* Update to highlight Schedule Generator */}
-          <div className="bg-white p-6 rounded-lg shadow-md border-2 
-          border-blue-200 relative">
-            <div className="absolute -top-3 -right-3 bg-blue-500 
-            text-white text-xs px-2 py-1 rounded-full">
+          <div className="bg-white p-6 rounded-lg shadow-md border-2 border-blue-200 relative">
+            <div className="absolute -top-3 -right-3 bg-blue-500 text-white text-xs px-2 py-1 rounded-full">
               NEW
             </div>
             <h3 className="text-xl font-semibold mb-3">Schedule Generator</h3>
-            <p className="text-gray-600">
+            <p className="text-gray-600 mb-4">
               Create conflict-free schedules based on your course selections and
               time preferences.
             </p>
+            <Link
+              to={GENERATE_SCHEDULE_PAGE_ROUTE}
+              className="block w-full bg-blue-500 hover:bg-blue-600 text-white text-center py-2 rounded-md transition-colors"
+            >
+              Generate Schedule
+            </Link>
           </div>
         </div>
       </section>
