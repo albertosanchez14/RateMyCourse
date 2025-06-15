@@ -1,14 +1,23 @@
 import { useState, useEffect } from "react";
 
 import { useCourseData } from "../../hooks/useCourse";
+import { useAuth } from "../../hooks/useAuth";
+import { useEnrolled } from "../../hooks/useEnrolled";
 import useDegrees from "../../hooks/useDegrees";
 
 import CourseSearchBar from "../../components/common/CourseSearchBar";
 import TimePickCalendar from "../../components/calendar/TimePickCalendar";
 import CourseCard from "../profilePage/CourseCard";
 import { getGenSchedules } from "../../hooks/useGenSchedule";
+import ScheduleVisualization from "./scheduleVisualization";
+import { MdClose } from "react-icons/md";
+import { FaArrowRightLong, FaArrowLeftLong } from "react-icons/fa6";
+import LoginModal from "../../components/auth/LoginModal";
 
 export default function GenerateSchedulePage() {
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const { isAuthenticated } = useAuth();
+  const { enrollInCourse } = useEnrolled();
   const [selectedCourses, setSelectedCourses] = useState<
     Array<{ id: string; title: string }>
   >([]);
@@ -24,6 +33,12 @@ export default function GenerateSchedulePage() {
   const { data: degrees, isLoading: degreesLoading } = useDegrees(
     "University Carlos III of Madrid"
   );
+  const [generatedSchedules, setGeneratedSchedules] = useState<any[]>([]);
+  const [coursesEventsMap, setCoursesEventsMap] = useState<
+    Record<string, any[]>
+  >({});
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [currentScheduleIndex, setCurrentScheduleIndex] = useState(0);
 
   // Add course from search bar
   const handleCourseSelect = (id: string, title: string) => {
@@ -86,15 +101,56 @@ export default function GenerateSchedulePage() {
       );
       // Handle the result, e.g., navigate to a results page or show a success message
       console.log("Generated schedule:", result);
-      // Optionally: navigate(`/schedule/result`, { state: result });
+      setGeneratedSchedules(result.validSchedules || []);
+      setCoursesEventsMap(result.coursesEventsMap || {});
+      setCurrentScheduleIndex(0);
     } catch (error) {
       console.error("Error generating schedule:", error);
       alert("Failed to generate schedule.");
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
+  const handleLoginSuccess = () => {
+    setIsLoginModalOpen(false);
+    // After successful login, try to save the schedule again
+    handleSaveSchedule(generatedSchedules[currentScheduleIndex]);
+  };
+
+  const handleSaveSchedule = async (schedule: any) => {
+    // If not authenticated, show login modal
+    if (!isAuthenticated) {
+      setIsLoginModalOpen(true);
+      return;
+    }
+
+    try {
+      // For each item in the schedule, create an enrollment
+      const savePromises = schedule.map(async (item: any) => {
+        const { courseId, groupId } = item;
+
+        // Enroll in the course with selected faculty and group
+        await enrollInCourse(courseId, selectedFaculty, groupId);
+      });
+      await Promise.all(savePromises);
+      // Show success notification
+      alert("Schedule saved successfully!");
+      // Clear generated schedules and return to main view
+      setGeneratedSchedules([]);
+    } catch (error) {
+      console.error("Error saving schedule:", error);
+      alert("Failed to save schedule. Please try again.");
     }
   };
 
   return (
     <div className="flex flex-col px-4 py-8">
+      <LoginModal
+        isOpen={isLoginModalOpen}
+        onClose={() => setIsLoginModalOpen(false)}
+        onLoginSuccess={handleLoginSuccess}
+      />
       <div className="flex flex-col items-center mb-8">
         <h1 className="text-4xl font-bold mb-8 text-center">
           Generate Your Schedule
@@ -251,6 +307,114 @@ export default function GenerateSchedulePage() {
           Generate Schedule
         </button>
       </div>
+
+      {isGenerating ? (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg">
+            <div className="flex flex-col items-center">
+              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+              <p className="mt-4 text-lg font-medium">
+                Generating schedules...
+              </p>
+            </div>
+          </div>
+        </div>
+      ) : generatedSchedules.length > 0 ? (
+        <div className="fixed inset-0 bg-white z-40 overflow-auto">
+          <div className="container mx-auto p-8">
+            <div className="flex flex-col items-center mb-12 relative">
+              <h2 className="text-3xl font-bold">Generated Schedules</h2>
+              <button
+                onClick={() => setGeneratedSchedules([])}
+                className="text-red-500 hover:text-red-700 p-1 rounded-full
+                hover:bg-red-50 transition-colors absolute right-0 top-0"
+              >
+                <MdClose size={30} />
+              </button>
+            </div>
+
+            {generatedSchedules.length > 0 ? (
+              <>
+                <div className="flex justify-center items-center">
+                  <button
+                    onClick={() =>
+                      setCurrentScheduleIndex(
+                        Math.max(0, currentScheduleIndex - 1)
+                      )
+                    }
+                    disabled={currentScheduleIndex === 0}
+                    className={`px-3 py-1 rounded flex items-center justify-center ${
+                      currentScheduleIndex === 0
+                        ? "text-gray-400 cursor-default"
+                        : "text-blue-800 hover:bg-blue-100 cursor-pointer"
+                    }`}
+                  >
+                    <FaArrowLeftLong size={18} />
+                  </button>
+                  <span className="mx-4">
+                    Option {currentScheduleIndex + 1} of{" "}
+                    {generatedSchedules.length}
+                  </span>
+                  <button
+                    onClick={() =>
+                      setCurrentScheduleIndex(
+                        Math.min(
+                          generatedSchedules.length - 1,
+                          currentScheduleIndex + 1
+                        )
+                      )
+                    }
+                    disabled={
+                      currentScheduleIndex === generatedSchedules.length - 1
+                    }
+                    className={`px-3 py-1 rounded flex items-center justify-center ${
+                      currentScheduleIndex === generatedSchedules.length - 1
+                        ? "text-gray-400 cursor-default"
+                        : "text-blue-800 hover:bg-blue-100 cursor-pointer"
+                    }`}
+                  >
+                    <FaArrowRightLong size={18} />
+                  </button>
+                </div>
+
+                {/* Display the current schedule */}
+                <div className="p-4 mb-6 rounded-lg max-w-5xl mx-auto">
+                  <ScheduleVisualization
+                    schedule={generatedSchedules[currentScheduleIndex]}
+                    courses={selectedCourses}
+                    coursesEventsMap={coursesEventsMap}
+                  />
+                </div>
+
+                <div className="flex justify-center mt-4 space-x-4">
+                  <button
+                    className="bg-gradient-to-r from-blue-500 to-blue-600 
+                    text-white py-2 px-6 rounded-full hover:from-blue-600 
+                    hover:to-blue-800 shadow-lg transform transition-transform 
+                    hover:scale-105 flex items-center gap-2"
+                    onClick={() =>
+                      handleSaveSchedule(
+                        generatedSchedules[currentScheduleIndex]
+                      )
+                    }
+                  >
+                    Save This Schedule
+                  </button>
+                </div>
+              </>
+            ) : (
+              <div className="text-center py-8">
+                <p className="text-xl">
+                  No schedules could be generated with your criteria.
+                </p>
+                <p className="text-gray-600 mt-2">
+                  Try selecting more courses or fewer constraints.
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }
