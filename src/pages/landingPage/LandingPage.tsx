@@ -1,7 +1,10 @@
 import { useEffect, useState, useRef, useCallback } from "react";
+import { Link } from "react-router-dom";
 
 import SearchBar from "../../components/common/SearchBar";
-import { Link } from "react-router-dom";
+import UniversitySelector from "../../components/common/UniversitySelector";
+import { FaArrowLeft } from "react-icons/fa";
+import { GENERATE_SCHEDULE_PAGE_ROUTE } from "../../Routes";
 
 export default function LandingPage() {
   const [lastScrollY, setLastScrollY] = useState(0);
@@ -117,7 +120,15 @@ export default function LandingPage() {
             Find detailed information about university courses, share your
             experience and build your schedule.
           </p>
-          <SearchBar placeholder="Search for courses..." />
+          <div className="flex flex-col md:flex-row items-center gap-4 mt-4">
+            <SearchBar placeholder="Search for courses..." />
+            <div className="flex items-center gap-2">
+              <UniversitySelector />
+              <span className="flex items-center gap-1 opacity-50">
+                <FaArrowLeft /> Select your university
+              </span>
+            </div>
+          </div>
           <span className="block mt-1 ml-1 opacity-50">
             Read course and professor reviews
           </span>
@@ -158,11 +169,22 @@ export default function LandingPage() {
               Read honest reviews and ratings from fellow students.
             </p>
           </div>
-          <div className="bg-white p-6 rounded-lg shadow-md">
-            <h3 className="text-xl font-semibold mb-3">Course Calendar</h3>
-            <p className="text-gray-600">
-              View course schedules and important dates at a glance.
+          {/* Update to highlight Schedule Generator */}
+          <div className="bg-white p-6 rounded-lg shadow-md border-2 border-blue-200 relative">
+            <div className="absolute -top-3 -right-3 bg-blue-500 text-white text-xs px-2 py-1 rounded-full">
+              NEW
+            </div>
+            <h3 className="text-xl font-semibold mb-3">Schedule Generator</h3>
+            <p className="text-gray-600 mb-4">
+              Create conflict-free schedules based on your course selections and
+              time preferences.
             </p>
+            <Link
+              to={GENERATE_SCHEDULE_PAGE_ROUTE}
+              className="block w-full bg-blue-500 hover:bg-blue-600 text-white text-center py-2 rounded-md transition-colors"
+            >
+              Generate Schedule
+            </Link>
           </div>
         </div>
       </section>
@@ -170,7 +192,7 @@ export default function LandingPage() {
       {/* How It Works Section */}
       <section className="container mx-auto px-4 py-12 mb-12">
         <h2 className="text-3xl font-bold text-center mb-12">How It Works</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="text-center">
             <div
               className="bg-blue-100 rounded-full w-16 h-16 flex 
@@ -201,6 +223,18 @@ export default function LandingPage() {
             items-center justify-center mx-auto mb-4"
             >
               <span className="text-2xl font-bold text-blue-600">3</span>
+            </div>
+            <h3 className="font-semibold mb-2">Generate Schedules</h3>
+            <p className="text-gray-600">
+              Build conflict-free timetables that match your preferences
+            </p>
+          </div>
+          <div className="text-center">
+            <div
+              className="bg-blue-100 rounded-full w-16 h-16 flex 
+            items-center justify-center mx-auto mb-4"
+            >
+              <span className="text-2xl font-bold text-blue-600">4</span>
             </div>
             <h3 className="font-semibold mb-2">Share Your Experience</h3>
             <p className="text-gray-600">

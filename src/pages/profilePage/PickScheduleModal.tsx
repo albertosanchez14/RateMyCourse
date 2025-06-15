@@ -1,4 +1,5 @@
 import { useState, useEffect, SetStateAction } from "react";
+import { Link } from "react-router-dom";
 import { MdClose, MdOutlineWarningAmber } from "react-icons/md";
 
 import { useEnrolled } from "../../hooks/useEnrolled";
@@ -242,8 +243,8 @@ export default function PickScheduleModal({
           </div>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 
-            p-1 rounded-full hover:bg-gray-100 transition-colors"
+            className="text-red-500 hover:text-red-700
+            p-1 rounded-full hover:bg-red-50 transition-colors"
           >
             <MdClose size={20} />
           </button>
@@ -311,28 +312,38 @@ export default function PickScheduleModal({
         {/* Modal Footer */}
         <div className="p-4 border-t border-gray-200 flex flex-col">
           {errorMessage && (
-            <div className="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-2 rounded mb-3">
+            <div className="bg-yellow-100 border border-yellow-400 
+            text-yellow-700 px-4 py-2 rounded mb-3">
               {errorMessage}
             </div>
           )}
-          <div className="flex justify-end gap-2">
-            <button
-              onClick={onClose}
-              className="px-4 py-2 bg-gray-200 text-gray-800 
-                rounded-md hover:bg-gray-300 transition-colors
+          <div className="flex justify-between items-center">
+            <Link
+              to="/generate-schedule"
+              className="text-blue-600 hover:text-blue-800 
+              flex items-center gap-1 text-sm"
+            >
+              <span>Try our schedule generator</span>
+            </Link>
+            <div className="flex gap-2">
+              <button
+                onClick={onClose}
+                className="px-4 py-2 bg-gray-200 text-gray-800 
+                rounded-md hover:bg-gray-300 transition-colors text-base 
+                font-medium"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleSaveSchedule}
+                className="px-4 py-2 bg-blue-600 
+                text-white rounded-md hover:bg-blue-700 transition-colors 
                 text-base font-medium"
-            >
-              Cancel
-            </button>
-            <button
-              onClick={handleSaveSchedule}
-              className="px-4 py-2 bg-blue-600 text-white rounded-md 
-              hover:bg-blue-700 transition-colors
-              text-base font-medium"
-              disabled={selectedCourses.length === 0}
-            >
-              Save Schedule
-            </button>
+                disabled={selectedCourses.length === 0}
+              >
+                Save Schedule
+              </button>
+            </div>
           </div>
         </div>
       </div>

@@ -1,12 +1,13 @@
 import { useNavigate } from "react-router-dom";
 import { CgProfile } from "react-icons/cg";
-import { GrConfigure } from "react-icons/gr";
+// import { GrConfigure } from "react-icons/gr";
 import { MdOutlineRateReview } from "react-icons/md";
 import { IoMdHeart } from "react-icons/io";
 import { MdLogout } from "react-icons/md";
 
 import { useAuth } from "../../hooks/useAuth";
 import { PROFILE_PAGE_ROUTE } from "../../Routes";
+import { GrCalendar } from "react-icons/gr";
 
 interface HeroPopUpProps {
   onClose: () => void;
@@ -67,6 +68,17 @@ export default function HeroPopUp({ onClose }: HeroPopUpProps) {
         </button>
 
         <button
+          onClick={() => goToProfile("#schedule")}
+          className="w-full text-left text-gray-700 
+          hover:bg-gray-100 flex items-center
+          border border-transparent px-2 py-2
+          text-base font-medium"
+        >
+          <GrCalendar  className="w-5 h-5 ml-2 mr-3" />
+          Your Schedule
+        </button>
+
+        <button
           onClick={() => goToProfile("#fav-courses")}
           className="w-full text-left text-gray-700 
           hover:bg-gray-100 flex items-center
@@ -77,7 +89,7 @@ export default function HeroPopUp({ onClose }: HeroPopUpProps) {
           Favourite Courses
         </button>
 
-        <button
+        {/* <button
           onClick={() => goToProfile("/settings")}
           className="w-full text-left text-gray-700 
           hover:bg-gray-100 flex items-center
@@ -86,7 +98,7 @@ export default function HeroPopUp({ onClose }: HeroPopUpProps) {
         >
           <GrConfigure className="w-5 h-5 ml-2 mr-3" />
           Settings
-        </button>
+        </button> */}
 
         <div className="border-t border-gray-200">
           <button

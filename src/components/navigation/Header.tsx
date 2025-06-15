@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 
 import SearchBar from "../common/SearchBar";
+import UniversitySelector from "../common/UniversitySelector";
 import HeroImage from "./HeroImage";
 
 export default function Header() {
@@ -25,7 +26,12 @@ export default function Header() {
         </Link>
       </div>
 
-      <SearchBar />
+      <div className="flex-1 flex justify-center">
+        <SearchBar />
+        <div className="relative ml-4">
+          <UniversitySelector />
+        </div>
+      </div>
 
       <div className="w-[90px] flex justify-center">
         {!isAuthenticated ? (

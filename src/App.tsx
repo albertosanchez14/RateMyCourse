@@ -26,6 +26,7 @@ import TermsOfServicePage from "./pages/termsPage";
 import ResetPasswordPage from "./pages/resetPasswordPage";
 import ProfileSetUpPage from "./pages/profileSetUpPage";
 // import SettingsPage from "./pages/settingsPage";
+import GenerateSchedulePage from "./pages/generateSchedulePage";
 
 import ScrollToTop from "./utils/ScrollToTop";
 
@@ -48,6 +49,8 @@ import {
   AUTH_CALLBACK_PAGE_ROUTE,
   RESET_PASSWORD_PAGE_ROUTE,
   PROFILE_SETUP_PAGE_ROUTE,
+  NOT_FOUND_PAGE_ROUTE,
+  GENERATE_SCHEDULE_PAGE_ROUTE,
   // SETTINGS_PAGE_ROUTE,
 } from "./Routes";
 
@@ -58,7 +61,8 @@ const HeaderWrapper = () => {
     location.pathname !== SIGN_UP_PAGE_ROUTE &&
     location.pathname !== RESET_PASSWORD_PAGE_ROUTE &&
     location.pathname !== AUTH_CALLBACK_PAGE_ROUTE &&
-    location.pathname !== PROFILE_SETUP_PAGE_ROUTE ? (
+    location.pathname !== PROFILE_SETUP_PAGE_ROUTE &&
+    location.pathname !== NOT_FOUND_PAGE_ROUTE ? (
     <Header />
   ) : null;
 };
@@ -112,7 +116,8 @@ function App() {
           <Route path={HELP_PAGE_ROUTE} element={<HelpPage />} />
           <Route path={CONTACT_PAGE_ROUTE} element={<ContactPage />} />
           <Route path={TERMS_PAGE_ROUTE} element={<TermsOfServicePage />} />
-          <Route path="*" element={<NotFoundPage />} />
+          <Route path={GENERATE_SCHEDULE_PAGE_ROUTE} element={<GenerateSchedulePage />} />
+          <Route path={NOT_FOUND_PAGE_ROUTE} element={<NotFoundPage />} />
         </Routes>
         <FooterWrapper />
       </Router>
