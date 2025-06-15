@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import {
-  ABOUT_PAGE_ROUTE,
+  // ABOUT_PAGE_ROUTE,
   PRIVACY_PAGE_ROUTE,
   EXPLORE_PAGE_ROUTE,
 } from "../../Routes";
@@ -104,7 +104,7 @@ export default function Footer() {
         <div className="flex flex-col gap-4">
           <h4 className="text-[#333] text-lg m-0">Support</h4>
           <ul className="list-none p-0 m-0 flex flex-col gap-2">
-            <li>
+            {/* <li>
               <Link
                 to="/help"
                 className="text-sm transition-colors duration-200 
@@ -123,7 +123,7 @@ export default function Footer() {
               >
                 Contact Us
               </Link>
-            </li>
+            </li> */}
             <li>
               <Link
                 to="/guidelines"
@@ -160,7 +160,7 @@ export default function Footer() {
                 Terms of Service
               </Link>
             </li>
-            <li>
+            {/* <li>
               <Link
                 to={ABOUT_PAGE_ROUTE}
                 className="text-sm transition-colors duration-200 
@@ -169,7 +169,7 @@ export default function Footer() {
               >
                 About Us
               </Link>
-            </li>
+            </li> */}
           </ul>
         </div>
       </div>

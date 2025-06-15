@@ -99,8 +99,6 @@ export default function GenerateSchedulePage() {
         coursesWithGroups,
         selectedTimeSlots
       );
-      // Handle the result, e.g., navigate to a results page or show a success message
-      console.log("Generated schedule:", result);
       setGeneratedSchedules(result.validSchedules || []);
       setCoursesEventsMap(result.coursesEventsMap || {});
       setCurrentScheduleIndex(0);

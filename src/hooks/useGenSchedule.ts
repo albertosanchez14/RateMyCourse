@@ -14,7 +14,6 @@ export async function getGenSchedules(
   courses: Array<{ id: string; groups: number[] }>,
   timePicks: Record<string, any>
 ) {
-  console.log(courses);
   const response = await fetch(`${API_URL}/schedule`, {
     method: "POST",
     headers: {
