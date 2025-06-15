@@ -129,14 +129,10 @@ export default function GenerateSchedulePage() {
       // For each item in the schedule, create an enrollment
       const savePromises = schedule.map(async (item: any) => {
         const { courseId, groupId } = item;
-
-        // Enroll in the course with selected faculty and group
         await enrollInCourse(courseId, selectedFaculty, groupId);
       });
       await Promise.all(savePromises);
-      // Show success notification
       alert("Schedule saved successfully!");
-      // Clear generated schedules and return to main view
       setGeneratedSchedules([]);
     } catch (error) {
       console.error("Error saving schedule:", error);

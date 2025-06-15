@@ -19,7 +19,7 @@ export default function Footer() {
             Help students make informed decisions about their education journey.
           </p>
           <div className="flex gap-4">
-            <a
+            {/* <a
               href="https://twitter.com"
               target="_blank"
               rel="noopener noreferrer"
@@ -48,7 +48,7 @@ export default function Footer() {
               no-underline"
             >
               GitHub
-            </a>
+            </a> */}
           </div>
         </div>
 
@@ -59,41 +59,44 @@ export default function Footer() {
               <Link
                 to={EXPLORE_PAGE_ROUTE + "?q=*&limit=1000"}
                 className="text-sm transition-colors duration-200 
-                font-medium text-[#646cff] hover:text-[#535bf2] 
-                no-underline"
+              font-medium text-[#646cff] hover:text-[#535bf2] 
+              no-underline"
               >
                 Browse Courses
               </Link>
             </li>
             <li>
-              <Link
-                to="/professors"
-                className="text-sm transition-colors duration-200 
-                font-medium text-[#646cff] hover:text-[#535bf2] 
-                no-underline"
+              <span
+                className="text-sm font-medium text-gray-400 cursor-not-allowed 
+                flex flex-col gap-1"
               >
                 Find Professors
-              </Link>
+                <span className="text-xs text-gray-500 rounded">
+                  (Coming soon..)
+                </span>
+              </span>
             </li>
             <li>
-              <Link
-                to="/departments"
-                className="text-sm transition-colors duration-200 
-                font-medium text-[#646cff] hover:text-[#535bf2] 
-                no-underline"
+              <span
+                className="text-sm font-medium text-gray-400 cursor-not-allowed
+                flex flex-col gap-1"
               >
                 Departments
-              </Link>
+                <span className="text-xs text-gray-500 rounded">
+                  (Coming soon..)
+                </span>
+              </span>
             </li>
             <li>
-              <Link
-                to="/degrees"
-                className="text-sm transition-colors duration-200 
-                font-medium text-[#646cff] hover:text-[#535bf2] 
-                no-underline"
+              <span
+                className="text-sm font-medium text-gray-400 cursor-not-allowed
+                flex flex-col gap-1"
               >
                 Degree Programs
-              </Link>
+                <span className="text-xs text-gray-500 rounded">
+                  (Coming soon..)
+                </span>
+              </span>
             </li>
           </ul>
         </div>

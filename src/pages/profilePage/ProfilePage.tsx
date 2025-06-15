@@ -185,7 +185,9 @@ export default function ProfilePage() {
         </div>
 
         {/* Calendar Section */}
-        <ProfileCalendarSection />
+        <div id="schedule">
+          <ProfileCalendarSection />
+        </div>
 
         <div className="flex flex-row gap-8">
           {/* Reviews Section */}
