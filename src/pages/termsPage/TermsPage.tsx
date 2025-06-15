@@ -81,7 +81,7 @@ export default function TermsOfServicePage() {
       <div className="max-w-3xl mx-auto">
         <h1 className="text-4xl font-bold mb-6">Terms of Service</h1>
         <p className="text-gray-600 mb-8">
-          Last updated: March 16, 2024
+          Last updated: March 16, 2025
         </p>
 
         <div className="space-y-8">
@@ -101,12 +101,12 @@ export default function TermsOfServicePage() {
           ))}
         </div>
 
-        <div className="mt-8 mb-12 text-gray-600 text-sm">
+        {/* <div className="mt-8 mb-12 text-gray-600 text-sm">
           <p>
             If you have any questions about these Terms of Service, please contact
             us at legal@coursewise.com
           </p>
-        </div>
+        </div> */}
       </div>
     </div>
   );
