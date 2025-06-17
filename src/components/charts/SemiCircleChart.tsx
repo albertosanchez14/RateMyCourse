@@ -6,11 +6,16 @@ interface SemiCircleChartProps {
   rating: number;
 }
 
-export default function SemiCircleChart( { rating }: SemiCircleChartProps ) {
+export default function SemiCircleChart({ rating }: SemiCircleChartProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   // Calculate the rotation angle based on the rating (assuming rating is out of 5)
   const angle = (rating / 5) * 180;
+
+  // Convert rating to percentage (0-100) for display
+  const ratingPercentage = rating * 20;
+  // Calculate needle rotation based on rating (0-100)
+  const needleRotation = (ratingPercentage / 100) * 180 + 180;
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -44,7 +49,7 @@ export default function SemiCircleChart( { rating }: SemiCircleChartProps ) {
         const endAngle_l = endAngle * (Math.PI / 180);
 
         const radius_l = radius;
-        
+
         if (!ctx) return;
         ctx.strokeStyle = lineColor;
         ctx.fillStyle = fillColor;
@@ -93,32 +98,45 @@ export default function SemiCircleChart( { rating }: SemiCircleChartProps ) {
   }, [angle]);
 
   return (
-    <div className="multi-graph margin">
-      <span>{rating * 20}%</span>
-      <div
-        className="graph"
-        style={
-          { "--percentage": 100, "--fill": "#0077b6" } as React.CSSProperties
-        }
-      ></div>
-      <div
-        className="graph"
-        style={
-          { "--percentage": 75, "--fill": "#00b4d8" } as React.CSSProperties
-        }
-      ></div>
-      <div
-        className="graph"
-        style={
-          { "--percentage": 50, "--fill": "#90e0ef" } as React.CSSProperties
-        }
-      ></div>
-      <div
-        className="graph"
-        style={
-          { "--percentage": 25, "--fill": "#caf0f8" } as React.CSSProperties
-        }
-      ></div>
+    <div className="chart-container">
+      <div className="multi-graph margin">
+        <div
+          className="graph"
+          style={
+            { "--percentage": 100, "--fill": "#0077b6" } as React.CSSProperties
+          }
+        ></div>
+        <div
+          className="graph"
+          style={
+            { "--percentage": 75, "--fill": "#00b4d8" } as React.CSSProperties
+          }
+        ></div>
+        <div
+          className="graph"
+          style={
+            { "--percentage": 50, "--fill": "#90e0ef" } as React.CSSProperties
+          }
+        ></div>
+        <div
+          className="graph"
+          style={
+            { "--percentage": 25, "--fill": "#caf0f8" } as React.CSSProperties
+          }
+        ></div>
+
+        {/* Needle element pointing to the rating */}
+        <div
+          className="needle animate-needle"
+          style={
+            {
+              "--needle-rotation": `${needleRotation}deg`,
+            } as React.CSSProperties
+          }
+        ></div>
+      </div>
+      {/* Rating value container - moved to be rendered last (on top) */}
+      <h4 className="rating-value">{ratingPercentage}%</h4>
     </div>
   );
 }

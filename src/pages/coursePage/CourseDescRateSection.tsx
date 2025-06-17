@@ -29,7 +29,7 @@ export default function CourseDescRateSection({
   const ratingContainerRef = useRef<HTMLDivElement>(null);
   const [isExpanded, setIsExpanded] = useState(false);
   const [isContentTruncated, setIsContentTruncated] = useState(false);
-  const MAX_HEIGHT = 300;
+  const MAX_HEIGHT = 390;
 
   // Animation variants
   const tabVariants = {
@@ -68,6 +68,8 @@ export default function CourseDescRateSection({
       const newRating = { ...rating };
       delete newRating._id;
       setModifiedRating(newRating);
+    } else {
+      setModifiedRating(undefined);
     }
   }, [rating]);
 
@@ -91,7 +93,7 @@ export default function CourseDescRateSection({
         // Compare the scroll height to the maximum allowed height
         const isTruncated = descriptionElement.scrollHeight > MAX_HEIGHT;
         setIsContentTruncated(isTruncated);
-        
+
         // If not truncated anymore, collapse the expanded view
         if (!isTruncated && isExpanded) {
           setIsExpanded(false);
@@ -103,11 +105,11 @@ export default function CourseDescRateSection({
     // Add a small delay to check after rendering/animation completes
     const timeoutId = setTimeout(checkTruncation, 400);
     // Add resize listener to handle window size changes
-    window.addEventListener('resize', checkTruncation);
+    window.addEventListener("resize", checkTruncation);
     // Clean up
     return () => {
       clearTimeout(timeoutId);
-      window.removeEventListener('resize', checkTruncation);
+      window.removeEventListener("resize", checkTruncation);
     };
   }, [description, isExpanded]);
 
@@ -195,7 +197,7 @@ export default function CourseDescRateSection({
             <div className="flex flex-col flex-[2]">
               <div
                 className={`relative ${
-                  !isExpanded ? "max-h-[300px] overflow-hidden" : ""
+                  !isExpanded ? "min-h-[340px] max-h-[340px] overflow-hidden" : ""
                 }`}
               >
                 <AnimatePresence mode="wait">
@@ -237,12 +239,12 @@ export default function CourseDescRateSection({
                 </button>
               )}
             </div>
-            <div
-              className="flex flex-col h-fit flex-1 gap-3"
-              ref={ratingContainerRef}
-            >
-              {modifiedRating &&
-                Object.entries(modifiedRating).map(([key, value]) => (
+            {modifiedRating && (
+              <div
+                className="flex flex-col h-fit flex-1 gap-3"
+                ref={ratingContainerRef}
+              >
+                {Object.entries(modifiedRating).map(([key, value]) => (
                   <div
                     className="flex flex-col"
                     id={`course-rating-${key}-container`}
@@ -260,7 +262,8 @@ export default function CourseDescRateSection({
                     )}
                   </div>
                 ))}
-            </div>
+              </div>
+            )}
           </div>
         </>
       ) : (

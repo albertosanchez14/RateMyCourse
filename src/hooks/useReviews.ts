@@ -15,6 +15,11 @@ import commentsProfessorData from "../data/comments_professor.json"; // Adjust t
 import professorData from "../data/professors.json"; // Adjust the path as necessary
 import { fetchCourse } from "./useCourse";
 
+const API_URL =
+  import.meta.env.VITE_ENV === "production"
+    ? import.meta.env.VITE_NODE_API_URL_PROD
+    : import.meta.env.VITE_NODE_API_URL_DEV;
+
 const fetchCourseReviews = async (
   courseId: string
 ): Promise<Array<CourseReviewsType>> => {
@@ -110,9 +115,43 @@ export const addCourseReview = async (
     date: new Date().toISOString(),
     professor: review.professor,
   });
-
   if (insertError) {
     throw new Error(`Failed to add review: ${insertError.message}`);
+  }
+
+  // Get the total number of reviews for this course
+  const { count, error: countError } = await supabase
+    .from("course_reviews")
+    .select("*", { count: "exact", head: true })
+    .eq("course_id", courseId);
+  if (countError) {
+    console.error("Failed to get total review count:", countError);
+  }
+
+  try {
+    const response = await fetch(`${API_URL}/course/rating/${courseId}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        numReviews: count || 0,
+        rating: {
+          overall: review.rating.overall,
+          easy: review.rating.easy,
+          useful: review.rating.useful,
+          workload: review.rating.workload,
+        },
+      }),
+    });
+    if (!response.ok) {
+      console.error(
+        "Failed to notify API about new rating:",
+        await response.text()
+      );
+    }
+  } catch (error) {
+    console.error("Error notifying API about new rating:", error);
   }
 };
 
@@ -136,6 +175,8 @@ export const useAddCourseReview = () => {
       queryClient.invalidateQueries({ queryKey: ["user", id] });
       // Invalidate course reviews for the specific course
       queryClient.invalidateQueries({ queryKey: ["comments", courseId] });
+      // Invalidate course data to refresh the rating
+      queryClient.invalidateQueries({ queryKey: ["course", courseId] });
     },
   });
 };
@@ -191,16 +232,21 @@ export const editCourseReview = async (
 export const useEditCourseReview = () => {
   const queryClient = useQueryClient();
   const { id } = useAuth();
-  
+
   return useMutation({
-    mutationFn: ({ reviewId, review }: { reviewId: string; review: FormCourseReviewType }) => 
-      editCourseReview(reviewId, review),
+    mutationFn: ({
+      reviewId,
+      review,
+    }: {
+      reviewId: string;
+      review: FormCourseReviewType;
+    }) => editCourseReview(reviewId, review),
     onSuccess: () => {
       // Invalidate user reviews query when a review is edited
       queryClient.invalidateQueries({ queryKey: ["userReviews"] });
       // Also invalidate the specific course's reviews
       queryClient.invalidateQueries({ queryKey: ["user", id] });
-    }
+    },
   });
 };
 
@@ -224,9 +270,11 @@ export const deleteCourseReview = async (reviewId: string): Promise<void> => {
     .eq("id", reviewId)
     .eq("user_id", user.id)
     .single();
-    
+
   if (checkError) {
-    throw new Error("Review not found or you don't have permission to delete it");
+    throw new Error(
+      "Review not found or you don't have permission to delete it"
+    );
   }
 
   // Delete the review
@@ -239,21 +287,21 @@ export const deleteCourseReview = async (reviewId: string): Promise<void> => {
   if (deleteError) {
     throw new Error(`Failed to delete review: ${deleteError.message}`);
   }
-  
+
   return review.course_id;
 };
 
 export const useDeleteCourseReview = () => {
   const queryClient = useQueryClient();
   const { id } = useAuth();
-  
+
   return useMutation({
     mutationFn: (reviewId: string) => deleteCourseReview(reviewId),
     onSuccess: (courseId) => {
       queryClient.invalidateQueries({ queryKey: ["userReviews"] });
       queryClient.invalidateQueries({ queryKey: ["comments", courseId] });
       queryClient.invalidateQueries({ queryKey: ["user", id] });
-    }
+    },
   });
 };
 
