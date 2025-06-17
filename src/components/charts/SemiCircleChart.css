@@ -1,52 +1,63 @@
-.multi-graph{
+.chart-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.rating-value {
+  font-size: 25px;
+  font-weight: 700;
+  color: #333;
+}
+
+.multi-graph {
   width: 300px;
   height: 150px;
   position: relative;
   z-index: 1;
-  /* color: #fff; */
   font-size: 22px;
   font-weight: 600;
   display: flex;
   align-items: flex-end;
   justify-content: center;
   overflow: hidden;
-  box-sizing : border-box;
-   &:before{
-    content: '';
+  box-sizing: border-box;
+  &:before {
+    content: "";
     width: 300px;
     height: 150px;
     /* border:70px solid rgba(0,0,0,.15); */
     border-bottom: none;
     position: absolute;
-    box-sizing : border-box;
-    transform-origin: 50%  0%;
-    border-radius: 300px 300px 0 0 ;
+    box-sizing: border-box;
+    transform-origin: 50% 0%;
+    border-radius: 300px 300px 0 0;
     left: 0;
     top: 0;
   }
 
-  .graph{
+  .graph {
     width: 300px;
     height: 150px;
-    border:70px solid var(--fill);
+    border: 70px solid var(--fill);
     border-top: none;
     position: absolute;
-    transform-origin :50%  0% 0;
-    border-radius: 0 0 300px 300px ;
+    transform-origin: 50% 0% 0;
+    border-radius: 0 0 300px 300px;
     left: 0;
     top: 100%;
     z-index: 5;
-    animation : 1s fillGraphAnimation ease-in;
-    transform: rotate( calc( 1deg * ( var(--percentage) * 1.8 ) ) );
-    box-sizing : border-box;
+    animation: 1s fillGraphAnimation ease-in;
+    transform: rotate(calc(1deg * (var(--percentage) * 1.8)));
+    box-sizing: border-box;
 
-    &:after{
+    &:after {
       /* content: attr(data-name) ; */
       /* content: attr(data-name) ' ' counter(varible) '%'; */
       counter-reset: varible var(--percentage);
-      background: var(--fill) ;
-      box-sizing : border-box;
-      border-radius : 2px;
+      background: var(--fill);
+      box-sizing: border-box;
+      border-radius: 2px;
       color: #fff;
       font-weight: 200;
       font-size: 12px;
@@ -55,13 +66,14 @@
       top: 0px;
       position: absolute;
       left: 0;
-      transform: rotate(calc( -1deg * var(--percentage) * 1.8 ))  translate(-30px , 0px);
-      transition:0.2s ease-in;
+      transform: rotate(calc(-1deg * var(--percentage) * 1.8))
+        translate(-30px, 0px);
+      transition: 0.2s ease-in;
       transform-origin: 0 50% 0;
       opacity: 0;
     }
-    &:hover{
-        /* opacity: 0.8;
+    &:hover {
+      /* opacity: 0.8;
       &:after{
         opacity: 1;
         left: 30px;
@@ -70,26 +82,62 @@
   }
 }
 
-#needle{
-  /* width: 0;
-  height: 0; */
-  border-left: 5px solid transparent;
-  border-right: 5px solid transparent;
-  border-bottom: 10px solid #fff;
+.needle {
   position: absolute;
-  top: 60;
-  left: 60;
-  /* transform: translate(-50% , 0); */
+  width: 120px;
+  height: 4px;
+  background-color: #333;
+  bottom: 5%;
+  left: 50%;
+  transform-origin: 0 50%;
+  border-radius: 4px;
   z-index: 10;
-  /* animation: 1s fillAnimation ease-in; */
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+  transition: transform 0.5s ease-out;
 }
 
-@keyframes fillAnimation{
-  0%{transform : rotate(-45deg);}
-  50%{transform: rotate(135deg);}
+.animate-needle {
+  animation: 1s needleAnimation ease-in-out forwards;
+  transform: rotate(var(--needle-rotation));
 }
 
-@keyframes fillGraphAnimation{
-  0%{transform: rotate(0deg);}
-  50%{transform: rotate(180deg);}
+.needle::after {
+  content: "";
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background-color: #333;
+  border-radius: 50%;
+  left: -6px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 21;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+}
+
+@keyframes fillAnimation {
+  0% {
+    transform: rotate(-45deg);
+  }
+  50% {
+    transform: rotate(135deg);
+  }
+}
+
+@keyframes fillGraphAnimation {
+  0% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(180deg);
+  }
+}
+
+@keyframes needleAnimation {
+  0% {
+    transform: rotate(180deg); /* Start at the zero position */
+  }
+  100% {
+    transform: rotate(var(--needle-rotation)); /* End at the target position */
+  }
 }
