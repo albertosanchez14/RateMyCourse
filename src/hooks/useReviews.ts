@@ -79,11 +79,9 @@ export const addCourseReview = async (
     .eq("course_id", courseId)
     .eq("user_id", user.id)
     .maybeSingle();
-
   if (checkError) {
     throw new Error("Failed to check existing reviews");
   }
-
   if (existingReview) {
     throw new Error("You have already submitted a review for this course");
   }
@@ -94,7 +92,6 @@ export const addCourseReview = async (
     .select("full_name")
     .eq("user_id", user.id)
     .single();
-
   if (profileError) {
     throw new Error(`Failed to fetch user profile: ${profileError.message}`);
   }
@@ -119,40 +116,23 @@ export const addCourseReview = async (
     throw new Error(`Failed to add review: ${insertError.message}`);
   }
 
-  // Get the total number of reviews for this course
-  const { count, error: countError } = await supabase
-    .from("course_reviews")
-    .select("*", { count: "exact", head: true })
-    .eq("course_id", courseId);
-  if (countError) {
-    console.error("Failed to get total review count:", countError);
-  }
-
-  try {
-    const response = await fetch(`${API_URL}/course/rating/${courseId}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        numReviews: count || 0,
-        rating: {
-          overall: review.rating.overall,
-          easy: review.rating.easy,
-          useful: review.rating.useful,
-          workload: review.rating.workload,
-        },
-      }),
+  // Notify the API about the rating change
+  fetch(`${API_URL}/course/rating/notify/${courseId}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => {
+      if (!response.ok) {
+        response.text().then((text) => {
+          console.error("Failed to notify API about rating change:", text);
+        });
+      }
+    })
+    .catch((error) => {
+      console.error("Error notifying API about rating change:", error);
     });
-    if (!response.ok) {
-      console.error(
-        "Failed to notify API about new rating:",
-        await response.text()
-      );
-    }
-  } catch (error) {
-    console.error("Error notifying API about new rating:", error);
-  }
 };
 
 // Create a new hook that uses the function but also handles cache invalidation
@@ -175,8 +155,24 @@ export const useAddCourseReview = () => {
       queryClient.invalidateQueries({ queryKey: ["user", id] });
       // Invalidate course reviews for the specific course
       queryClient.invalidateQueries({ queryKey: ["comments", courseId] });
-      // Invalidate course data to refresh the rating
-      queryClient.invalidateQueries({ queryKey: ["course", courseId] });
+      // Notify the API about the rating change
+      fetch(`${API_URL}/course/rating/notify/${courseId}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => {
+          if (!response.ok) {
+            response.text().then((text) => {
+              console.error("Failed to notify API about rating change:", text);
+            });
+          }
+          queryClient.invalidateQueries({ queryKey: ["course", courseId] });
+        })
+        .catch((error) => {
+          console.error("Error notifying API about rating change:", error);
+        });
     },
   });
 };
@@ -258,7 +254,6 @@ export const deleteCourseReview = async (reviewId: string): Promise<void> => {
   const {
     data: { user },
   } = await supabase.auth.getUser();
-
   if (!user) {
     throw new Error("You must be logged in to delete a review");
   }
@@ -270,7 +265,6 @@ export const deleteCourseReview = async (reviewId: string): Promise<void> => {
     .eq("id", reviewId)
     .eq("user_id", user.id)
     .single();
-
   if (checkError) {
     throw new Error(
       "Review not found or you don't have permission to delete it"
@@ -283,12 +277,11 @@ export const deleteCourseReview = async (reviewId: string): Promise<void> => {
     .delete()
     .eq("id", reviewId)
     .eq("user_id", user.id); // Ensure only the owner can delete
-
   if (deleteError) {
     throw new Error(`Failed to delete review: ${deleteError.message}`);
   }
 
-  return review.course_id;
+  return review.course_id.toString();
 };
 
 export const useDeleteCourseReview = () => {
@@ -301,6 +294,24 @@ export const useDeleteCourseReview = () => {
       queryClient.invalidateQueries({ queryKey: ["userReviews"] });
       queryClient.invalidateQueries({ queryKey: ["comments", courseId] });
       queryClient.invalidateQueries({ queryKey: ["user", id] });
+      // Notify the API about the rating change
+      fetch(`${API_URL}/course/rating/notify/${courseId}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => {
+          if (!response.ok) {
+            response.text().then((text) => {
+              console.error("Failed to notify API about rating change:", text);
+            });
+          }
+          queryClient.invalidateQueries({ queryKey: ["course", courseId] });
+        })
+        .catch((error) => {
+          console.error("Error notifying API about rating change:", error);
+        });
     },
   });
 };
