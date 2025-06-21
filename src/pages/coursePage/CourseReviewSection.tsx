@@ -157,9 +157,13 @@ export default function CourseReviewSection({
             onSort={handleButtonSort}
             professors={[
               ...new Set(
-                courseComments.data.map((comment) => comment.professor)
+                courseComments.data
+                  .map((comment) => comment.professor)
+                  .filter(
+                    (prof): prof is string => prof !== "" && prof !== undefined
+                  )
               ),
-            ].filter((prof) => prof !== "" && prof !== undefined)}
+            ]}
             onProfessorFilter={(e: React.ChangeEvent<HTMLSelectElement>) => {
               const professor = e.target.value;
               if (professor === "") {
