@@ -69,10 +69,34 @@ export default function ProfileSetUpPage() {
       } = await supabase.auth.getSession();
 
       if (session?.user) {
+        const fullName = session.user.user_metadata?.name || "";
+        const nameParts = fullName.split(" ");
+        const firstName =
+          formData.firstName.trim() ||
+          (nameParts.length > 0
+            ? nameParts[0].charAt(0).toUpperCase() +
+              nameParts[0].slice(1).toLowerCase()
+            : "No First Name");
+        const lastName =
+          formData.lastName.trim() ||
+          (nameParts.length > 1
+            ? nameParts
+                .slice(1)
+                .map(
+                  (word: string) =>
+                    word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+                )
+                .join(" ")
+            : "No Last Name");
         // Update user profile with academic information
         const { error: profileError } = await supabase
           .from("profiles")
-          .update({
+          .upsert({
+            first_name: firstName,
+            last_name: lastName,
+            full_name: `${firstName} ${lastName}`,
+            user_id: session.user.id,
+            email: session.user.email || "",
             university: formData.university,
             degree: formData.degree,
             course_year: formData.courseYear,

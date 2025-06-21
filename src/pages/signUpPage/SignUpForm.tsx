@@ -179,7 +179,7 @@ export default function SignUpForm({
                   );
                 case 2:
                   return (
-                    <div className="space-y-4">
+                    <div className="space-y-4 py-2">
                       <h2 className="text-xl font-semibold mb-4">
                         {isGoogleAuth
                           ? "Complete Your Profile"

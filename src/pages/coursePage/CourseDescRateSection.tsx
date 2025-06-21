@@ -67,6 +67,12 @@ export default function CourseDescRateSection({
     if (rating) {
       const newRating = { ...rating };
       delete newRating._id;
+      // Ensure all rating values are integers
+      Object.keys(newRating).forEach((key) => {
+        if (typeof newRating[key] === "number") {
+          newRating[key] = Number((newRating[key] as number).toFixed(1));
+        }
+      });
       setModifiedRating(newRating);
     } else {
       setModifiedRating(undefined);
@@ -197,7 +203,9 @@ export default function CourseDescRateSection({
             <div className="flex flex-col flex-[2]">
               <div
                 className={`relative ${
-                  !isExpanded ? "min-h-[340px] max-h-[340px] overflow-hidden" : ""
+                  !isExpanded
+                    ? "min-h-[340px] max-h-[340px] overflow-hidden"
+                    : ""
                 }`}
               >
                 <AnimatePresence mode="wait">
@@ -244,35 +252,9 @@ export default function CourseDescRateSection({
                 className="flex flex-col h-fit flex-1 gap-3"
                 ref={ratingContainerRef}
               >
-                {Object.entries(modifiedRating).map(([key, value]) => (
-                  <div
-                    className="flex flex-col"
-                    id={`course-rating-${key}-container`}
-                    key={key}
-                  >
-                    <h4 className="font-semibold">
-                      {key === "overall"
-                        ? "Rating"
-                        : key.charAt(0).toUpperCase() + key.slice(1)}
-                    </h4>
-                    {key === "overall" ? (
-                      <SemiCircleChart rating={value as number} />
-                    ) : (
-                      <RectangleChart rating={value as number} />
-                    )}
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        </>
-      ) : (
-        <div className="flex flex-row gap-6 mt-6">
-          <div className="flex flex-col flex-1 gap-3">
-            {modifiedRating &&
-              Object.entries(modifiedRating).map(
-                ([key, value]) =>
-                  key !== "overall" && (
+                {Object.entries(modifiedRating)
+                  .filter(([key]) => key !== "overall") // Filter out overall to display it last
+                  .map(([key, value]) => (
                     <div
                       className="flex flex-col"
                       id={`course-rating-${key}-container`}
@@ -283,13 +265,43 @@ export default function CourseDescRateSection({
                       </h4>
                       <RectangleChart rating={value as number} />
                     </div>
-                  )
-              )}
+                  ))}
+                {modifiedRating.overall && ( // Display overall rating last
+                  <div
+                    className="flex flex-col"
+                    id="course-rating-overall-container"
+                  >
+                    <h4 className="font-semibold">Rating</h4>
+                    <SemiCircleChart rating={modifiedRating.overall} />
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        </>
+      ) : (
+        <div className="flex flex-row gap-6 mt-6">
+          <div className="flex flex-col flex-1 gap-3">
+            {modifiedRating &&
+              Object.entries(modifiedRating)
+                .filter(([key]) => key !== "overall")
+                .map(([key, value]) => (
+                  <div
+                    className="flex flex-col"
+                    id={`course-rating-${key}-container`}
+                    key={key}
+                  >
+                    <h4 className="font-semibold">
+                      {key.charAt(0).toUpperCase() + key.slice(1)}
+                    </h4>
+                    <RectangleChart rating={value as number} />
+                  </div>
+                ))}
           </div>
           <div className="flex flex-col flex-1 justify-center items-center">
             {modifiedRating && modifiedRating.overall && (
               <div className="flex flex-col items-center">
-                {/* <h4 className="font-semibold">Rating</h4> */}
+                <h4 className="font-semibold">Rating</h4>
                 <SemiCircleChart rating={modifiedRating.overall} />
               </div>
             )}

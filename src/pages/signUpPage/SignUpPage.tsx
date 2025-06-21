@@ -152,12 +152,10 @@ export default function SignUpPage() {
         options: {
           redirectTo: `${redirectBaseUrl}/auth/callback`,
           queryParams: {
-            access_type: "offline",
-            prompt: "consent",
+            intent: "login",
           },
         },
       });
-      console.log("Google auth error:", error);
       if (error) {
         console.error("Google auth error:", error);
         setErrors({
@@ -366,8 +364,8 @@ export default function SignUpPage() {
         setFormData((prevData) => ({
           ...prevData,
           firstName:
-            session.user.user_metadata.full_name?.split(" ")?.[0] || "",
-          lastName: session.user.user_metadata.full_name?.split(" ")?.[1] || "",
+            session.user.user_metadata.name?.split(" ")?.[0] || "",
+          lastName: session.user.user_metadata.name?.split(" ")?.[1] || "",
           email: session.user.email || "",
           // Password fields not needed for Google auth
           password: "google-auth-not-required",

@@ -17,7 +17,7 @@ export type User = {
     id: string;
     title: string;
     code: number;
-    rating: RatingType;
+    rating: RatingType | null;
     degree: DegreeType;
   }>;
   created_at: string;

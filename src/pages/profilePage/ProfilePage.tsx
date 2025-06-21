@@ -264,9 +264,11 @@ export default function ProfilePage() {
                           </h3>
                         </Link>
                       </div>
-                      <div className="bg-blue-50 text-blue-700 px-3 py-1 rounded-full font-semibold">
-                        {course.rating.overall}/5
-                      </div>
+                      {course.rating && (
+                        <div className="bg-blue-50 text-blue-700 px-3 py-1 rounded-full font-semibold">
+                          {course.rating.overall.toFixed(2)}/5
+                        </div>
+                      )}
                     </div>
                     <span className="text-gray-600">{course.degree.title}</span>
                   </div>

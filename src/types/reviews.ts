@@ -20,7 +20,7 @@ export type CourseReviewsType = {
   title: string;
   review: string;
   date: string;
-  professor: string;
+  professor?: string;
 };
 
 export type UserCourseReviewType = Omit<CourseReviewsType, "course_id"> & {

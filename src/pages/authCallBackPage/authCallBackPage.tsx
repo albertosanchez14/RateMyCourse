@@ -20,8 +20,6 @@ export default function AuthCallbackPage() {
       } = await supabase.auth.getSession();
 
       if (session?.user) {
-        const user = session.user;
-        console.log("User authenticated:", user.user_metadata);
         // Check if user has a profile data in the database
         const { data: profileData, error: profileError } = await supabase
           .from("profiles")

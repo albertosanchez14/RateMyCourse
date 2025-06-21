@@ -36,12 +36,22 @@ export default function CoursePage() {
         course={data.code}
         degree={data.degree}
       />
-      <CourseDescRateSection
-        objectives={data.objectives}
-        skills_and_learning_outcomes={data.skills_and_learning_outcomes}
-        description_of_contents={data.description_of_contents}
-        rating={data.rating}
-      />
+      {!data.objectives &&
+      !data.skills_and_learning_outcomes &&
+      !data.description_of_contents &&
+      !data.rating ? (
+        <div className="text-center text-gray-500 border-t 
+        border-[#f0f0f0] pt-8">
+          No course description available.
+        </div>
+      ) : (
+        <CourseDescRateSection
+          objectives={data.objectives}
+          skills_and_learning_outcomes={data.skills_and_learning_outcomes}
+          description_of_contents={data.description_of_contents}
+          rating={data.rating}
+        />
+      )}
       {data.schedule.length > 0 && (
         <CourseScheduleSection
           teacher={data.teacher}
