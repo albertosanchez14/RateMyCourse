@@ -15,6 +15,7 @@ import { FaArrowRightLong, FaArrowLeftLong } from "react-icons/fa6";
 import LoginModal from "../../components/auth/LoginModal";
 
 export default function GenerateSchedulePage() {
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const { isAuthenticated } = useAuth();
   const { enrollInCourse } = useEnrolled();
@@ -130,8 +131,11 @@ export default function GenerateSchedulePage() {
         await enrollInCourse(courseId, selectedFaculty, groupId);
       });
       await Promise.all(savePromises);
-      alert("Schedule saved successfully!");
-      setGeneratedSchedules([]);
+      setShowSuccessMessage(true);
+      setTimeout(() => {
+        setShowSuccessMessage(false);
+        setGeneratedSchedules([]);
+      }, 2000);
     } catch (error) {
       console.error("Error saving schedule:", error);
       alert("Failed to save schedule. Please try again.");
@@ -409,6 +413,29 @@ export default function GenerateSchedulePage() {
           </div>
         </div>
       ) : null}
+      {showSuccessMessage && (
+        <div
+          className="fixed top-8 right-1/2 bg-green-600 
+        text-white px-6 py-3 rounded-full shadow-lg 
+          flex items-center gap-2 animate-fadeIn z-50"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-5 w-5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M5 13l4 4L19 7"
+            />
+          </svg>
+          <span className="font-medium">Schedule saved successfully!</span>
+        </div>
+      )}
     </div>
   );
 }

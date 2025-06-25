@@ -7,12 +7,18 @@ import { useCourseData } from "../../hooks/useCourse";
 
 import LoadingSpinnerScreen from "../../components/loading/LoadingSpinnerScreen";
 import Calendar from "../../components/calendar/Calendar";
+import ConfirmationModal from "../../components/common/ConfirmationModal";
 import PickScheduleModal from "./PickScheduleModal";
 
 import { FREventType } from "../../types/course";
 
 export default function ProfileCalendarSection() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [confirmModal, setConfirmModal] = useState({
+    isOpen: false,
+    courseId: "",
+    courseName: "",
+  });
   const { enrolledCourses, isLoading, error, unenrollFromCourse } =
     useEnrolled();
   const { data: user } = useUser();
@@ -71,10 +77,29 @@ export default function ProfileCalendarSection() {
     setIsModalOpen(false);
   };
 
-  const handleUnenroll = (courseId: string) => {
-    if (window.confirm("Are you sure you want to unenroll from this course?")) {
-      unenrollFromCourse(courseId);
-    }
+  const handleUnenroll = (courseId: string, courseName: string = "") => {
+    setConfirmModal({
+      isOpen: true,
+      courseId,
+      courseName,
+    });
+  };
+
+  const confirmUnenroll = () => {
+    unenrollFromCourse(confirmModal.courseId);
+    setConfirmModal({
+      isOpen: false,
+      courseId: "",
+      courseName: "",
+    });
+  };
+
+  const cancelUnenroll = () => {
+    setConfirmModal({
+      isOpen: false,
+      courseId: "",
+      courseName: "",
+    });
   };
 
   return (
@@ -114,10 +139,15 @@ export default function ProfileCalendarSection() {
                                 </p>
                               )}
                               <button
-                                onClick={() => handleUnenroll(course.course_id)}
+                                onClick={() =>
+                                  handleUnenroll(
+                                    course.course_id,
+                                    courseInfo?.title || course.course_id
+                                  )
+                                }
                                 className="flex text-red-500 hover:text-red-700 text-sm ml-auto"
                               >
-                                <MdDelete size={20}/>
+                                <MdDelete size={20} />
                               </button>
                             </div>
                           </div>
@@ -144,25 +174,36 @@ export default function ProfileCalendarSection() {
         </div>
       ) : (
         <div className="flex flex-col items-center justify-center h-full p-8 mb-8">
-            <button
+          <button
             className="bg-gradient-to-r from-blue-500 to-blue-600 text-white py-3 px-8 rounded-full 
                 hover:from-blue-600 hover:to-blue-800 shadow-lg transform 
                 transition-transform hover:scale-105 flex flex-col items-center gap-2"
             onClick={handleOpenModal}
-            >
+          >
             <span className="text-lg font-bold">
               {user?.first_name}, you have no enrolled courses.
             </span>
             <span className="text-sm font-medium">
               Click here to pick a schedule.
             </span>
-            </button>
+          </button>
         </div>
       )}
       {/* Render the modal only once, outside of the conditional rendering */}
       {isModalOpen && (
         <PickScheduleModal isOpen={isModalOpen} onClose={handleCloseModal} />
       )}
+      <ConfirmationModal
+        isOpen={confirmModal.isOpen}
+        title="Unenroll from Course"
+        message={`Are you sure you want to unenroll from ${
+          confirmModal.courseName || "this course"
+        }?`}
+        confirmText="Unenroll"
+        cancelText="Cancel"
+        onConfirm={confirmUnenroll}
+        onCancel={cancelUnenroll}
+      />
     </>
   );
 }
