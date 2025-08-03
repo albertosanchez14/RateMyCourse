@@ -30,7 +30,6 @@ export default function CourseDescRateSection({
   const [isExpanded, setIsExpanded] = useState(false);
   const [isContentTruncated, setIsContentTruncated] = useState(false);
   const MAX_HEIGHT = 390;
-
   // Animation variants
   const tabVariants = {
     active: {
@@ -58,8 +57,6 @@ export default function CourseDescRateSection({
       transition: { duration: 0.3, ease: "easeIn" },
     },
   };
-
-  // Rest of your existing state and effects here
   const [modifiedRating, setModifiedRating] = useState<RatingType | undefined>(
     rating
   );
@@ -92,27 +89,19 @@ export default function CourseDescRateSection({
 
   // Check if the content is truncated
   useEffect(() => {
-    // Use a small delay to ensure content is rendered properly after animation
     const checkTruncation = () => {
       const descriptionElement = descriptionRef.current;
       if (descriptionElement) {
-        // Compare the scroll height to the maximum allowed height
         const isTruncated = descriptionElement.scrollHeight > MAX_HEIGHT;
         setIsContentTruncated(isTruncated);
-
-        // If not truncated anymore, collapse the expanded view
         if (!isTruncated && isExpanded) {
           setIsExpanded(false);
         }
       }
     };
-    // Initial check
     checkTruncation();
-    // Add a small delay to check after rendering/animation completes
     const timeoutId = setTimeout(checkTruncation, 400);
-    // Add resize listener to handle window size changes
     window.addEventListener("resize", checkTruncation);
-    // Clean up
     return () => {
       clearTimeout(timeoutId);
       window.removeEventListener("resize", checkTruncation);
@@ -120,7 +109,6 @@ export default function CourseDescRateSection({
   }, [description, isExpanded]);
 
   const handleDescriptionChange = (e: React.MouseEvent<HTMLHeadingElement>) => {
-    // Change the description based on the clicked title
     const selectedDescription = e.currentTarget.textContent;
     let newDescription = "";
     switch (selectedDescription) {
@@ -148,18 +136,16 @@ export default function CourseDescRateSection({
   };
 
   return (
-    <div
-      className="flex flex-col gap-4 border-t border-[#f0f0f0]"
-      // initial={{ opacity: 0 }}
-      // animate={{ opacity: 1 }}
-      // transition={{ duration: 0.4 }}
-    >
+    <div className="flex flex-col gap-4 border-t border-[#f0f0f0] px-4 sm:px-0">
       {objectives || skills_and_learning_outcomes || description_of_contents ? (
         <>
-          <div className="flex flex-row gap-6" ref={descriptionTitleContRef}>
+          <div
+            className="flex flex-row gap-2 sm:gap-6 overflow-x-auto scrollbar-hide"
+            ref={descriptionTitleContRef}
+          >
             {objectives && (
               <motion.h3
-                className="text-lg font-semibold m-2 cursor-pointer"
+                className="text-base sm:text-lg font-semibold m-2 cursor-pointer whitespace-nowrap flex-shrink-0"
                 onClick={handleDescriptionChange}
                 variants={tabVariants}
                 animate={description === objectives ? "active" : "inactive"}
@@ -170,7 +156,7 @@ export default function CourseDescRateSection({
             )}
             {skills_and_learning_outcomes && (
               <motion.h3
-                className="text-lg font-semibold m-2 cursor-pointer"
+                className="text-base sm:text-lg font-semibold m-2 cursor-pointer whitespace-nowrap flex-shrink-0"
                 onClick={handleDescriptionChange}
                 variants={tabVariants}
                 animate={
@@ -185,7 +171,7 @@ export default function CourseDescRateSection({
             )}
             {description_of_contents && (
               <motion.h3
-                className="text-lg font-semibold m-2 cursor-pointer"
+                className="text-base sm:text-lg font-semibold m-2 cursor-pointer whitespace-nowrap flex-shrink-0"
                 onClick={handleDescriptionChange}
                 variants={tabVariants}
                 animate={
@@ -199,12 +185,12 @@ export default function CourseDescRateSection({
               </motion.h3>
             )}
           </div>
-          <div className="flex flex-row gap-6">
+          <div className="flex flex-col lg:flex-row gap-6">
             <div className="flex flex-col flex-[2]">
               <div
                 className={`relative ${
                   !isExpanded
-                    ? "min-h-[340px] max-h-[340px] overflow-hidden"
+                    ? "min-h-[280px] sm:min-h-[340px] max-h-[280px] sm:max-h-[340px] overflow-hidden"
                     : ""
                 }`}
               >
@@ -216,7 +202,10 @@ export default function CourseDescRateSection({
                     animate="animate"
                     exit="exit"
                   >
-                    <p className="text-[0.95rem] mb-0" ref={descriptionRef}>
+                    <p
+                      className="text-sm sm:text-[0.95rem] mb-0"
+                      ref={descriptionRef}
+                    >
                       {generateDescription(description)}
                     </p>
                   </motion.div>
@@ -231,7 +220,7 @@ export default function CourseDescRateSection({
                   className="w-fit text-blue-600 hover:text-blue-800 
                   mt-2 flex items-center gap-1
                   border border-transparent px-2 py-2
-                  text-base font-medium"
+                  text-sm sm:text-base font-medium"
                 >
                   {isExpanded ? (
                     <>
@@ -249,38 +238,103 @@ export default function CourseDescRateSection({
             </div>
             {modifiedRating && (
               <div
-                className="flex flex-col h-fit flex-1 gap-3"
+                className="flex flex-col gap-3 mt-4 lg:mt-0 lg:h-fit lg:flex-1"
                 ref={ratingContainerRef}
               >
-                {Object.entries(modifiedRating)
-                  .filter(([key]) => key !== "overall") // Filter out overall to display it last
-                  .map(([key, value]) => (
+                {/* Desktop layout (lg and above) - current layout */}
+                <div className="hidden lg:flex lg:flex-col lg:gap-3">
+                  {Object.entries(modifiedRating)
+                    .filter(([key]) => key !== "overall")
+                    .map(([key, value]) => (
+                      <div
+                        className="flex flex-col"
+                        id={`course-rating-${key}-container`}
+                        key={key}
+                      >
+                        <h4 className="font-semibold text-sm sm:text-base">
+                          {key.charAt(0).toUpperCase() + key.slice(1)}
+                        </h4>
+                        <RectangleChart rating={value as number} />
+                      </div>
+                    ))}
+                  {modifiedRating.overall && (
                     <div
-                      className="flex flex-col"
-                      id={`course-rating-${key}-container`}
-                      key={key}
+                      className="flex flex-col items-center lg:items-start"
+                      id="course-rating-overall-container"
                     >
-                      <h4 className="font-semibold">
-                        {key.charAt(0).toUpperCase() + key.slice(1)}
+                      <h4 className="font-semibold text-sm sm:text-base">
+                        Rating
                       </h4>
-                      <RectangleChart rating={value as number} />
+                      <SemiCircleChart rating={modifiedRating.overall} />
                     </div>
-                  ))}
-                {modifiedRating.overall && ( // Display overall rating last
-                  <div
-                    className="flex flex-col"
-                    id="course-rating-overall-container"
-                  >
-                    <h4 className="font-semibold">Rating</h4>
-                    <SemiCircleChart rating={modifiedRating.overall} />
+                  )}
+                </div>
+
+                {/* Tablet layout (md) - rectangles in rows with semicircle on the side */}
+                <div className="hidden md:flex md:flex-row lg:hidden gap-6">
+                  <div className="flex flex-col gap-3 flex-1">
+                    {Object.entries(modifiedRating)
+                      .filter(([key]) => key !== "overall")
+                      .map(([key, value]) => (
+                        <div
+                          className="flex flex-col"
+                          id={`course-rating-${key}-container`}
+                          key={key}
+                        >
+                          <h4 className="font-semibold text-sm sm:text-base">
+                            {key.charAt(0).toUpperCase() + key.slice(1)}
+                          </h4>
+                          <RectangleChart rating={value as number} />
+                        </div>
+                      ))}
                   </div>
-                )}
+                  {modifiedRating.overall && (
+                    <div
+                      className="flex flex-col items-center justify-center"
+                      id="course-rating-overall-container"
+                    >
+                      <h4 className="font-semibold text-sm sm:text-base">
+                        Rating
+                      </h4>
+                      <SemiCircleChart rating={modifiedRating.overall} />
+                    </div>
+                  )}
+                </div>
+
+                {/* Mobile layout (sm and below) - rectangles first, then semicircle below */}
+                <div className="flex flex-col gap-3 md:hidden">
+                  {Object.entries(modifiedRating)
+                    .filter(([key]) => key !== "overall")
+                    .map(([key, value]) => (
+                      <div
+                        className="flex flex-col"
+                        id={`course-rating-${key}-container`}
+                        key={key}
+                      >
+                        <h4 className="font-semibold text-sm sm:text-base">
+                          {key.charAt(0).toUpperCase() + key.slice(1)}
+                        </h4>
+                        <RectangleChart rating={value as number} />
+                      </div>
+                    ))}
+                  {modifiedRating.overall && (
+                    <div
+                      className="flex flex-col items-center mt-2"
+                      id="course-rating-overall-container"
+                    >
+                      <h4 className="font-semibold text-sm sm:text-base mb-2 lg:mb-0">
+                        Rating
+                      </h4>
+                      <SemiCircleChart rating={modifiedRating.overall} />
+                    </div>
+                  )}
+                </div>
               </div>
             )}
           </div>
         </>
       ) : (
-        <div className="flex flex-row gap-6 mt-6">
+        <div className="flex flex-col lg:flex-row gap-6 mt-6">
           <div className="flex flex-col flex-1 gap-3">
             {modifiedRating &&
               Object.entries(modifiedRating)
@@ -291,17 +345,17 @@ export default function CourseDescRateSection({
                     id={`course-rating-${key}-container`}
                     key={key}
                   >
-                    <h4 className="font-semibold">
+                    <h4 className="font-semibold text-sm sm:text-base">
                       {key.charAt(0).toUpperCase() + key.slice(1)}
                     </h4>
                     <RectangleChart rating={value as number} />
                   </div>
                 ))}
           </div>
-          <div className="flex flex-col flex-1 justify-center items-center">
+          <div className="flex flex-col flex-1 justify-center items-center mt-4 lg:mt-0">
             {modifiedRating && modifiedRating.overall && (
               <div className="flex flex-col items-center">
-                <h4 className="font-semibold">Rating</h4>
+                <h4 className="font-semibold text-sm sm:text-base">Rating</h4>
                 <SemiCircleChart rating={modifiedRating.overall} />
               </div>
             )}

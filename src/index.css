@@ -41,10 +41,6 @@ a, button, input, select, textarea {
   body {
     font-size: 16px;
   }
-  
-  input, select, textarea {
-    font-size: 16px;
-  }
 }
 
 @media (prefers-color-scheme: light) {

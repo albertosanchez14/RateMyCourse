@@ -76,10 +76,10 @@ export default function CourseDetailSection({
   };
 
   return (
-    <div className="flex flex-col gap-4 border-t border-[#f0f0f0]">
-      <div className="flex flex-row gap-6">
+    <div className="flex flex-col gap-4 border-t border-[#f0f0f0] px-4 sm:px-0">
+      <div className="flex flex-row gap-2 sm:gap-6 overflow-x-auto scrollbar-hide">
         <motion.h3
-          className="text-lg font-semibold m-2 cursor-pointer"
+          className="text-base sm:text-lg font-semibold m-2 cursor-pointer whitespace-nowrap flex-shrink-0"
           onClick={handleDetailChange}
           variants={tabVariants}
           animate={details === "Course Details" ? "active" : "inactive"}
@@ -89,7 +89,7 @@ export default function CourseDetailSection({
         </motion.h3>
         {teacher.length !== 0 && (
           <motion.h3
-            className="text-lg font-semibold m-2 cursor-pointer"
+            className="text-base sm:text-lg font-semibold m-2 cursor-pointer whitespace-nowrap flex-shrink-0"
             onClick={handleDetailChange}
             variants={tabVariants}
             animate={details === "Groups and Teachers" ? "active" : "inactive"}
@@ -100,7 +100,7 @@ export default function CourseDetailSection({
         )}
         {requirements.length !== 0 && (
           <motion.h3
-            className="text-lg font-semibold m-2 cursor-pointer"
+            className="text-base sm:text-lg font-semibold m-2 cursor-pointer whitespace-nowrap flex-shrink-0"
             onClick={handleDetailChange}
             variants={tabVariants}
             animate={details === "Requirements" ? "active" : "inactive"}
@@ -123,38 +123,38 @@ export default function CourseDetailSection({
               exit="exit"
             >
               {department && (
-                <div className="flex flex-row">
-                  <span className="font-bold mr-2">Department:</span>
-                  <span>{department}</span>
+                <div className="flex flex-col sm:flex-row">
+                  <span className="font-bold mr-2 text-sm sm:text-base">Department:</span>
+                  <span className="text-sm sm:text-base">{department}</span>
                 </div>
               )}
               {coordinating_teacher && (
-                <div className="flex flex-row">
-                  <span className="font-bold mr-2">Coordinating Teacher:</span>
-                  <span>{printTeacher(coordinating_teacher)}</span>
+                <div className="flex flex-col sm:flex-row">
+                  <span className="font-bold mr-2 text-sm sm:text-base">Coordinating Teacher:</span>
+                  <span className="text-sm sm:text-base">{printTeacher(coordinating_teacher)}</span>
                 </div>
               )}
-              <div className="flex flex-row">
-                <span className="font-bold mr-2">Type:</span>
-                <span>{type}</span>
+              <div className="flex flex-col sm:flex-row">
+                <span className="font-bold mr-2 text-sm sm:text-base">Type:</span>
+                <span className="text-sm sm:text-base">{type}</span>
               </div>
-              <div className="flex flex-row">
-                <span className="font-bold mr-2">Credits:</span>
-                <span>{credits}</span>
+              <div className="flex flex-col sm:flex-row">
+                <span className="font-bold mr-2 text-sm sm:text-base">Credits:</span>
+                <span className="text-sm sm:text-base">{credits}</span>
               </div>
-              <div className="flex flex-row">
-                <span className="font-bold mr-2">Course Year:</span>
-                <span>{course_year}</span>
+              <div className="flex flex-col sm:flex-row">
+                <span className="font-bold mr-2 text-sm sm:text-base">Course Year:</span>
+                <span className="text-sm sm:text-base">{course_year}</span>
               </div>
-              <div className="flex flex-row">
-                <span className="font-bold mr-2">Semester:</span>
-                <span>{semester}</span>
+              <div className="flex flex-col sm:flex-row">
+                <span className="font-bold mr-2 text-sm sm:text-base">Semester:</span>
+                <span className="text-sm sm:text-base">{semester}</span>
               </div>
-              <div className="flex flex-row">
-                <span className="font-bold mr-2">Website:</span>
-                <span>
+              <div className="flex flex-col sm:flex-row">
+                <span className="font-bold mr-2 text-sm sm:text-base">Website:</span>
+                <span className="text-sm sm:text-base">
                   <a
-                    className="text-blue-500 hover:text-blue-700"
+                    className="text-blue-500 hover:text-blue-700 break-all"
                     href={website}
                     target="_blank"
                     rel="noreferrer"
@@ -180,29 +180,29 @@ export default function CourseDetailSection({
                   className="flex flex-col gap-2"
                   key={`faculty-${teachersInFaculty.faculty || facultyIndex}`}
                 >
-                  <h4 className="my-0">{teachersInFaculty.faculty}</h4>
+                  <h4 className="my-0 text-base sm:text-lg font-semibold">{teachersInFaculty.faculty}</h4>
                   {teachersInFaculty.teacher.map((teacherElem, index) => (
                     <div
-                      className="flex flex-col pl-4"
+                      className="flex flex-col pl-2 sm:pl-4"
                       key={`faculty-${teachersInFaculty.faculty}-group-${
                         teacherElem.group || index
                       }`}
                     >
-                      <span className="font-bold">
+                      <span className="font-bold text-sm sm:text-base">
                         Group {teacherElem.group}
                       </span>
-                      <div className="pl-4">
-                        <span className="font-bold mr-2">Lead Teacher:</span>
-                        <span>
+                      <div className="pl-2 sm:pl-4">
+                        <span className="font-bold mr-2 text-sm sm:text-base">Lead Teacher:</span>
+                        <span className="text-sm sm:text-base">
                           {printTeacher(teacherElem.lead_teacher.name)}
                         </span>
                       </div>
                       {teacherElem.aggregated_group_lead_teacher && (
-                        <div className="pl-4">
-                          <span className="font-bold mr-2">
+                        <div className="pl-2 sm:pl-4">
+                          <span className="font-bold mr-2 text-sm sm:text-base">
                             Aggregated Teacher:
                           </span>
-                          <span>
+                          <span className="text-sm sm:text-base">
                             {printTeacher(
                               teacherElem.aggregated_group_lead_teacher.name
                             )}
@@ -227,8 +227,8 @@ export default function CourseDetailSection({
             >
               {requirements.map((req, index) => (
                 <div className="flex flex-row" key={index}>
-                  <span> - </span>
-                  <span>{req}</span>
+                  <span className="text-sm sm:text-base"> - </span>
+                  <span className="text-sm sm:text-base">{req}</span>
                 </div>
               ))}
             </motion.div>

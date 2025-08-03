@@ -88,32 +88,34 @@ export default function CourseScheduleSection({
   };
 
   return (
-    <div className="flex flex-col gap-6 border-t border-[#f0f0f0]">
-      <div className="flex flex-row gap-6">
+    <div className="flex flex-col gap-6 border-t border-[#f0f0f0] px-4 sm:px-0">
+      <div className="flex flex-row gap-2 sm:gap-6 overflow-x-auto scrollbar-hide">
         {schedule.map((facultySchedule) => (
           <motion.h3
-          className="text-lg font-semibold m-2 cursor-pointer"
-          onClick={handleChangeFaculty}
-          key={facultySchedule.faculty}
-          variants={tabVariants}
-          animate={selectedFaculty === facultySchedule.faculty ? "active" : "inactive"}
-          whileHover={{ scale: 1.05, opacity: 1 }}
-        >
-          {facultySchedule.faculty}
-        </motion.h3>
+            className="text-base sm:text-lg font-semibold m-2 cursor-pointer whitespace-nowrap flex-shrink-0"
+            onClick={handleChangeFaculty}
+            key={facultySchedule.faculty}
+            variants={tabVariants}
+            animate={selectedFaculty === facultySchedule.faculty ? "active" : "inactive"}
+            whileHover={{ scale: 1.05, opacity: 1 }}
+          >
+            {facultySchedule.faculty}
+          </motion.h3>
         ))}
       </div>
       <div className="flex flex-row items-start w-full">
         <Calendar events={filteredEvents} />
-        <GroupSelector
-          groups={
-            teacher
-              .find((t) => t.faculty === selectedFaculty)
-              ?.teacher.map((t) => t.group) || []
-          }
-          selectedGroups={selectedGroups}
-          onGroupChange={handleGroupChange}
-        />
+        <div className="hidden md:block">
+          <GroupSelector
+            groups={
+              teacher
+                .find((t) => t.faculty === selectedFaculty)
+                ?.teacher.map((t) => t.group) || []
+            }
+            selectedGroups={selectedGroups}
+            onGroupChange={handleGroupChange}
+          />
+        </div>
       </div>
     </div>
   );

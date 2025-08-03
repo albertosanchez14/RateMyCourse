@@ -181,7 +181,7 @@ export default function CourseReviewSection({
 
         {/* Course Reviews */}
         {commentsType === "course" && (
-          <div className="flex flex-row gap-4">
+          <div className="flex flex-col lg:flex-row gap-4">
             <div className="flex flex-col gap-4 flex-1">
               {filteredCourseReviews.length > 0 ? (
                 filteredCourseReviews.map((comment: CourseReviewsType) => (
@@ -209,9 +209,9 @@ export default function CourseReviewSection({
                   </div>
                 ))
               ) : (
-                <div className="flex flex-col gap-4 p-6 rounded-xl border border-[#e0e0e0] bg-white text-center">
+                <div className="flex flex-col gap-4 p-4 sm:p-6 rounded-xl border border-[#e0e0e0] bg-white text-center">
                   <div className="text-center">
-                    <div className="text-lg font-semibold text-gray-800 mb-2">
+                    <div className="text-base sm:text-lg font-semibold text-gray-800 mb-2">
                       No Reviews Yet
                     </div>
                     <p className="text-gray-600 text-sm">
@@ -222,7 +222,7 @@ export default function CourseReviewSection({
               )}
             </div>
             {/* Write Form */}
-            <div className="flex flex-col h-fit w-90">
+            <div className="flex flex-col h-fit lg:w-90 w-full">
               {showWriteForm ? (
                 <WriteReviewForm
                   courseId={courseId}
@@ -242,9 +242,9 @@ export default function CourseReviewSection({
                   initialData={editingReview}
                 />
               ) : userHasReview ? (
-                <div className="flex flex-col self-center gap-4 p-6 rounded-xl border border-[#e0e0e0] bg-white">
+                <div className="flex flex-col self-center gap-4 p-4 sm:p-6 rounded-xl border border-[#e0e0e0] bg-white">
                   <div className="text-center">
-                    <div className="text-lg font-semibold text-gray-800 mb-2">
+                    <div className="text-base sm:text-lg font-semibold text-gray-800 mb-2">
                       Thanks for Your Review!
                     </div>
                     <p className="text-gray-600 text-sm">

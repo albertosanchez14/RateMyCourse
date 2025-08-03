@@ -11,9 +11,7 @@ import CourseReviewSection from "./CourseReviewSection";
 import LoadingSpinnerScreen from "../../components/loading/LoadingSpinnerScreen";
 
 export default function CoursePage() {
-  // Get course_code from URL
   const { courseId } = useParams();
-  // Load course data now from folder data
   const { data, isLoading, error } = useCourse(courseId ?? "");
 
   if (isLoading) return <LoadingSpinnerScreen />;
