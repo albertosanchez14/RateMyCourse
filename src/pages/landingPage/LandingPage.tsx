@@ -121,7 +121,7 @@ export default function LandingPage() {
             experience and build your schedule.
           </p>
           <div className="flex flex-col md:flex-row items-start gap-4 mt-4">
-            <div className="flex flex-col flex-1 min-w-0 max-w-lg">
+            <div className="flex flex-col flex-1 min-w-0 max-w-lg w-full">
               <SearchBar placeholder="Search for courses..." />
               <span className="block mt-1 ml-1 opacity-50 w-fit">
                 Read course and professor reviews
