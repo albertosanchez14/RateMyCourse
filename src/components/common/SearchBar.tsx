@@ -94,7 +94,7 @@ export default function SearchBar({
   };
 
   return (
-    <div className="relative w-full max-w-lg" ref={dropdownRef}>
+    <div className="relative w-full" ref={dropdownRef}>
       <input
         type="text"
         value={searchTerm}

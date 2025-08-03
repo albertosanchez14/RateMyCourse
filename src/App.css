@@ -1,13 +1,32 @@
 #root {
   max-width: 1200px;
   width: 100%;
-
   display: flex;
   flex-direction: column;
   gap: 2rem;
   padding: 2rem;
   padding-top: 0px;
   padding-bottom: 0px;
+  min-width: 0;
+}
+
+@media (max-width: 480px) {
+  #root {
+    padding: 0.5rem;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    gap: 1rem;
+    max-width: 100vw;
+  }
+}
+
+@media (max-width: 768px) {
+  #root {
+    padding: 1rem;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    gap: 1.5rem;
+  }
 }
 
 .logo {
@@ -38,19 +57,27 @@
   }
 }
 
-.card {
-  padding: 2em;
-}
-
 .read-the-docs {
   color: #888;
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translate(-50%, 20px); }
-  to { opacity: 1; transform: translate(-50%, 0); }
+  from {
+    opacity: 0;
+    transform: translate(-50%, 20px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
 }
 
 .animate-fadeIn {
   animation: fadeIn 0.3s ease-out forwards;
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .logo:hover {
+    filter: none;
+  }
 }

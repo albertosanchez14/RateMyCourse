@@ -27,7 +27,9 @@ export default function Header() {
       </div>
 
       <div className="flex-1 flex justify-center">
-        <SearchBar />
+        <div className="flex-1 max-w-lg">
+          <SearchBar />
+        </div>
         <div className="relative ml-4">
           <UniversitySelector />
         </div>

@@ -120,18 +120,20 @@ export default function LandingPage() {
             Find detailed information about university courses, share your
             experience and build your schedule.
           </p>
-          <div className="flex flex-col md:flex-row items-center gap-4 mt-4">
-            <SearchBar placeholder="Search for courses..." />
-            <div className="flex items-center gap-2">
+          <div className="flex flex-col md:flex-row items-start gap-4 mt-4">
+            <div className="flex flex-col flex-1 min-w-0 max-w-lg">
+              <SearchBar placeholder="Search for courses..." />
+              <span className="block mt-1 ml-1 opacity-50 w-fit">
+                Read course and professor reviews
+              </span>
+            </div>
+            <div className="flex shrink-0 gap-2">
               <UniversitySelector />
               <span className="flex items-center gap-1 opacity-50">
                 <FaArrowLeft /> Select your university
               </span>
             </div>
           </div>
-          <span className="block mt-1 ml-1 opacity-50">
-            Read course and professor reviews
-          </span>
         </div>
         {/* Scroll Arrow */}
         <div

@@ -7,14 +7,14 @@ import {
 
 export default function Footer() {
   return (
-    <footer className="w-full bg-[#f8f9fa] pt-12 pb-4 mt-16">
+<footer className="w-full bg-[#f8f9fa] pt-8 md:pt-12 pb-4 mt-16">
       <div
         className="max-w-[1200px] mx-auto grid 
-      grid-cols-[2fr_1fr_1fr_1fr] gap-8 px-8 
-      sm:grid-cols-[2fr_1fr_1fr_1fr] xs:grid-cols-[2fr_1fr]"
+        grid-cols-1 sm:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr_1fr] 
+        gap-8 px-8"
       >
-        <div className="flex flex-col gap-4">
-          <h3 className="text-[#333] text-2xl m-0">CourseWise</h3>
+        <div className="flex flex-col gap-3 md:gap-4 sm:col-span-2 lg:col-span-1">
+          <h3 className="text-[#333] text-xl md:text-2xl m-0 font-semibold">CourseWise</h3>
           <p className="text-[#666] text-sm leading-6 m-0">
             Help students make informed decisions about their education journey.
           </p>
